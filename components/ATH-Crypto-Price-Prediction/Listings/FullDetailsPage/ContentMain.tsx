@@ -1,6 +1,8 @@
 // /components/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage/ContentMain.tsx
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { calculateFibLevels, FibResult } from '@/utils/formulars/FoskaayFibV1';
+import Prediction from './Prediction'
 
 
 interface HistoricalDataPoint {
@@ -38,7 +40,7 @@ const ContentMain = ({ cryptoData }: ContentMainProps) => {
     const itemDate = new Date(item.time);
     const startDate = new Date(dateRange.start);
     const endDate = dateRange.end ? new Date(dateRange.end) : null;
-    
+
     if (endDate) {
       return itemDate >= startDate && itemDate <= endDate;
     }
@@ -62,23 +64,55 @@ const ContentMain = ({ cryptoData }: ContentMainProps) => {
     });
   };
 
+  // Calculate Fibonacci levels with historical data
+  const fibResults = useMemo(() => {
+    // Find PMCATH (Previous Market Cycle ATH - highest price in 2021)
+    const pmcData = data.filter(item => {
+      const date = new Date(item.time);
+      return date.getFullYear() === 2021;
+    });
+    const pmcATH = Math.max(...pmcData.map(item => item.high));
+
+    // Find CMCATL (Current Market Cycle ATL - lowest price after PMCATH)
+    const cmcData = data.filter(item => {
+      const date = new Date(item.time);
+      return date > new Date(pmcData[pmcData.length - 1].time);
+    });
+    const cmcATL = Math.min(...cmcData.map(item => item.low));
+
+    // Get current price
+    const currentPrice = data[data.length - 1].close;
+
+    // Convert historical data to required format
+    const historicalPrices = data.map(item => ({
+      time: item.time,
+      close: item.close
+    }));
+
+    // Prediction start date (June 1st, 2022)
+    const predictionStartDate = '2022-06-01';
+
+    return calculateFibLevels(
+      pmcATH,
+      cmcATL,
+      currentPrice,
+      predictionStartDate,
+      historicalPrices
+    );
+  }, [data]);
+
   return (
     <div className="w-full lg:w-2/3">
       <div className="rounded-lg bg-white dark:bg-black/20 p-6 shadow-md">
+
         {/* Market Statistics Section */}
         <section className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">{symbol} Market Statistics</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-              <h3 className="text-sm text-gray-600 dark:text-gray-400">All Time High</h3>
-              <p className="text-xl font-bold text-green-600">${ath.toLocaleString()}</p>
-            </div>
-            <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
-              <h3 className="text-sm text-gray-600 dark:text-gray-400">All Time Low</h3>
-              <p className="text-xl font-bold text-red-600">${atl.toLocaleString()}</p>
-            </div>
-          </div>
+          <h2 className="text-2xl font-bold mb-4">{symbol} Crypto Market Cycle Statistics</h2>
         </section>
+
+        {/* Prediction Component */}
+        <Prediction symbol={symbol} fibResults={fibResults} />
+
 
         {/* Historical Price Data Section */}
         <section className="mb-8">

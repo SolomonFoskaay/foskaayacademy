@@ -33,6 +33,7 @@
     "chart.js": "^4.4.7",
     "chartjs-plugin-zoom": "^2.2.0",
     "cloudinary": "^2.2.0",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",

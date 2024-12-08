@@ -79,7 +79,7 @@ const ATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
       {/* SEO Optimized Title and Description */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">
-          {cryptoData.symbol} ATH Crypto Price Prediction
+          2025 {cryptoData.symbol} ATH Crypto Price Prediction
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
           Comprehensive price analysis and ATH prediction for {cryptoData.symbol}. 
