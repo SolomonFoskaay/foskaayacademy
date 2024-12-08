@@ -1,7 +1,7 @@
 // /components/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage/ContentMain.tsx
 "use client";
 import React, { useState, useMemo } from 'react';
-import { calculateFibLevels, FibResult } from '@/utils/formulars/FoskaayFibV1';
+import { calculateFoskaayFibLevels, FoskaayFibResult } from '@/utils/formulars/FoskaayFibV1';
 import Prediction from './Prediction'
 
 
@@ -64,8 +64,8 @@ const ContentMain = ({ cryptoData }: ContentMainProps) => {
     });
   };
 
-  // Calculate Fibonacci levels with historical data
-  const fibResults = useMemo(() => {
+  // Calculate FoskaayFibonacci levels with historical data
+  const FoskaayFibResults = useMemo(() => {
     // Find PMCATH (Previous Market Cycle ATH - highest price in 2021)
     const pmcData = data.filter(item => {
       const date = new Date(item.time);
@@ -92,7 +92,7 @@ const ContentMain = ({ cryptoData }: ContentMainProps) => {
     // Prediction start date (June 1st, 2022)
     const predictionStartDate = '2022-06-01';
 
-    return calculateFibLevels(
+    return calculateFoskaayFibLevels(
       pmcATH,
       cmcATL,
       currentPrice,
@@ -111,7 +111,7 @@ const ContentMain = ({ cryptoData }: ContentMainProps) => {
         </section>
 
         {/* Prediction Component */}
-        <Prediction symbol={symbol} fibResults={fibResults} />
+        <Prediction symbol={symbol} FoskaayFibResults={FoskaayFibResults} />
 
 
         {/* Historical Price Data Section */}

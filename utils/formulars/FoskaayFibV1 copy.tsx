@@ -36,39 +36,6 @@ export interface FoskaayFibGradeResult {
     allGrades: FoskaayFibGrade[];
 }
 
-// FoskaayFibResult Interface
-export interface FoskaayFibResult {
-    levels: FoskaayFibLevel[];
-    currentPrice: number;
-    pmcATH: number;
-    cmcATL: number;
-    cmcATH: {
-        min: number;  // 141.4% level
-        max: number;  // 236% level
-    };
-    currentZone: FoskaayFibZone;
-    predictionStartDate: string;
-    lastUpdated: string;
-    grade: FoskaayFibGradeResult;
-    currentPercentage: number;
-}
-
-// Define market cycles explicitly
-export const MARKET_CYCLES = {
-    PMC: {
-        name: "Previous Market Cycle",
-        startDate: "2018-01-01",
-        endDate: "2021-12-31",
-        abbreviation: "PMC"
-    },
-    CMC: {
-        name: "Current Market Cycle",
-        startDate: "2022-01-01",
-        endDate: "2025-12-31",
-        abbreviation: "CMC"
-    }
-};
-
 // Define the FoskaayFib Grades boundaries
 const FOSKAAY_FIB_GRADES: FoskaayFibGrade[] = [
     {
@@ -139,7 +106,47 @@ const FOSKAAY_FIB_GRADES: FoskaayFibGrade[] = [
     }
 ];
 
+// Grading function
+export const calculateFoskaayFibGrade = (currentPercentage: number): FoskaayFibGradeResult => {
+    // Calculate the logarithmic percentage for accurate grading
+    const logCurrentPercentage = Number(currentPercentage.toFixed(2));
+    
+    // Find the correct grade based on the exact percentage ranges
+    const currentGrade = FOSKAAY_FIB_GRADES.find(grade => {
+        const min = Number(grade.range[0].toFixed(2));
+        const max = Number(grade.range[1].toFixed(2));
+        
+        // Ensure exact boundary matching
+        return logCurrentPercentage >= min && logCurrentPercentage <= max;
+    }) || FOSKAAY_FIB_GRADES[0]; // Default to 'A' if somehow outside ranges
 
+    return {
+        currentGrade,
+        allGrades: FOSKAAY_FIB_GRADES
+    };
+};
+
+// FoskaayFibResult Interface
+export interface FoskaayFibResult {
+    levels: FoskaayFibLevel[];
+    currentPrice: number;
+    pmcATH: number;
+    cmcATL: number;
+    cmcATH: {
+        min: number;  // 141.4% level
+        max: number;  // 236% level
+    };
+    currentZone: FoskaayFibZone;
+    predictionStartDate: string;
+    lastUpdated: string;
+    grade: FoskaayFibGradeResult;
+    currentPercentage: number;
+}
+
+const MARKET_CYCLES: MarketCycle[] = [
+    { startYear: 2018, endYear: 2021, name: "Previous Market Cycle", abbreviation: "PMC" },
+    { startYear: 2022, endYear: 2025, name: "Current Market Cycle", abbreviation: "CMC" }
+];
 
 const FIB_ZONES: FoskaayFibZone[] = [
     {
@@ -187,43 +194,6 @@ const FIBONACCI_LEVELS = [
     { percentage: 236.00, name: "Maximum Extension Profit Taking Zone" }
 ];
 
-// Helper function to check if a date falls within a market cycle
-const isWithinCycle = (date: string, cycle: typeof MARKET_CYCLES.CMC): boolean => {
-    const checkDate = new Date(date);
-    const cycleStart = new Date(cycle.startDate);
-    const cycleEnd = new Date(cycle.endDate);
-    return checkDate >= cycleStart && checkDate <= cycleEnd;
-};
-
-// Helper function to filter historical prices by cycle
-const filterPricesByCycle = (
-    prices: { time: string; close: number }[],
-    cycle: typeof MARKET_CYCLES.CMC
-): { time: string; close: number }[] => {
-    return prices.filter(price => isWithinCycle(price.time, cycle));
-};
-
-// FoskaayFib Grading function
-export const calculateFoskaayFibGrade = (currentPercentage: number): FoskaayFibGradeResult => {
-    // Calculate the logarithmic percentage for accurate grading
-    const logCurrentPercentage = Number(currentPercentage.toFixed(2));
-    
-    // Find the correct grade based on the exact percentage ranges
-    const currentGrade = FOSKAAY_FIB_GRADES.find(grade => {
-        const min = Number(grade.range[0].toFixed(2));
-        const max = Number(grade.range[1].toFixed(2));
-        
-        // Ensure exact boundary matching
-        return logCurrentPercentage >= min && logCurrentPercentage <= max;
-    }) || FOSKAAY_FIB_GRADES[0]; // Default to 'A' if somehow outside ranges
-
-    return {
-        currentGrade,
-        allGrades: FOSKAAY_FIB_GRADES
-    };
-};
-
-// Main FoskaayFib Level Formular Function
 export const calculateFoskaayFibLevels = (
     pmcATH: number,
     cmcATL: number,
@@ -263,9 +233,7 @@ export const calculateFoskaayFibLevels = (
         let daysToAchieve;
 
         if (isAchieved && historicalPrices) {
-            // Filter historical prices to current market cycle only for achievement dates
-            const cycleHistoricalPrices = filterPricesByCycle(historicalPrices, MARKET_CYCLES.CMC);
-            const achievementPoint = cycleHistoricalPrices.find(p => p.close >= price);
+            const achievementPoint = historicalPrices.find(p => p.close >= price);
             if (achievementPoint) {
                 achievedDate = achievementPoint.time;
                 daysToAchieve = Math.floor(
@@ -309,6 +277,13 @@ export const calculateFoskaayFibLevels = (
         max: Math.exp(logMaxCMCATH)
     };
 
+  // Calculate the current percentage more precisely
+//   const range = pmcATH - cmcATL;
+//   const progress = currentPrice - cmcATL;
+//   const currentPercentage = (progress / range) * 100;
+
+//   // Get the grade using the precise percentage
+//   const grade = calculateFoskaayFibGrade(currentPercentage);  
 
     return {
         levels,

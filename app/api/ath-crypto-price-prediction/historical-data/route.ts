@@ -87,7 +87,7 @@ export async function GET(request: Request) {
     console.error('Error in historical-data route:', error);
     return NextResponse.json(
       { 
-        error: 'Failed to fetch data from CryptoCompare',
+        error: 'Failed to fetch historic data to show this crypto ATh prediction. Kindly reload the page or revisit later',
         details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
