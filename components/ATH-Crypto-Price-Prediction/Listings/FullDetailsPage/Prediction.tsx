@@ -48,15 +48,41 @@ const Prediction: React.FC<PredictionProps> = ({ symbol, FoskaayFibResults }: Pr
                 </p>
             );
         } else if (level.percentage > 161.80) {
-            // Warning for high levels
+            const accumulationLevels = FoskaayFibResults.levels.filter(l =>
+                l.percentage <= 78.00 && l.isAchieved
+            );
+
+            // Get min and max percentages from accumulation levels
+            const minIncrease = Math.min(...accumulationLevels.map(l =>
+                ((currentPrice - l.price) / l.price) * 100
+            ));
+            const maxIncrease = Math.max(...accumulationLevels.map(l =>
+                ((currentPrice - l.price) / l.price) * 100
+            ));
+
+            const minMultiplier = (minIncrease / 100).toFixed(2);
+            const maxMultiplier = (maxIncrease / 100).toFixed(2);
+
+            // Calculate potential increase to target
+            const percentToGo = ((level.price - currentPrice) / currentPrice) * 100;
+            const multiplier = (percentToGo / 100).toFixed(2);
+
             return (
-                <p className="text-sm text-amber-600 dark:text-amber-400">
-                    <strong>Warning:</strong> {symbol} has already delivered {level.progressPercentage.toFixed(2)}%
-                    ({(level.progressPercentage / 100).toFixed(2)}x) this cycle assuming you accumulated early at
-                    the accumulation stages (Level 0.00%-78.00%). The market is getting over-extended, and the risk
-                    of market cycle top is imminent. It may not reach this price prediction of ${level.price.toLocaleString()}
-                    before the current market cycle tops out and starts declining - Always DYOR (Do Your Own Research).
-                </p>
+                <>
+                    <p className="text-sm">
+                        <strong>Hint:</strong> If you acquire {symbol} at the current price (${currentPrice.toLocaleString()}),
+                        it can potentially increase by {percentToGo.toFixed(2)}% to reach this target (${level.price.toLocaleString()}),
+                        which is equivalent to a {multiplier}x {symbol} price prediction.
+                    </p>
+                    <p className="text-sm text-amber-600 dark:text-amber-400">
+                        <strong>Warning:</strong> {symbol} has already delivered {minIncrease.toFixed(2)}% - {maxIncrease.toFixed(2)}%
+                        ({minMultiplier}x - {maxMultiplier}x) this 2022-2025 crypto market cycle assuming you accumulated early at
+                        the accumulation stages (Level 0.00%-78.00%) of FoskaayFib Levels crypto predictions. The market is getting
+                        over-extended, and the risk of {symbol} market cycle top and price crash to prepare for next cycle is imminent.
+                        {" "} {symbol} may not reach this price prediction of ${level.price.toLocaleString()} before the current 2025 market cycle
+                        tops out and starts declining - Always DYOR (Do Your Own Research).
+                    </p>
+                </>
             );
         } else {
             // Regular hint for unachieved levels
