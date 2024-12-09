@@ -1,324 +1,262 @@
-// /components/Blinks/Page.tsx
-"use client";
-import React, { useState, useEffect } from "react";
-import { createClient } from "@/utils/supabase/client";
-import ListingsTableCard from "./Listings/ListingsTableCard";
+// /components/ATH-Crypto-Price-Prediction/page.tsx 
+import React, { useState, useMemo } from 'react';
+import Link from 'next/link';
+import { ArrowUpIcon, ArrowDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
-const BlinksPage = () => {
-  const [listings, setListings] = useState<DisplayListingBlinksTypes[]>([]);
-  const [categories, setCategories] = useState<
-    { name: string; count: number }[]
-  >([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterCategory, setFilterCategory] = useState("All");
-  const [filterStatus, setFilterStatus] = useState("All");
-  const [filterPlatform, setFilterPlatform] = useState("All");
-  const [filterRegistry, setFilterRegistry] = useState("All");
-  const [loading, setLoading] = useState(true);
+interface ATHCryptoPricePredictionPageProps {
+  cryptoList: any[];
+  isLoading: boolean;
+  error: string | null;
+}
+
+const formatPrice = (price: number) => {
+  if (price >= 1) return `$${price.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
+  return `$${price.toFixed(6)}`;
+};
+
+const formatMarketCap = (marketCap: number) => {
+  if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
+  if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
+  return `$${marketCap.toLocaleString()}`;
+};
+
+const getGradeColor = (grade: string) => {
+  const gradeColors: { [key: string]: string } = {
+    'A': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
+    'B': 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-100',
+    'C': 'bg-lime-100 text-lime-800 dark:bg-lime-900 dark:text-lime-100',
+    'D': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100',
+    'E': 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100',
+    'F': 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100',
+    'G': 'bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-100',
+    'H': 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100',
+    'I': 'bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-100',
+    'J': 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-100',
+    'K': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100'
+  };
+  return gradeColors[grade] || 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
+};
+
+// main function
+export default function ATHCryptoPricePredictionPage({
+  cryptoList,
+  isLoading,
+  error
+}: ATHCryptoPricePredictionPageProps) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortConfig, setSortConfig] = useState({ key: 'marketCap', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
-  const [totalListings, setTotalListings] = useState(0);
-  const [statuses, setStatuses] = useState([]);
-  const [platforms, setPlatforms] = useState<{ id: number; name: string }[]>(
-    [],
-  );
-  const [registryStatuses, setRegistryStatuses] = useState<string[]>([]);
-  const [categoryNamesById, setCategoryNamesById] = useState<CategoryNamesById>(
-    {},
-  );
-  const [sortColumn, setSortColumn] = useState<string | null>(null);
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const ITEMS_PER_PAGE = 100;
 
-  const supabaseClient = createClient();
-
-  // Fetch categories from the database
-  const fetchCategories = async () => {
-    setLoading(true);
-    const { data, error } = await supabaseClient
-      .from("blinks_categories_count")
-      .select("category_name, total_blinks");
-
-    if (error) {
-      console.error("Error fetching categories:", error);
-    } else {
-      setCategories(
-        data.map((category) => ({
-          name: category.category_name,
-          count: category.total_blinks,
-        })),
-      );
-    }
-    setLoading(false);
-  };
-
-  // Fetch total listings from the database
-  const fetchTotalListings = async () => {
-    setLoading(true);
-    const { count, error } = await supabaseClient
-      .from("blinks")
-      .select("*", { count: "exact" })
-      .eq("moderation_status", "approved");
-
-    if (error) {
-      console.error("Error fetching total listings:", error);
-      setLoading(false);
-      return;
-    }
-
-    setTotalListings(count ?? 0);
-    setLoading(false);
-  };
-
-  // Fetch listing data from the database
-  const fetchListingData = async () => {
-    setLoading(true);
-    const { data, error } = await supabaseClient
-      .from("blinks")
-      .select("*")
-      .eq("moderation_status", "approved");
-
-    if (error) {
-      console.error("Error fetching listings:", error);
-      setLoading(false);
-      return;
-    }
-
-    setListings(data);
-    setTotalListings(data.length); // Set total listings count
-    setLoading(false);
-  };
-
-  // Fetch statuses from the database
-  const fetchStatuses = async () => {
-    const { data, error } = await supabaseClient.rpc("enum_status_values");
-
-    if (error) {
-      console.error("Error fetching statuses:", error);
-    } else {
-      setStatuses(data);
-    }
-  };
-
-  // Fetch platforms from the database
-  const fetchPlatforms = async () => {
-    const { data, error } = await supabaseClient
-      .from("blinks_platforms")
-      .select("id, name");
-
-    if (error) {
-      console.error("Error fetching platforms:", error);
-    } else {
-      setPlatforms(data);
-    }
-  };
-
-  // Fetch registry statuses from the database
-  const fetchRegistryStatuses = async () => {
-    const { data, error } = await supabaseClient.rpc(
-      "enum_blinks_registry_status_values",
+  const filteredAndSortedData = useMemo(() => {
+    let filtered = cryptoList.filter(crypto =>
+      crypto.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      crypto.symbol.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (error) {
-      console.error("Error fetching registry statuses:", error);
-    } else {
-      setRegistryStatuses(data);
+    return filtered.sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [cryptoList, searchTerm, sortConfig]);
+
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredAndSortedData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [filteredAndSortedData, currentPage]);
+
+  const handleSort = (key: string) => {
+    setSortConfig({
+      key,
+      direction: sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc',
+    });
+  };
+
+  const SortIcon = ({ column }: { column: string }) => {
+    if (sortConfig.key !== column) {
+      return <ArrowUpIcon className="h-4 w-4 text-gray-400 opacity-0 group-hover:opacity-100" />;
     }
+    return sortConfig.direction === 'asc'
+      ? <ArrowUpIcon className="h-4 w-4 text-blue-500" />
+      : <ArrowDownIcon className="h-4 w-4 text-blue-500" />;
   };
 
-  // Fetch all category names from the database
-  const fetchAllCategoryNames = async () => {
-    const { data, error } = await supabaseClient
-      .from("categories")
-      .select("id, name");
-    if (error) {
-      console.error("Error fetching categories:", error);
-      return {};
-    }
-    return data.reduce(
-      (acc, category) => ({ ...acc, [category.id]: category.name }),
-      {},
-    );
-  };
-
-  // Initialize category names by ID
-  const initCategoryNamesById = async () => {
-    const fetchedCategoryNamesById = await fetchAllCategoryNames();
-    setCategoryNamesById(fetchedCategoryNamesById);
-  };
-
-  // UseEffect to fetch data when the component mounts
-  useEffect(() => {
-    fetchListingData();
-    fetchCategories();
-    fetchTotalListings();
-    fetchStatuses();
-    fetchPlatforms();
-    fetchRegistryStatuses();
-    initCategoryNamesById();
-  }, []);
-
-  // Sort listings based on the selected column
-  const sortListings = (column: string) => {
-    const direction =
-      sortColumn === column && sortDirection === "asc" ? "desc" : "asc";
-    setSortDirection(direction);
-    setSortColumn(column);
-    setListings((prevListings) =>
-      [...prevListings].sort((a, b) => {
-        if (a[column] < b[column]) {
-          return direction === "asc" ? -1 : 1;
-        }
-        if (a[column] > b[column]) {
-          return direction === "asc" ? 1 : -1;
-        }
-        return 0;
-      }),
-    );
-  };
-
-  // Filter listings based on search term, category, status, platform, and registry
-  const filteredListings = listings.filter((listing) => {
-    const searchMatch = listing.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const categoryMatch =
-      filterCategory === "All" ||
-      categoryNamesById[listing.category_1] === filterCategory ||
-      categoryNamesById[listing.category_2] === filterCategory ||
-      categoryNamesById[listing.category_3] === filterCategory ||
-      categoryNamesById[listing.category_4] === filterCategory ||
-      categoryNamesById[listing.category_5] === filterCategory;
-
-    const statusMatch =
-      filterStatus === "All" || listing.status === filterStatus;
-    const platformMatch =
-      filterPlatform === "All" ||
-      listing.platform_ids.includes(parseInt(filterPlatform));
-    const registryMatch =
-      filterRegistry === "All" ||
-      listing.blinks_registry_status === filterRegistry;
-
+  if (isLoading) {
     return (
-      searchMatch &&
-      categoryMatch &&
-      statusMatch &&
-      platformMatch &&
-      registryMatch
+      <div className="text-center">
+        <p>FoskaayFib ATH Crypto Price Prediction List</p>
+        <p> Loading...</p>
+      </div>
     );
-  });
+  }
 
-  // Filter and paginate listings
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentListings = filteredListings.slice(
-    indexOfFirstItem,
-    indexOfLastItem,
-  );
-
-  // Handle pagination
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  // Display loading state if data is still being fetched
-  if (loading) {
-    return <div>Loading...</div>;
+  if (error) {
+    return (
+      <div className="text-center">
+        <div className="text-red-600 dark:text-red-400 p-4 rounded-lg bg-red-50 dark:bg-red-900/10">
+          {error}
+        </div>
+      </div>
+    );
   }
 
   return (
-    <>
-
-    {/* Filters */}
-      <div className="mb-4 flex flex-col justify-between md:flex-row">
-    {/* Category Filter */}
-        <select
-          className="rounded border bg-gray-700 p-2 text-white"
-          value={filterCategory}
-          onChange={(e) => setFilterCategory(e.target.value)}
-        >
-          <option value="All">All Categories ({totalListings})</option>
-          {categories
-            .filter(category => category.count > 0) // Only show categories with at least 1 blink
-            .map((category, idx) => (
-              <option key={idx} value={category.name}>
-                {category.name} ({category.count})
-              </option>
-            ))}
-        </select>
-        {/* Platform Filter */}
-        <select
-          className="rounded border bg-purple-800 p-2 text-white"
-          value={filterPlatform}
-          onChange={(e) => setFilterPlatform(e.target.value)}
-        >
-          <option value="All">All Platforms</option>
-          {platforms.map((platform, idx) => (
-            <option key={idx} value={platform.id}>
-              {platform.name}
-            </option>
-          ))}
-        </select>
-        {/* Status Filter */}
-        <select
-          className="rounded border bg-gray-700 p-2 text-white"
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-        >
-          <option value="All">All Statuses</option>
-          {statuses.map((status, idx) => (
-            <option key={idx} value={status}>
-              {status}
-            </option>
-          ))}
-        </select>
-        {/* Registry Filter */}
-        <select
-          className="rounded border bg-purple-800 p-2 text-white"
-          value={filterRegistry}
-          onChange={(e) => setFilterRegistry(e.target.value)}
-        >
-          <option value="All">All Registry Status</option>
-          {registryStatuses.map((registry, idx) => (
-            <option key={idx} value={registry}>
-              {registry}
-            </option>
-          ))}
-        </select>
-        {/* Search box Filter */}
-        <input
-          type="text"
-          className="mb-4 w-full rounded border bg-purple-800 p-2 text-white md:mb-0"
-          placeholder="Search for Solana Blinks, Airdrop, Recovery, Security tools etc..."
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+    <div className="w-full">
+      {/* SEO Header */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-purple-500 mb-4">
+          2025 ATH Cryptocurrency Price Predictions Using FoskaayFib Levels & Grades
+        </h1>
+        <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          Advanced market cycle analysis and price predictions for top cryptocurrencies.
+          Get detailed FoskaayFib grades, accumulation zones, and price targets based on
+          historical market cycles.
+        </p>
+        <p>
+          Disclaimer: This is for EDUCATIONAL purposes ONLY and not Financial, Investment or Trading Advice in any listed crypto coins/token. 
+          Always Do Your Own Research (DYOR). 
+          Kindly consult professional financial/legal advisers before making financial/investment decisions. 
+          Using whole or part of content means you agree that we are not liable for any losses that you may sufer thereafter (including you agree not to initiate any lawsuit in person or as group) 
+          and you will be solely responsible for your decisions and actions and ensuring that accessing this content is legally permitted in your jurisdiction.
+        </p>
       </div>
 
-        {/* Blinks Table */}
-        <ListingsTableCard
-  listings={currentListings}
-  currentPage={currentPage}
-  itemsPerPage={itemsPerPage}
-  sortListings={sortListings}
-/>
+      {/* Search Bar */}
+      <div className="mb-6">
+        <div className="relative max-w-md mx-auto">
+          <input
+            type="text"
+            placeholder="Search cryptocurrency by name or symbol..."
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 
+                     bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                     focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute right-3 top-2.5" />
+        </div>
+      </div>
 
+      {/* Table */}
+      <div className="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-900">
+              <tr>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  #
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Asset
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer group"
+                  onClick={() => handleSort('marketCap')}
+                >
+                  <div className="flex items-center">
+                    Market Cap
+                    <SortIcon column="marketCap" />
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer group"
+                  onClick={() => handleSort('currentPrice')}
+                >
+                  <div className="flex items-center">
+                    Price
+                    <SortIcon column="currentPrice" />
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer group"
+                  onClick={() => handleSort('foskaayFibGrade')}
+                >
+                  <div className="flex items-center">
+                    FoskaayFib Grade
+                    <SortIcon column="foskaayFibGrade" />
+                  </div>
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  2025 Price Target
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              {paginatedData.map((crypto, index) => (
+                <tr key={crypto.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    {(currentPage - 1) * ITEMS_PER_PAGE + index + 1}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} className="flex items-center">
+                      <div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          {crypto.name}
+                        </div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                          {crypto.symbol}
+                        </div>
+                      </div>
+                    </Link>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    {formatMarketCap(crypto.marketCap)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                    {formatPrice(crypto.currentPrice)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getGradeColor(crypto.foskaayFibGrade)}`}>
+                      Grade {crypto.foskaayFibGrade}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    {formatPrice(crypto.predictedRange.min)} - {formatPrice(crypto.predictedRange.max)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Pagination */}
-      <div className="mt-4 flex justify-center">
-      {Array.from(
-              Array(Math.ceil(totalListings / itemsPerPage)),
-              (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => paginate(index + 1)}
-                  className={`mx-1 rounded border p-2 ${
-                    currentPage === index + 1 ? "bg-blue-500 text-white" : ""
-                  }`}
-                >
-                  {index + 1}
+      <div className="mt-6 flex justify-center">
+        <nav className="flex items-center space-x-2">
+          {Array.from({ length: Math.ceil(filteredAndSortedData.length / ITEMS_PER_PAGE) }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 py-1 rounded ${currentPage === i + 1
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+            >
+              {i + 1}
             </button>
-          ),
-        )}
+          ))}
+        </nav>
       </div>
-    </>
-  );
-};
 
-export default BlinksPage;
+      {/* Footer Info */}
+      <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+        <p>Data updates every 5 minutes. Last updated: {new Date().toLocaleString()}</p>
+        <p className="mt-2">
+          Powered by FoskaayFib Market Cycle Analysis. 
+          Historical data provided by {" "} 
+          <Link href="https://www.cryptocompare.com">
+          CryptoCompare.
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}

@@ -1,61 +1,33 @@
-// /app/ATH-Crypto-Price-Prediction/page.tsx
-import Blinks from "@/components/Blinks";
-import TitleAnimated from "@/components/Header/TitleAnimated";
-import { Metadata } from "next";
-import TitleStaticBlinks from "@/components/Header/TitleStaticBlinks";
+// /app/ath-crypto-price-prediction/page.tsx
+import { Metadata } from 'next';
+import ATHCryptoPricePrediction from '@/components/ATH-Crypto-Price-Prediction';
 
-// Define fixed metadata values
-const title = "Explore Solana Blinks - Explore Web3";
-const description = "Earn Using and Exploring Solana Projects& Blinks";
-const ogImage = "https://ExploreWeb3.xyz/images/opengraph-image.png";
-const siteUrl = "https://ExploreWeb3.xyz/directory"; // Replace with your actual site URL
-
-// Create metadata object
 export const metadata: Metadata = {
-  title: title,
-  description: description,
+  title: 'Cryptocurrency Price Predictions | FoskaayFib Market Cycle Analysis',
+  description: 'Get accurate cryptocurrency price predictions using FoskaayFib market cycle analysis. View detailed grades, accumulation zones, and price targets for Bitcoin, Ethereum, and other major cryptocurrencies.',
+  keywords: 'crypto price prediction, FoskaayFib analysis, cryptocurrency market cycles, Bitcoin prediction, crypto trading tools, market cycle analysis, crypto investment strategy',
   openGraph: {
-    url: siteUrl,
+    title: 'Cryptocurrency Price Predictions | FoskaayFib Market Cycle Analysis',
+    description: 'Advanced market cycle analysis and price predictions for top cryptocurrencies using FoskaayFib levels.',
     type: 'website',
-    title: title,
-    description: description,
-    images: [
-      {
-        url: ogImage,
-        width: 1200,
-        height: 630,
-        alt: title,
-      },
-    ],
+    locale: 'en_US',
+    siteName: 'FoskaayFib Crypto Analysis'
   },
   twitter: {
-    card: "summary_large_image",
-    title: title,
-    description: description,
-    images: [ogImage],
-  },
+    card: 'summary_large_image',
+    title: 'Cryptocurrency Price Predictions | FoskaayFib Market Cycle Analysis',
+    description: 'Advanced market cycle analysis and price predictions for top cryptocurrencies using FoskaayFib levels.'
+  }
 };
 
-const BlinksHomePage = () => {
-  
+export default function ATHCryptoPricePredictionPage() {
   return (
-    <>
-      <section className="pb-20 pt-35 lg:pb-25 lg:pt-45 xl:pb-30 xl:pt-50">
-        <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
-          <div className="flex flex-col gap-7.5">
-          {/* Top text section with highlighted text */}
-            <TitleStaticBlinks />
-
-            {/* Animated text component */}
-            <TitleAnimated />
-
-            {/* Directory Page */}
-            <Blinks />
-          </div>
-        </div>
-      </section>
-    </>
+    <section className="pb-20 pt-35 lg:pb-25 lg:pt-45 xl:pb-30 xl:pt-50">
+       <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
+        {/* <div className="flex flex-col-reverse gap-7.5 lg:flex-row xl:gap-12.5">  */}
+        <ATHCryptoPricePrediction />
+        {/* </div> */}
+      </div> 
+    </section>
   );
-};
-
-export default BlinksHomePage;
+}

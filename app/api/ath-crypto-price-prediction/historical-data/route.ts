@@ -13,6 +13,15 @@ export async function GET(request: Request) {
     // Log the incoming request details
     console.log('Incoming request for symbol:', symbol);
 
+    //Check API key
+    if (!CRYPTOCOMPARE_API_KEY) {
+      console.error('CRYPTOCOMPARE_API_KEY not found in environment variables');
+      return NextResponse.json(
+        { error: 'API configuration error' },
+        { status: 500 }
+      );
+    }
+
     if (!symbol) {
       console.error('No symbol provided');
       return NextResponse.json(
@@ -21,13 +30,6 @@ export async function GET(request: Request) {
       );
     }
 
-    if (!CRYPTOCOMPARE_API_KEY) {
-      console.error('CRYPTOCOMPARE_API_KEY not found in environment variables');
-      return NextResponse.json(
-        { error: 'API configuration error' },
-        { status: 500 }
-      );
-    }
 
     // Construct the API URL for daily historical data
     // Using histoday endpoint for daily OHLCV data

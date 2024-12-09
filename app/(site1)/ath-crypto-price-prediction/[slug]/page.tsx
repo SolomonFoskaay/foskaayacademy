@@ -1,4 +1,4 @@
-// /app/ATH-Crypto-Price-Prediction/[slug]/page.tsx
+// /app/ath-crypto-price-prediction/[slug]/page.tsx
 import ATHCPPListingsFullDetailsPage from "@/components/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage";
 
 const CryptoPredictionPage = ({ params }: { params: { slug: string } }) => {

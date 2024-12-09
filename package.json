@@ -61,6 +61,7 @@
     "typescript": "^5.4.5"
   },
   "devDependencies": {
+    "@shadcn/ui": "^0.0.4",
     "encoding": "^0.1.13"
   }
 }
