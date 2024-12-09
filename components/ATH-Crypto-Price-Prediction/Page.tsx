@@ -116,7 +116,7 @@ export default function ATHCryptoPricePredictionPage({
       {/* SEO Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-purple-500 mb-4">
-          2025 ATH Cryptocurrency Price Predictions Using FoskaayFib Levels & Grades
+          2022 - 2025 Crypto Market Cycle ATH Cryptocurrency Price Predictions Using FoskaayFib Levels & Grades
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
           Advanced market cycle analysis and price predictions for top cryptocurrencies.

@@ -1,13 +1,13 @@
-// /components/Blinks/Tab/index.tsx
+// /components/ATH-Crypto-Price-Prediction/Tab/index.tsx
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import BlinksTabItem from "./BlinksTabItem";
-import BlinksTabData from "./BlinksTabData";
+import ATHCryptoPricePredictionTabItem from "./ATHCryptoPricePredictionTabItem";
+import ATHCryptoPricePredictionTabData from "./ATHCryptoPricePredictionTabData";
 
 import { motion } from "framer-motion";
 
-const BlinksTab = () => {
+const ATHCryptoPricePredictionTab = () => {
   const [currentTab, setCurrentTab] = useState("tabOne");
 
   return (
@@ -64,11 +64,11 @@ const BlinksTab = () => {
               </div>
               <div className="md:w-3/5 lg:w-auto">
                 <button className="text-sm font-medium text-black dark:text-white xl:text-regular">
-                  PROJECTS
+                FREE ATH Crypto Price Prediction Tool
                 </button>
               </div>
             </div>
-            <div
+            {/* <div
               onClick={() => setCurrentTab("tabTwo")}
               className={`relative flex w-full cursor-pointer items-center gap-4 border-b border-stroke px-6 py-2 last:border-0 dark:border-strokedark md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${
                 currentTab === "tabTwo"
@@ -86,7 +86,7 @@ const BlinksTab = () => {
                   BLINKS
                 </button>
               </div>
-            </div>
+            </div> */}
             
           </motion.div>
           {/* <!-- Tab Menues End --> */}
@@ -110,12 +110,12 @@ const BlinksTab = () => {
             viewport={{ once: true }}
             className="animate_top mx-auto max-w-c-1154"
           >
-            {BlinksTabData.map((feature, key) => (
+            {ATHCryptoPricePredictionTabData.map((feature, key) => (
               <div
                 className={feature.id === currentTab ? "block" : "hidden"}
                 key={key}
               >
-                <BlinksTabItem featureTab={feature} />
+                <ATHCryptoPricePredictionTabItem featureTab={feature} />
               </div>
             ))}
           </motion.div>
@@ -127,4 +127,4 @@ const BlinksTab = () => {
   );
 };
 
-export default BlinksTab;
+export default ATHCryptoPricePredictionTab;
