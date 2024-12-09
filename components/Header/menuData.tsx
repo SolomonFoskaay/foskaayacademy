@@ -44,6 +44,12 @@ const menuData: Menu[] = [
         path: "/blinks",
       },
       {
+        id: 2.2,
+        title: "ATH Crypto Price Pridiction Tool",
+        newTab: false,
+        path: "/ath-crypto-price-prediction",
+      },
+      {
         id: 2.3,
         title: "About",
         newTab: false,

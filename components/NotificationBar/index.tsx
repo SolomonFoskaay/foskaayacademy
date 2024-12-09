@@ -17,9 +17,9 @@ const NotificationBar = () => {
           <div className="flex items-center gap-4">
             <strong>New Feature:</strong>
             <span>
-              Solana Blinks Explorer Launched - {" "}
+              2025 Bull Market Price Prediction Tool Launched - {" "}
               <a
-                href="/blinks"
+                href="/ath-crypto-price-prediction"
                 className="underline hover:text-yellow-300"
               >
                 Explore!

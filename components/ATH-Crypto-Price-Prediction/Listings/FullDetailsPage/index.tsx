@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Chart from "./Chart";
 import ContentMain from "./ContentMain";
+import Link from "next/link";
 import ContentSidebar from "./ContentSidebar";
 
 interface HistoricalDataPoint {
@@ -75,28 +76,48 @@ const ATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
   }
 
   return (
-    <div className="flex flex-col w-full">
-      {/* SEO Optimized Title and Description */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">
-          2025 {cryptoData.symbol} ATH Crypto Price Prediction
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Comprehensive price analysis and ATH prediction for {cryptoData.symbol}. 
-          Track historical data, market trends, and price movements to make informed decisions.
-        </p>
+    <div>
+
+      {/* Breadcrumbs */}
+      <nav className="text-sm mb-4">
+        <Link href="/ath-crypto-price-prediction" className="text-blue-500 hover:underline">
+        ← Back to ATH Crypto Price Prediction Homepage
+        </Link>
+        <span className="mx-2">{">>"}</span>
+        <span>{slug.toUpperCase()}</span>
+      </nav>
+
+      <div className="flex flex-col w-full">
+        {/* SEO Optimized Title and Description */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">
+            2025 {cryptoData.symbol} ATH Crypto Price Prediction
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Comprehensive price analysis and ATH prediction for {cryptoData.symbol}.
+            Track historical data, market trends, and price movements to make informed decisions.
+          </p>
+        </div>
+
+        {/* Full-width chart section */}
+        <div className="w-full mb-8">
+          <Chart cryptoData={cryptoData} />
+        </div>
+
+        {/* Two-column layout below chart */}
+        <div className="flex flex-col lg:flex-row gap-8">
+          <ContentMain cryptoData={cryptoData} />
+          {/* <ContentSidebar /> */}
+        </div>
       </div>
 
-      {/* Full-width chart section */}
-      <div className="w-full mb-8">
-        <Chart cryptoData={cryptoData} />
+      {/* Back to Homepage Link at Bottom */}
+      <div className="mt-4">
+        <Link href="/ath-crypto-price-prediction" className="text-blue-500 hover:underline">
+        ← Back to Crypto ATH Price Prediction Homepage
+        </Link>
       </div>
 
-      {/* Two-column layout below chart */}
-      <div className="flex flex-col lg:flex-row gap-8">
-        <ContentMain cryptoData={cryptoData} />
-        {/* <ContentSidebar /> */}
-      </div>
     </div>
   );
 };
