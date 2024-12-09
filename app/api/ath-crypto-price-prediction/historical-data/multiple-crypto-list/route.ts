@@ -4,38 +4,41 @@ import { NextResponse } from 'next/server';
 const CRYPTOCOMPARE_API_KEY = process.env.CRYPTOCOMPARE_API_KEY;
 const BASE_URL = 'https://min-api.cryptocompare.com/data';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    if (!CRYPTOCOMPARE_API_KEY) {
-      throw new Error('API configuration error');
+    // Get URL parameters
+    const { searchParams } = new URL(request.url);
+    const symbolsParam = searchParams.get('symbols');
+    const symbols = symbolsParam ? symbolsParam.split(',').map(s => s.toUpperCase()) : [];
+
+    if (!CRYPTOCOMPARE_API_KEY || symbols.length === 0) {
+      throw new Error('API configuration error or no symbols provided');
     }
 
-    // Hardcoded list of symbols
-    const symbols = ['BTC', 'ETH', 'XRP', 'USDT', 'SOL', 'BNB', 'DOGE', 'ADA', 'SUI', 'USDC'];
-    const promises = symbols.map(async (symbol) => {
-      const apiUrl = `${BASE_URL}/v2/histoday?fsym=${symbol}&tsym=USD&limit=1&aggregate=1`;
-      const response = await fetch(apiUrl, {
-        headers: {
-          'authorization': `Apikey ${CRYPTOCOMPARE_API_KEY}`
-        }
-      });
+    const apiUrl = `${BASE_URL}/pricemultifull?fsyms=${symbols.join(',')}&tsyms=USD`;
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data for ${symbol}`);
+    const response = await fetch(apiUrl, {
+      headers: {
+        'authorization': `Apikey ${CRYPTOCOMPARE_API_KEY}`
       }
-
-      const data = await response.json();
-      const coinInfo = data.Data.Data[0];
-
-      return {
-        symbol,
-        name: symbol, // Replace with actual name if available
-        marketCap: coinInfo.volumeto,
-        currentPrice: coinInfo.close
-      };
     });
 
-    const results = await Promise.all(promises);
+    if (!response.ok) {
+      throw new Error('Failed to fetch data');
+    }
+
+    const data = await response.json();
+
+    const results = symbols.map(symbol => {
+      const coinInfo = data.RAW[symbol].USD;
+      return {
+        symbol,
+        name: symbol,
+        currentPrice: coinInfo.PRICE,
+        marketCap: coinInfo.MKTCAP,
+        totalVolume24h: coinInfo.TOTALVOLUME24HTO
+      };
+    });
 
     return NextResponse.json({
       success: true,

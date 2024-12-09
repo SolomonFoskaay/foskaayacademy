@@ -20,6 +20,12 @@ const formatMarketCap = (marketCap: number) => {
   return `$${marketCap.toLocaleString()}`;
 };
 
+const formattotalVolume24h = (totalVolume24h: number) => {
+  if (totalVolume24h >= 1e9) return `$${(totalVolume24h / 1e9).toFixed(2)}B`;
+  if (totalVolume24h >= 1e6) return `$${(totalVolume24h / 1e6).toFixed(2)}M`;
+  return `$${totalVolume24h.toLocaleString()}`;
+};
+
 const getGradeColor = (grade: string) => {
   const gradeColors: { [key: string]: string } = {
     'A': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
@@ -118,10 +124,10 @@ export default function ATHCryptoPricePredictionPage({
           historical market cycles.
         </p>
         <p>
-          Disclaimer: This is for EDUCATIONAL purposes ONLY and not Financial, Investment or Trading Advice in any listed crypto coins/token. 
-          Always Do Your Own Research (DYOR). 
-          Kindly consult professional financial/legal advisers before making financial/investment decisions. 
-          Using whole or part of content means you agree that we are not liable for any losses that you may sufer thereafter (including you agree not to initiate any lawsuit in person or as group) 
+          Disclaimer: This is for EDUCATIONAL purposes ONLY and not Financial, Investment or Trading Advice in any listed crypto coins/token.
+          Always Do Your Own Research (DYOR).
+          Kindly consult professional financial/legal advisers before making financial/investment decisions.
+          Using whole or part of content means you agree that we are not liable for any losses that you may sufer thereafter (including you agree not to initiate any lawsuit in person or as group)
           and you will be solely responsible for your decisions and actions and ensuring that accessing this content is legally permitted in your jurisdiction.
         </p>
       </div>
@@ -148,12 +154,15 @@ export default function ATHCryptoPricePredictionPage({
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
+                {/* ID */}
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   #
                 </th>
+                {/* Name */}
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Asset
+                  Name
                 </th>
+                {/* MarketCap */}
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer group"
@@ -164,6 +173,7 @@ export default function ATHCryptoPricePredictionPage({
                     <SortIcon column="marketCap" />
                   </div>
                 </th>
+                {/* Price */}
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer group"
@@ -174,6 +184,18 @@ export default function ATHCryptoPricePredictionPage({
                     <SortIcon column="currentPrice" />
                   </div>
                 </th>
+                {/* Liquidity (24H) */}
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer group"
+                  onClick={() => handleSort('foskaayFibGrade')}
+                >
+                  <div className="flex items-center">
+                    Liquidity (24H)
+                    <SortIcon column="foskaayFibGrade" />
+                  </div>
+                </th>
+                {/* FoskaayFib Grade  */}
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer group"
@@ -184,6 +206,7 @@ export default function ATHCryptoPricePredictionPage({
                     <SortIcon column="foskaayFibGrade" />
                   </div>
                 </th>
+                {/* FoskaayFib Price Prediction */}
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   2025 Price Target
                 </th>
@@ -195,6 +218,7 @@ export default function ATHCryptoPricePredictionPage({
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                     {(currentPage - 1) * ITEMS_PER_PAGE + index + 1}
                   </td>
+                  {/* Name values */}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} className="flex items-center">
                       <div>
@@ -207,19 +231,34 @@ export default function ATHCryptoPricePredictionPage({
                       </div>
                     </Link>
                   </td>
+                  {/* Marketcap values*/}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                     {formatMarketCap(crypto.marketCap)}
                   </td>
+                  {/* Price values */}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                     {formatPrice(crypto.currentPrice)}
                   </td>
+                  {/* Liquidity (24H) values */}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                    {formattotalVolume24h(crypto.totalVolume24h)}
+                  </td>
+                  {/* FoskaayFib grades Value */}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${getGradeColor(crypto.foskaayFibGrade)}`}>
                       Grade {crypto.foskaayFibGrade}
                     </span>
                   </td>
+                  {/* FoskaayFib Price Prediction */}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {formatPrice(crypto.predictedRange.min)} - {formatPrice(crypto.predictedRange.max)}
+                  
+                      <div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          Unveil Now {">>"}
+                        </div>
+                      </div>
+                    
+                    {/* {formatPrice(crypto.predictedRange.min)} - {formatPrice(crypto.predictedRange.max)} */}
                   </td>
                 </tr>
               ))}
@@ -236,8 +275,8 @@ export default function ATHCryptoPricePredictionPage({
               key={i}
               onClick={() => setCurrentPage(i + 1)}
               className={`px-3 py-1 rounded ${currentPage === i + 1
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
             >
               {i + 1}
@@ -248,12 +287,12 @@ export default function ATHCryptoPricePredictionPage({
 
       {/* Footer Info */}
       <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
-        <p>Data updates every 5 minutes. Last updated: {new Date().toLocaleString()}</p>
+        <p>Data updates every 5 minutes (Or Reload the page). Last updated: {new Date().toLocaleString()}</p>
         <p className="mt-2">
-          Powered by FoskaayFib Market Cycle Analysis. 
-          Historical data provided by {" "} 
+          Powered by FoskaayFib Market Cycle Analysis.
+          Historical data provided by {" "}
           <Link href="https://www.cryptocompare.com">
-          CryptoCompare.
+            CryptoCompare.
           </Link>
         </p>
       </div>
