@@ -233,32 +233,40 @@ export default function ATHCryptoPricePredictionPage({
                   </td>
                   {/* Marketcap values*/}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {formatMarketCap(crypto.marketCap)}
+                    <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} className="flex items-center">
+                      {formatMarketCap(crypto.marketCap)}
+                    </Link>
                   </td>
                   {/* Price values */}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                    {formatPrice(crypto.currentPrice)}
+                    <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} className="flex items-center">
+                      {formatPrice(crypto.currentPrice)}
+                    </Link>
                   </td>
                   {/* Liquidity (24H) values */}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                    {formattotalVolume24h(crypto.totalVolume24h)}
+                    <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} className="flex items-center">
+                      {formattotalVolume24h(crypto.totalVolume24h)}
+                    </Link>
                   </td>
                   {/* FoskaayFib grades Value */}
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getGradeColor(crypto.foskaayFibGrade)}`}>
-                      Grade {crypto.foskaayFibGrade}
-                    </span>
+                    <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} className="flex items-center">
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${getGradeColor(crypto.foskaayFibGrade)}`}>
+                        Grade {crypto.foskaayFibGrade}
+                      </span>
+                    </Link>
                   </td>
                   {/* FoskaayFib Price Prediction */}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                  
-                      <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
-                          Unveil Now {">>"}
-                        </div>
+                    <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} className="flex items-center">
+                    <div>
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        Unveil Now {">>"}
                       </div>
-                    
+                    </div>
                     {/* {formatPrice(crypto.predictedRange.min)} - {formatPrice(crypto.predictedRange.max)} */}
+                    </Link>
                   </td>
                 </tr>
               ))}
