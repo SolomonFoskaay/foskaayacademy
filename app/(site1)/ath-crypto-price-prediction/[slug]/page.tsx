@@ -1,7 +1,14 @@
-// /app/ath-crypto-price-prediction/[slug]/page.tsx
+// /app/(site1)/ath-crypto-price-prediction/[slug]/page.tsx
+
 import ATHCPPListingsFullDetailsPage from "@/components/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage";
 
-const CryptoPredictionPage = ({ params }: { params: { slug: string } }) => {
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
+const CryptoPredictionPage = ({ params }: PageProps) => {
   const { slug } = params;
 
   return (
