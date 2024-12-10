@@ -9,22 +9,20 @@ export const cryptoSymbols = [
     'SAND', 'MKR', 'LDO', 'EOS', 'QNT', 'BRETT', 'BEAM', 'KAIA', 'KCS', 'PYTH', 
     'FLR', 'FLOW', 'AR', 'VIRTUAL', 'AERO', 'XTZ', 'JUP', 'STRK', 'BSV', 'BTT', 
     'MOG', 'HNT', 'CRV', 'RAY', 'DYDX', 'EGLD', 'XDC', 'AXS', 'NEO', 'AIOZ', 
-    'ENS', 'MANA', 'MATIC', 'POPCAT', 'PNUT', 'CORE', 'APE', 'GT', 'CHZ', 'CAKE' 
-        
-    
+    'ENS', 'MANA', 'POPCAT', 'PNUT', 'CORE', 'APE', 'GT', 'CHZ', 'CAKE', 'SUPER', 
+
   ];
 
   export const cryptoNames = [
     'Bitcoin', 'Ethereum', 'Ripple', 'Solana', 'Binance', 'Dogecoin', 'Cardano', 'Tron', 'Avalanche', 'Shiba Inu', 
     'Toncoin', 'Chainlink', 'Polkadot', 'Stellar Lumen', 'Bitcoin Cash', 'Sui', 'Pepe', 'Hedera', 'Uniswap', 'Unus Sed Leo', 
-    'Litecoin', 'Near Protocol', 'Aptos', 'Internet Computer', 'Polygon (ex-MATIC)', 'Ethereum Classic', 'Cronos', 'Render', 'Bittensor', 'VeChain', 
+    'Litecoin', 'Near Protocol', 'Aptos', 'Internet Computer', 'Polygon (POL ex-MATIC)', 'Ethereum Classic', 'Cronos', 'Render', 'Bittensor', 'VeChain', 
     'Kaspa', 'Artificial SuperInterlligience Alliance', 'Arbitrum', 'Aave', 'Mantle', 'Filecoin', 'Bitget Token', 'Algorand', 'Mantra', 'Cosmos', 
     'OKB', 'Stacks', 'Monero', 'Fantom', 'DogWifHat', 'Bonk', "Celestia", 'Immutable', 'Optimism', 'Ethena', 
-    'Injective', 'The Graph', 'Floki', 'Theta Network', 'Sei', 'Worldcoin', 'Thorchain', 'Ondo', 'JasmyCoin', 'Gala', 
-    'The Sandbox', 'Maker', 'Beam', 'EOS', 'Quant', 'BRETT', 'BEAM', 'KAIA', 'KCS', 'PYTH', 
-    'FLR', 'FLOW', 'AR', 'VIRTUAL', 'AERO', 'XTZ', 'JUP', 'STRK', 'BSV', 'BTT', 
-    'MOG', 'HNT', 'CRV', 'RAY', 'DYDX', 'EGLD', 'XDC', 'AXS', 'NEO', 'AIOZ', 
-    'ENS', 'MANA', 'MATIC', 'POPCAT', 'PNUT', 'CORE', 'APE', 'GT', 'CHZ', 'CAKE' 
-    
+    'Injective', 'The Graph', 'Floki', 'Theta Network', 'Sei', 'Worldcoin', 'Thorchain', 'Ondo', 'JasmyCoin', 'GalaChain', 
+    'The Sandbox', 'Maker', 'Beam', 'EOS', 'Quant', 'Brett (Based)', 'Beam', 'Kaia', 'KuCoin Token', 'Pyth Network', 
+    'Flare', 'Flow', 'Arweave', 'Virtuals Protocol', 'Aerodrome Finance', 'Tezos', 'Jupiter', 'Starknet', 'Bitcoin SV', 'BitTorrent (New)', 
+    'Mog Coin', 'Helium', 'Curve DAO Token', 'Raydium', 'dYdX (Native)', 'MultiversX', 'XDC Network', 'Axie Infinity', 'Neo', 'AIOZ Network', 
+    'Ethereum Name Service', 'Decentraland', 'PopCat (SOL)', 'Peanut The Squirrel', 'Core', 'ApeCoin', 'GateToken', 'Chiliz', 'PancakeSwap', 'Super' 
     
   ];
