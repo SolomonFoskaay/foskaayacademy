@@ -36,7 +36,7 @@ export async function GET(request: Request) {
         symbol,
         name: symbol,
         currentPrice: coinInfo.PRICE,
-        marketCap: coinInfo.MKTCAP > 0 ? coinInfo.MKTCAP : 'Unknown',
+        marketCap: coinInfo.CIRCULATINGSUPPLYMKTCAP > 0 ? coinInfo.CIRCULATINGSUPPLYMKTCAP : 'Unknown',
         totalVolume24h: coinInfo.TOTALVOLUME24HTO > 0 ? coinInfo.TOTALVOLUME24HTO : 'Unknown',
         tokenImageURL: `${IMAGE_BASE_URL}${coinInfo.IMAGEURL}`
       };
