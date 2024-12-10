@@ -124,19 +124,27 @@ export default function ATHCryptoPricePredictionPage({
       {/* SEO Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-purple-500 mb-4">
-          2022 - 2025 Crypto Market Cycle ATH Cryptocurrency Price Predictions Using FoskaayFib Levels & Grades
+          2022 - 2025 Crypto Market Cycle ATH Cryptocurrency Price Predictions Using FoskaayFib Levels & Grades (V1.16.100)
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
           Advanced market cycle analysis and price predictions for top cryptocurrencies.
           Get detailed FoskaayFib grades, accumulation zones, and price targets based on
           historical market cycles.
         </p>
-        <p>
+        <p className="text-xs mx-auto">
           Disclaimer: This is for EDUCATIONAL purposes ONLY and not Financial, Investment or Trading Advice in any listed crypto coins/token.
           Always Do Your Own Research (DYOR).
           Kindly consult professional financial/legal advisers before making financial/investment decisions.
           Using whole or part of content means you agree that we are not liable for any losses that you may sufer thereafter (including you agree not to initiate any lawsuit in person or as group)
           and you will be solely responsible for your decisions and actions and ensuring that accessing this content is legally permitted in your jurisdiction.
+        </p>
+        <p className="text-l text-yellow-600 max-w-3xl mx-auto">
+          <Link href="/donate" >
+          <b>SUPPORT PLEASE:</b> If you find this FREE ATH Crypto Price Prediction Calculator Tool helpful and want to keep it going 
+          (it took me lots of sleepless-nights to build & continue to maintain for FREE). 
+          <br />
+          Kindly DONATE here (Hint: Mint ExploreWeb3 Donor NFT to unlock more EXCLUSIVE Features coming soon) - THANKS!
+          </Link>
         </p>
       </div>
 
@@ -249,7 +257,7 @@ export default function ATHCryptoPricePredictionPage({
                     </td>
                     {/* Marketcap values*/}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} className="flex items-center">
+                      <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`}  className="flex items-center">
                         {formatMarketCap(crypto.marketCap)}
                       </Link>
                     </td>
