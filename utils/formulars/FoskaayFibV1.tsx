@@ -73,67 +73,67 @@ export const MARKET_CYCLES = {
 const FOSKAAY_FIB_GRADES: FoskaayFibGrade[] = [
     {
         grade: "A",
-        name: "Super Early Stage of Accumulation Zone",
+        name: "Super Early Stage of Accumulation Zone (FoskaayFib Level 0.00%-23.60%)",
         range: [0.00, 23.60],
         color: "#004d00" // Deep Green
     },
     {
         grade: "B",
-        name: "Early Stage of Accumulation Zone",
+        name: "Early Stage of Accumulation Zone (FoskaayFib Level 23.61%-50.00%)",
         range: [23.61, 50.00],
         color: "#008000" // Medium Green
     },
     {
         grade: "C",
-        name: "Mid/Late Stage of Accumulation Zone",
+        name: "Mid/Late Stage of Accumulation Zone (FoskaayFib Level 50.01%-78.00%)",
         range: [50.01, 78.00],
         color: "#00cc00" // Light Green
     },
     {
         grade: "D",
-        name: "Mid Stage of Previous ATH Recovery Zone",
+        name: "Mid Stage of Previous ATH Recovery Zone (FoskaayFib Level 78.01%-100.00%)",
         range: [78.01, 100.00],
         color: "#cccc00" // Yellow
     },
     {
         grade: "E",
-        name: "Super Early Stage of Market Cycle Top Zone",
+        name: "Super Early Stage of Market Cycle Top Zone (FoskaayFib Level 100.01%-124.60%)",
         range: [100.01, 124.60],
         color: "#ffcc00" // Light Orange
     },
     {
         grade: "F",
-        name: "Early Stage of Market Cycle Top Zone",
+        name: "Early Stage of Market Cycle Top Zone (FoskaayFib Level 124.61%-141.40%)",
         range: [124.61, 141.40],
         color: "#ff9900" // Orange
     },
     {
         grade: "G",
-        name: "Mid Stage of Market Cycle Top Zone",
+        name: "Mid Stage of Market Cycle Top Zone (FoskaayFib Level 141.41%-161.80%)",
         range: [141.41, 161.80],
         color: "#ff6600" // Dark Orange
     },
     {
         grade: "H",
-        name: "Late Stage of Market Cycle Top Zone",
+        name: "Late Stage of Market Cycle Top Zone (FoskaayFib Level 161.81%-180.00%)",
         range: [161.81, 180.00],
         color: "#ff3300" // Light Red
     },
     {
         grade: "I",
-        name: "Super Late Stage of Market Cycle Top Zone",
+        name: "Super Late Stage of Market Cycle Top Zone (FoskaayFib Level 180.01%-200.00%)",
         range: [180.01, 200.00],
         color: "#cc0000" // Medium Red
     },
     {
         grade: "J",
-        name: "Super Late Stage of Market Cycle Top Zone",
+        name: "Super Late Stage of Market Cycle Top Zone (FoskaayFib Level 200.01%-216.80%)",
         range: [200.01, 216.80],
         color: "#990000" // Dark Red
     },
     {
         grade: "K",
-        name: "Extreme Late Stage of Market Cycle Top Zone",
+        name: "Extreme Late Stage of Market Cycle Top Zone (FoskaayFib Level 216.80%-236.00%)",
         range: [216.81, 236.00],
         color: "#660000" // Deep Red
     }

@@ -81,7 +81,9 @@ const ATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
       {/* Breadcrumbs */}
       <nav className="text-sm mb-4">
         <Link href="/ath-crypto-price-prediction" className="text-blue-500 hover:underline">
-        ← Back to ATH Crypto Price Prediction Homepage
+        <br /> {/* this break helps to create needed space on mobile betwen nav and notification header bar */}
+        ← Back to 
+        ATH Crypto Price Prediction Homepage
         </Link>
         <span className="mx-2">{">>"}</span>
         <span>{slug.toUpperCase()}</span>

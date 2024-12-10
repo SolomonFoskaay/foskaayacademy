@@ -56,10 +56,15 @@ export default function ATHCryptoPricePredictionPage({
   const ITEMS_PER_PAGE = 100;
 
   const filteredAndSortedData = useMemo(() => {
-    let filtered = cryptoList.filter(crypto =>
-      crypto.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      crypto.symbol.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    let filtered = cryptoList.filter(crypto => {
+      const nameIndex = cryptoSymbols.indexOf(crypto.symbol);
+      const cryptoName = cryptoNames[nameIndex] || crypto.symbol;
+
+      return (
+        crypto.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        cryptoName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
 
     return filtered.sort((a, b) => {
       if (a[sortConfig.key] < b[sortConfig.key]) {
