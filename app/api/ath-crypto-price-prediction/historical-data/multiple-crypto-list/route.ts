@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 
 const CRYPTOCOMPARE_API_KEY = process.env.CRYPTOCOMPARE_API_KEY;
 const BASE_URL = 'https://min-api.cryptocompare.com/data';
+const IMAGE_BASE_URL = 'https://cryptocompare.com'; // Add this line
 
 export async function GET(request: Request) {
   try {
@@ -36,7 +37,8 @@ export async function GET(request: Request) {
         name: symbol,
         currentPrice: coinInfo.PRICE,
         marketCap: coinInfo.MKTCAP,
-        totalVolume24h: coinInfo.TOTALVOLUME24HTO
+        totalVolume24h: coinInfo.TOTALVOLUME24HTO,
+        tokenImageURL: `${IMAGE_BASE_URL}${coinInfo.IMAGEURL}`
       };
     });
 

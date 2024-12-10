@@ -230,6 +230,11 @@ export default function ATHCryptoPricePredictionPage({
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} className="flex items-center">
+                        <img
+                          src={crypto.tokenImageURL}
+                          alt={`${cryptoName} logo`}
+                          className="h-6 w-6 mr-2"
+                        />
                         <div>
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
                             {cryptoName}

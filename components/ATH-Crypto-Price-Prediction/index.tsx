@@ -11,6 +11,7 @@ interface CryptoData {
   marketCap: number;
   currentPrice: number;
   totalVolume24h: number;
+  tokenImageURL: string;
 }
 
 export default function ATHCryptoPricePrediction() {
