@@ -16,10 +16,12 @@ const formatPrice = (price: number) => {
 };
 
 const formatMarketCap = (marketCap: number) => {
-  if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
-  if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
-  return `$${marketCap.toLocaleString()}`;
+  if (marketCap >= 1e12) return `$${(marketCap / 1e12).toFixed(2)}Trillion`; // Trillions
+  if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}Billion`;  // Billions
+  if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}Million`;  // Millions
+  return `$${marketCap.toLocaleString()}`; // Less than a million
 };
+
 
 const formattotalVolume24h = (totalVolume24h: number) => {
   if (totalVolume24h >= 1e9) return `$${(totalVolume24h / 1e9).toFixed(2)}B`;
