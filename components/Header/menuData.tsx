@@ -45,9 +45,9 @@ const menuData: Menu[] = [
       },
       {
         id: 2.2,
-        title: "ATH Crypto Price Pridiction Tool",
+        title: "Crypto ATH Price Prediction Tool",
         newTab: false,
-        path: "/ath-crypto-price-prediction",
+        path: "/crypto-ath-price-prediction",
       },
       {
         id: 2.3,

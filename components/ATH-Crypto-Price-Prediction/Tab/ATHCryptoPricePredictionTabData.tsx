@@ -3,7 +3,7 @@ const ATHCryptoPricePredictionTabData: directoryTabTypes[] = [
   {
     id: "tabOne",
     title: "", //Put title here or leave empty if returned page alreay have title
-    desc1: `Check here for ATH Crypto Price Pridictions:`,
+    desc1: `Check here for Crypto ATH Price Predictions:`,
     desc2: ``,
     image: "",
     imageDark: "",

@@ -17,12 +17,12 @@ const NotificationBar = () => {
           <div className="flex items-center gap-4">
             <strong>New Feature:</strong>
             <span>
-              2025 Bull Market Price Prediction Tool Launched - {" "}
+              2025 Bull Market Crypto ATH Price Prediction Tool Launched - {" "}
               <a
-                href="/ath-crypto-price-prediction"
+                href="/crypto-ath-price-prediction"
                 className="underline hover:text-yellow-300"
               >
-                Explore!
+                Explore FREE{">>"}
               </a>
             </span>
           </div>
