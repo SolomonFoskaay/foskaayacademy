@@ -37,7 +37,7 @@ export default function ATHCryptoPricePrediction() {
       setIsLoading(false);
     } catch (err) {
       console.error('Failed to fetch cryptocurrency data:', err);
-      setError('Failed to fetch cryptocurrency data. Please try again later.');
+      setError('Failed to fetch cryptocurrency data. Kindly reload the page or revisit later!');
       setIsLoading(false);
     }
   };

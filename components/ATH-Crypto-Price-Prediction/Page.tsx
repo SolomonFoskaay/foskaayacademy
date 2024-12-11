@@ -103,7 +103,7 @@ export default function ATHCryptoPricePredictionPage({
   if (isLoading) {
     return (
       <div className="text-center">
-        <p>FoskaayFib ATH Crypto Price Prediction List</p>
+        <p>FoskaayFib Crypto ATH Price Prediction List</p>
         <p> Loading...</p>
       </div>
     );
@@ -124,12 +124,12 @@ export default function ATHCryptoPricePredictionPage({
       {/* SEO Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-purple-500 mb-4">
-          2022 - 2025 Crypto Market Cycle ATH Cryptocurrency Price Predictions Using FoskaayFib Levels & Grades (Beta-V1.23.100)
+          2022 - 2025 Crypto Market Cycle ATH Cryptocurrency Price Predictions Using FoskaayFib Levels & Grades (Beta-V1.25.100)
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-          Advanced market cycle analysis and price predictions for top cryptocurrencies.
+        Crypto ATH List with Advanced market cycle analysis and price predictions for top cryptocurrencies.
           Get detailed FoskaayFib grades, accumulation zones, and price targets based on
-          historical market cycles.
+          historical market cycles. Crypto ATH Calculator for Crypto ATH Prediction.
         </p>
         <p className="text-xs mx-auto">
           Disclaimer: This is for EDUCATIONAL purposes ONLY and not Financial, Investment or Trading Advice in any listed crypto coins/token.
@@ -140,7 +140,7 @@ export default function ATHCryptoPricePredictionPage({
         </p>
         <p className="text-l text-yellow-600 max-w-3xl mx-auto">
           <Link href="/donate" >
-          <b>SUPPORT PLEASE:</b> If you find this FREE ATH Crypto Price Prediction Calculator Tool helpful and want to keep it going 
+          <b>SUPPORT PLEASE:</b> If you find this FREE Crypto ATH Price Prediction Calculator Tool helpful and want to keep it going 
           (it took me lots of sleepless-nights to build & continue to maintain for FREE). 
           <br />
           Kindly DONATE here (Hint: Mint ExploreWeb3 Donor NFT to unlock more EXCLUSIVE Features coming soon) - THANKS!
@@ -238,8 +238,9 @@ export default function ATHCryptoPricePredictionPage({
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       {(currentPage - 1) * ITEMS_PER_PAGE + index + 1}
                     </td>
+                    {/* Asset Name Values */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
+                      <Link href={`/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         <img
                           src={crypto.tokenImageURL}
                           alt={`${cryptoName} logo`}
@@ -257,25 +258,25 @@ export default function ATHCryptoPricePredictionPage({
                     </td>
                     {/* Marketcap values*/}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
+                      <Link href={`/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         {formatMarketCap(crypto.marketCap)}
                       </Link>
                     </td>
                     {/* Price values */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                      <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
+                      <Link href={`/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         {formatPrice(crypto.currentPrice)}
                       </Link>
                     </td>
                     {/* Liquidity (24H) values */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                      <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
+                      <Link href={`/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         {formattotalVolume24h(crypto.totalVolume24h)}
                       </Link>
                     </td>
                     {/* FoskaayFib Grades Values */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
+                      <Link href={`/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getGradeColor(crypto.foskaayFibGrade)}`}>
                           Calculate {crypto.symbol} FFGrade {/* {crypto.foskaayFibGrade} */}
                         </span>
@@ -283,7 +284,7 @@ export default function ATHCryptoPricePredictionPage({
                     </td>
                     {/* FoskaayFib Price Prediction value */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      <Link href={`/ath-crypto-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
+                      <Link href={`/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         <div>
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
                             Unveil Now {">>"}
@@ -323,7 +324,7 @@ export default function ATHCryptoPricePredictionPage({
         <p className="mt-2">
           Powered by FoskaayFib Market Cycle Analysis.
           Historical data provided by {" "}
-          <Link href="https://www.cryptocompare.com">
+          <Link href="https://www.cryptocompare.com" target="_blank">
             CryptoCompare.
           </Link>
         </p>

@@ -1,4 +1,4 @@
-// /app/(site1)/ath-crypto-price-prediction/[slug]/page.tsx
+// /app/(site1)/crypto-ath-price-prediction/[slug]/page.tsx
 
 import ATHCPPListingsFullDetailsPage from "@/components/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage";
 

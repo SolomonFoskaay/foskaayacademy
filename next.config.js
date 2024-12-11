@@ -16,6 +16,16 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/foskaayfib',
+        destination: '/crypto-ath-price-prediction',
+        permanent: true,
+      },
+      {
+        source: '/ath-crypto-price-prediction',
+        destination: '/crypto-ath-price-prediction',
+        permanent: true,
+      },
+      {
         source: '/directory/:path*',
         destination: '/projects/:path*',
         permanent: true, // This indicates that the redirect is permanent (301)
@@ -41,7 +51,7 @@ const nextConfig = {
         source: '/X',
         destination: 'https://x.com/ExploreWeb3xyz',
         permanent: true,
-      },
+      },      
     ]
   },
 };

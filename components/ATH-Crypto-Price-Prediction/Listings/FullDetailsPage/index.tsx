@@ -80,7 +80,7 @@ const ATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
 
       {/* Breadcrumbs */}
       <nav className="text-sm mb-4">
-        <Link href="/ath-crypto-price-prediction" className="text-blue-500 hover:underline">
+        <Link href="/crypto-ath-price-prediction" className="text-blue-500 hover:underline">
         <br /> {/* this break helps to create needed space on mobile betwen nav and notification header bar */}
         ← Back to 
         ATH Crypto Price Prediction Homepage
@@ -115,7 +115,7 @@ const ATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
 
       {/* Back to Homepage Link at Bottom */}
       <div className="mt-4">
-        <Link href="/ath-crypto-price-prediction" className="text-blue-500 hover:underline">
+        <Link href="/crypto-ath-price-prediction" className="text-blue-500 hover:underline">
         ← Back to Crypto ATH Price Prediction Homepage
         </Link>
       </div>
