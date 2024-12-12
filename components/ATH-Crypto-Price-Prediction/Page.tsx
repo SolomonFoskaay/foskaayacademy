@@ -124,10 +124,10 @@ export default function ATHCryptoPricePredictionPage({
       {/* SEO Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-purple-500 mb-4">
-          2022 - 2025 (Market Cycle) Crypto ATH Price Prediction List Using FoskaayFib Levels & Grades (Beta-V1.26.100)
+          2022 - 2025 (Market Cycle) Crypto ATH Price Prediction List Using FoskaayFib Levels & Grades (Beta-V1.27.100)
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-        Crypto ATH List with Advanced market cycle analysis and price predictions for top cryptocurrencies.
+          Crypto ATH List with Advanced market cycle analysis and price predictions for top cryptocurrencies.
           Get detailed FoskaayFib grades, accumulation zones, and price targets based on
           historical market cycles. Crypto ATH Calculator for Crypto ATH Prediction.
         </p>
@@ -140,10 +140,10 @@ export default function ATHCryptoPricePredictionPage({
         </p>
         <p className="text-l text-yellow-600 max-w-3xl mx-auto">
           <Link href="/donate" >
-          <b>SUPPORT PLEASE:</b> If you find this FREE Crypto ATH Price Prediction Calculator Tool helpful and want to keep it going 
-          (it took me lots of sleepless-nights to build & continue to maintain for FREE). 
-          <br />
-          Kindly DONATE here (Hint: Mint ExploreWeb3 Donor NFT to unlock more EXCLUSIVE Features coming soon) - THANKS!
+            <b>SUPPORT PLEASE:</b> If you find this FREE Crypto ATH Price Prediction Calculator Tool helpful and want to keep it going
+            (it took me lots of sleepless-nights to build & continue to maintain for FREE).
+            <br />
+            Kindly DONATE here (Hint: Mint ExploreWeb3 Donor NFT to unlock more EXCLUSIVE Features coming soon) - THANKS!
           </Link>
         </p>
       </div>
@@ -316,6 +316,26 @@ export default function ATHCryptoPricePredictionPage({
             </button>
           ))}
         </nav>
+      </div>
+
+      {/* Video Section */}
+      <div className="mb-8 flex flex-col items-center">
+        <br />
+        <h2 className="mb-6 text-purple-500 text-center">
+          <b>
+            FREE Crypto ATH Price Prediction Tool:
+            FoskaayFib Levels & Grades EXPLAINED below:
+          </b>
+        </h2>
+        <iframe
+          width="70%"
+          height="515"
+          src="https://www.youtube.com/embed/xg8jNOED8f4"
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          style={{ border: 'none' }} // Optional: Use CSS for border styling
+        ></iframe>
       </div>
 
       {/* Footer Info */}

@@ -113,6 +113,25 @@ const ContentMain = ({ cryptoData }: ContentMainProps) => {
         {/* Prediction Component */}
         <Prediction symbol={symbol} FoskaayFibResults={FoskaayFibResults} />
 
+        {/* Video Section */}
+        <div className="mb-8 flex flex-col items-center">
+          <br />
+          <h2 className="mb-6 text-purple-500 text-center">
+            <b>
+              FREE Crypto ATH Price Prediction Tool:
+              FoskaayFib Levels & Grades EXPLAINED below:
+            </b>
+          </h2>
+          <iframe
+            width="95%"
+            height="515"
+            src="https://www.youtube.com/embed/xg8jNOED8f4"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ border: 'none' }} // Optional: Use CSS for border styling
+          ></iframe>
+        </div>
 
         {/* Historical Price Data Section */}
         <section className="mb-8">
