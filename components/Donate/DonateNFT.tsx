@@ -5,6 +5,38 @@ import { FaCheck, FaTimes } from "react-icons/fa";
 
 // Define feature categories and their items
 const featureCategories = {
+    "FoskaayFib Crypto ATH Prediction Tool Features": [
+        {
+            name: "Crypto ATH Price Prediction Tool",
+            basic: true,
+            donor: true,
+        },
+        {
+            name: "FoskaayFib Levels Tool (All listed Coins/Tokens ONLY)",
+            basic: true,
+            donor: true,
+        },
+        {
+            name: "FoskaayFib Grade Tool (All listed Coins/Tokens ONLY)",
+            basic: true,
+            donor: true,
+        },
+        {
+            name: "FoskaayFib Levels Tool (Unlisted Coins/Tokens - Calculate any crypto coin/token with FoskaayFib Levels & Grades for FREE even if unlisted on the coin/token list yet giving you unlimited coin/token research capability)",
+            basic: false,
+            donor: true,
+        },
+        {
+            name: "FoskaayFib Grade Tool (Unlisted Coins/Tokens - Calculate any crypto coin/token with FoskaayFib Levels & Grades for FREE even if unlisted on the coin/token list yet giving you unlimited coin/token research capability)",
+            basic: false,
+            donor: true,
+        },
+        {
+            name: "FoskaayFib Crypto ATH Predictions Support (Ask questions under any listed coin/token and get direct support from me)",
+            basic: false,
+            donor: true,
+        },
+    ],
     "Earning Features": [
         {
             name: "Earn for submitted and approved project",
@@ -212,11 +244,33 @@ const DonateNFT = () => {
             {/* Call to action */}
             <div className="mt-8 text-center">
                 <p className="mb-4 text-gray-300">
-                    Kindly Mint ExploreWeb3 Donor NFT today to DONATE and unlock all APPRECIATION perks features 
+                    Kindly Mint ExploreWeb3 Donor NFT today to DONATE and unlock all APPRECIATION perks features
                     and support this public good project to keep showcasing amazing web3/Solana projects and their opportunities!
-                    <br/>
+                </p>
+                <h2 className="mb-4 text-red-500 text-xl">
                     <b>
-                    The more you DONATE (Mint), the higher the perks unlocked!
+                    IMPORTANT NOTES/UPDATES (13th December 2024):
+                    </b>
+                </h2>
+                <p className="mb-4 text-gray-300">
+
+                    (1) The more you DONATE (Mint), the higher the perks unlocked!
+
+                </p>
+                <p className="mb-4 text-red-300">
+                    <b>
+                        (2) Warning: Am not selling this NFT and so its not flippable/resellable.
+                        <br />
+                        It just a proof that you DONATED to support ExploreWeb3 as a PUBLIC Good Projects expecting nothing back [Zero (0) Expectation].
+                        <br />
+                        Yet, I want to appreciate you with some perks and the NFT makes it easier for me to do that!
+                        <br />
+                        For example some features are locked on this website and you may only unlock it with the donor NFT in your connected wallet.
+                    </b>
+                </p>
+                <p className="mb-4 text-gray-300">
+                    <b>
+                        (3) The amount to donate to qualify to mint this Donor NFT will keep increasing by 25% per every 50 mints until hit $1,000 - After first 50 Mints, Next will be atleast 125USDC/Donation to Mint!
                     </b>
                 </p>
                 <a
@@ -225,13 +279,13 @@ const DonateNFT = () => {
                     rel="noopener noreferrer"
                     className="inline-block rounded-md bg-purple-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-purple-600"
                 >
-                    Donate By Minting Donor NFT (100 USDC/NFT)
+                    Donate By Minting Donor NFT (100 USDC/Donation to Mint NFT)
                 </a>
             </div>
             <div className="mt-8 text-center">
                 <p className="mb-4 text-gray-300">
-                    ALERT: <br/>
-                    Please, kindly note that most of the above perks features are not yet available because they require more resources to implement. 
+                    ALERT: <br />
+                    Please, kindly note that most of the above perks features are not yet available because they require more resources to implement.
                     They will kickstart when there is atleast 25-50 Donors NFT minted making funds available to ensure there implementation.
                 </p>
             </div>
