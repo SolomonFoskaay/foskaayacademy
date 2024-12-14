@@ -44,7 +44,7 @@ const nextConfig = {
       },
       {
         source: '/Discord',
-        destination: 'https://dprogramminguniversity.com/discord',
+        destination: 'https://discord.gg/A3B2msyzVK',
         permanent: true,
       },
       {

@@ -1,5 +1,6 @@
 // /components/Donate/DonateNFT.tsx
 "use client";
+import Link from "next/link";
 import React from "react";
 import { FaCheck, FaTimes } from "react-icons/fa";
 
@@ -33,6 +34,26 @@ const featureCategories = {
         },
         {
             name: "FoskaayFib Crypto ATH Predictions Support (Ask questions under any listed coin/token and get direct support from me)",
+            basic: false,
+            donor: true,
+        },
+        {
+            name: "FoskaayFib Strategy (My 8years+ coins/tokens risk edging strategy to ensure no matter what you don't endup been loser at the end of the bullrun with top coin/token picks with FoskaayFib Levels and Grade)",
+            basic: false,
+            donor: true,
+        },
+        {
+            name: "+ My top coin picks with the strategy using FoskaayFib levels and Grades",
+            basic: false,
+            donor: true,
+        },
+        {
+            name: "+ Live daily calculation of the result if have following capitals to explore crypto 2022-2025 Bull Cycle before its over in 2025: even $50, $1,000, $10,000+ capital calculator)",
+            basic: false,
+            donor: true,
+        },
+        {
+            name: "+ Plugin in your custom capital amount and watch live update of your portfolio as it acheive each FoskaayFib Price Prediction targets (wins) or misses (losses)",
             basic: false,
             donor: true,
         },
@@ -282,12 +303,24 @@ const DonateNFT = () => {
                     Donate By Minting Donor NFT (100 USDC/Donation to Mint NFT)
                 </a>
             </div>
+            
             <div className="mt-8 text-center">
                 <p className="mb-4 text-gray-300">
                     ALERT: <br />
                     Please, kindly note that most of the above perks features are not yet available because they require more resources to implement.
                     They will kickstart when there is atleast 25-50 Donors NFT minted making funds available to ensure there implementation.
                 </p>
+            </div>
+
+            <div className="mt-8 text-center text-green-500">
+                <Link href="/Discord" target="_blank" >
+                <b>
+                After Donation & Successfully Minting Your Donor NFT:
+                <br />
+                 Kindly Click Here To Unlock and Join Exclusive Donors Discord Channel with your Donor NFT!
+                </b>
+                <br />
+                </Link>
             </div>
         </div>
     );
