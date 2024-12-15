@@ -295,7 +295,8 @@ const DonateNFT = () => {
                     </b>
                 </p>
                 <a
-                    href="https://3.land/item/ppknfMRWztTEGfnt2Po5sh7xcQyeEU22Ndzy6VSpeNw"
+                    // href="https://3.land/item/ppknfMRWztTEGfnt2Po5sh7xcQyeEU22Ndzy6VSpeNw" old mint page
+                    href="https://launchmynft.io/sol/11741"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block rounded-md bg-purple-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-purple-600"

@@ -10,7 +10,10 @@ export const cryptoSymbols = [
     'FLR', 'FLOW', 'AR', 'VIRTUAL', 'AERO', 'XTZ', 'JUP', 'STRK', 'BSV', 'BTT', 
     'MOG', 'HNT', 'CRV', 'RAY', 'DYDX', 'EGLD', 'XDC', 'AXS', 'NEO', 'AIOZ', 
     'ENS', 'MANA', 'POPCAT', 'CORE', 'APE', 'GT', 'CHZ', 'CAKE', 'SNX', 'CFX', 
-    'PENDLE', 'NEXO', 'ZEC', 'COMP', 'AKT', 'XEC', 'ZK', 'AMP', 'BLUR', 'NOT',
+    'PENDLE', 'NEXO', 'ZEC', 'COMP', 'AKT', 'XEC', 'ZK', 'AMP', 'BLUR', 'NOT', 
+    'ROSE', 'GNO', 'ORDI', 'RSR', 'TURBO', 'BabyDoge', 'NEIRO', '1INCH', 'XAUT', 'SPX', 
+    'CKB', 'KAVA', 'KSM', 'LPT', 'GIGA', 'SAFE', 'CTC', 'TFUEL', 'SUSHI', 'DEXE', 
+
   ];
 
   export const cryptoNames = [
@@ -24,5 +27,8 @@ export const cryptoSymbols = [
     'Flare', 'Flow', 'Arweave', 'Virtuals Protocol', 'Aerodrome Finance', 'Tezos', 'Jupiter', 'Starknet', 'Bitcoin SV', 'BitTorrent (New)', 
     'Mog Coin', 'Helium', 'Curve DAO Token', 'Raydium', 'dYdX (Native)', 'MultiversX', 'XDC Network', 'Axie Infinity', 'Neo', 'AIOZ Network', 
     'Ethereum Name Service', 'Decentraland', 'PopCat (SOL)', 'Core', 'ApeCoin', 'GateToken', 'Chiliz', 'PancakeSwap', 'Synthetix', 'Conflux', 
-    'Pendle', 'Nexo', 'Zcash', 'Compound', 'Akash Netwrok', 'eCash', 'ZKsync', 'Amp', 'Blur', 'Notcoin',
+    'Pendle', 'Nexo', 'Zcash', 'Compound', 'Akash Netwrok', 'eCash', 'ZKsync', 'Amp', 'Blur', 'Notcoin', 
+    'Oasis', 'Gnosis', 'Ordinals', 'Reserve Rights', 'Turbo', 'Baby Doge Coin', 'Neiro (First Neiro On Ethereum)', '1inch Network', 'Tether Gold', 'SPX6900', 
+    'Nervos Network', 'Kava', 'Kusama', 'Livepeer', 'Gigachad', 'Safe', 'Creditcoin', 'Theta Fuel', 'SushiSwap', 'DeXe', 
+    
   ];
