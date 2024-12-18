@@ -9,6 +9,10 @@ Disallow: /dashboard/moderator
 Disallow: /dashboard/profile
 Disallow: /dashboard/update-password
 Disallow: /dashboard/user
+Disallow: /donor
+Disallow: /donor/
+Disallow: /donor/crypto-ath-price-prediction
+Disallow: /donor/crypto-ath-price-prediction/[slug]
 
 # Host
 Host: https://exploreweb3.xyz
