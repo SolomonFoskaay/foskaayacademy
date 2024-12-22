@@ -34,18 +34,35 @@ const DonorPage = async () => {
           </div>
 
           {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            <Link href="/crypto-ath-price-prediction" target="_blank">
             <div className="p-6 bg-gray-800/80 rounded-lg">
               <h3 className="text-xl font-semibold text-purple-400 mb-2">
-                Advanced Crypto ATH Predictions
+                FREE Crypto ATH Price Predictions - Non-Donor Version
               </h3>
               <p className="text-gray-300 mb-4">
-                Access detailed market analysis and predictions
+                Access detailed market analysis and predictions powered by FoskaayFib Levels, Grade and Strategy
               </p>
               <span className="text-gray-500">
-                Requires Donor NFT
+                Donor NFT Not required!
               </span>
             </div>
+            </Link>
+
+            <Link href="/donor/crypto-ath-price-prediction" target="_blank">
+            <div className="p-6 bg-gray-800/80 rounded-lg">
+              <h3 className="text-xl font-semibold text-purple-400 mb-2">
+                FREE Advanced Crypto ATH Price Predictions - Donor Version
+              </h3>
+              <p className="text-gray-300 mb-4">
+                Access detailed market analysis and predictions powered by FoskaayFib Levels, Grade and Strategy
+              </p>
+              <span className="text-gray-500">
+                Requires Donor NFT!
+              </span>
+            </div>
+            </Link>
+
             {/* Add more feature cards here */}
           </div>
         </div>

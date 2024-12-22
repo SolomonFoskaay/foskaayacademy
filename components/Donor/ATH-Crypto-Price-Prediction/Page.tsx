@@ -1,10 +1,10 @@
-// /components/ATH-Crypto-Price-Prediction/page.tsx 
+// /components/donor/ATH-Crypto-Price-Prediction/page.tsx 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { ArrowUpIcon, ArrowDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { cryptoSymbols, cryptoNames } from './ATHCryptoList';
+import { cryptoSymbols, cryptoNames } from './DonorATHCryptoList';
 
-interface ATHCryptoPricePredictionPageProps {
+interface DonorATHCryptoPricePredictionPageProps {
   cryptoList: any[];
   isLoading: boolean;
   error: string | null;
@@ -47,11 +47,11 @@ const getGradeColor = (grade: string) => {
 };
 
 // main function
-export default function ATHCryptoPricePredictionPage({
+export default function DonorATHCryptoPricePredictionPage({
   cryptoList,
   isLoading,
   error
-}: ATHCryptoPricePredictionPageProps) {
+}: DonorATHCryptoPricePredictionPageProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: 'marketCap', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
@@ -127,7 +127,7 @@ export default function ATHCryptoPricePredictionPage({
           2022 - 2025 (Market Cycle) Crypto ATH Price Prediction List Using FoskaayFib Levels & Grades (Beta-V1.32.140)
         </h1>
         <h2 className="text-2xl font-bold text-red-500 mb-4">
-          Non-Donor Version With BASIC FEATURES
+          Donor Version With ADVANCED FEATURES!
         </h2>
         <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
           Crypto ATH List with Advanced market cycle analysis and price predictions for top cryptocurrencies.
@@ -146,7 +146,7 @@ export default function ATHCryptoPricePredictionPage({
             <b>SUPPORT PLEASE:</b> If you find this FREE Crypto ATH Price Prediction Calculator Tool helpful and want to keep it going
             (it took me lots of sleepless-nights to build & continue to maintain for FREE).
             <br />
-            Kindly DONATE here (Hint: Mint ExploreWeb3 Donor NFT to unlock more EXCLUSIVE ADVANCE Features via the Donor Version of this tool) - THANKS!
+            Kindly DONATE here (Hint: Minting multiple ExploreWeb3 Donor NFT unlocks even more EXCLUSIVE Features coming soon) - THANKS!
           </Link>
         </p>
       </div>
@@ -243,7 +243,7 @@ export default function ATHCryptoPricePredictionPage({
                     </td>
                     {/* Asset Name Values */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <Link href={`/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
+                      <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         <img
                           src={crypto.tokenImageURL}
                           alt={`${cryptoName} logo`}
@@ -261,25 +261,25 @@ export default function ATHCryptoPricePredictionPage({
                     </td>
                     {/* Marketcap values*/}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      <Link href={`/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
+                      <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         {formatMarketCap(crypto.marketCap)}
                       </Link>
                     </td>
                     {/* Price values */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                      <Link href={`/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
+                      <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         {formatPrice(crypto.currentPrice)}
                       </Link>
                     </td>
                     {/* Liquidity (24H) values */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                      <Link href={`/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
+                      <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         {formattotalVolume24h(crypto.totalVolume24h)}
                       </Link>
                     </td>
                     {/* FoskaayFib Grades Values */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <Link href={`/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
+                      <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getGradeColor(crypto.foskaayFibGrade)}`}>
                           Calculate {crypto.symbol} FFGrade {/* {crypto.foskaayFibGrade} */}
                         </span>
@@ -287,7 +287,7 @@ export default function ATHCryptoPricePredictionPage({
                     </td>
                     {/* FoskaayFib Price Prediction value */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      <Link href={`/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
+                      <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         <div>
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
                             Unveil Now {">>"}

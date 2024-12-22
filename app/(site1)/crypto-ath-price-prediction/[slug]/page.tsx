@@ -1,6 +1,38 @@
 // /app/(site1)/crypto-ath-price-prediction/[slug]/page.tsx
 
 import ATHCPPListingsFullDetailsPage from "@/components/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage";
+import { Metadata } from "next";
+// Define fixed metadata values
+const title = "FREE Crypto ATH Price Predictions | FoskaayFib Market Cycle Analysis - Explore Web3";
+const description = "Get cryptocurrency price predictions using FoskaayFib market cycle analysis. View detailed grades, accumulation zones, and price targets for Bitcoin, Ethereum, and other major cryptocurrencies.";
+const ogImage = "https://ExploreWeb3.xyz/images/crypto-ath-tool/Cypto-ATH-Price-Prediction-List-ExploreWeb3-FoskaayFib-image.png";
+const siteUrl = "https://ExploreWeb3.xyz/crypto-ath-price-prediction"; // Replace with your actual site URL
+
+// Create metadata object
+export const metadata: Metadata = {
+  title: title,
+  description: description,
+  openGraph: {
+    url: siteUrl,
+    type: 'website',
+    title: title,
+    description: description,
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: title,
+    description: description,
+    images: [ogImage],
+  },
+};
 
 interface PageProps {
   params: {
