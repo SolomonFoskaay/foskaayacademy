@@ -6,26 +6,29 @@ module.exports = {
     generateRobotsTxt: true,
     sitemapSize: 500,
     generateIndexSitemap: true,
-    exclude: ['/dashboard/*'],
+    exclude: [
+      '/dashboard/*', // Add dashboard exclusion
+      '/donor/*'  // Add donor exclusion
+    ],
     robotsTxtOptions: {
       policies: [
         {
           userAgent: '*',
           allow: '/',
           disallow: [
-            '/dashboard',
-            '/dashboard/admin',
-            '/dashboard/create-listings',
-            '/dashboard/favorites',
-            '/dashboard/moderator',
-            '/dashboard/profile',
-            '/dashboard/update-password',
-            '/dashboard/user',
+            '/dashboard', // Add dashboard base path
+            '/dashboard/*', // Add all dashboard subpaths
+            '/donor',  // Add donor base path
+            '/donor/*' // Add all donor subpaths
           ],
         },
       ],
       additionalSitemaps: [
         `${process.env.NEXT_PUBLIC_BASE_URL}/sitemap/index.xml`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/sitemap/projects-listings.xml`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/sitemap/crypto-ath-price-prediction-list.xml`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/sitemap/categories.xml`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/sitemap/blinks-listings.xml`,
       ],
     },
     transform: async (config, path) => {

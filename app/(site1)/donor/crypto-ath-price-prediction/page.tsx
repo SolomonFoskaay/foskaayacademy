@@ -1,4 +1,4 @@
-// /app/(site1)/crypto-ath-price-prediction/page.tsx
+// /app/(site1)/donor/crypto-ath-price-prediction/page.tsx
 import { Metadata } from 'next';
 import DonorATHCryptoPricePrediction from '@/components/Donor/ATH-Crypto-Price-Prediction';
 
