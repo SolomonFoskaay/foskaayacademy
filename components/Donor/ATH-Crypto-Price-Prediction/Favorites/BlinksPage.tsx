@@ -2,7 +2,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
-import ListingsTableCard from "../../Blinks/Listings/ListingsTableCard";
+import ListingsTableCard from "../../../Blinks/Listings/ListingsTableCard";
 
 const FavoritesBlinksPage = () => {
   const [listings, setListings] = useState<DisplayListingBlinksTypes[]>([]);
