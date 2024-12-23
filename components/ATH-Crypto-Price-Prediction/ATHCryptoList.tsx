@@ -12,7 +12,7 @@ export const cryptoSymbols = [
     'ENS', 'MANA', 'POPCAT', 'CORE', 'APE', 'GT', 'CHZ', 'CAKE', 'SNX', 'CFX', 
     'PENDLE', 'NEXO', 'ZEC', 'COMP', 'AKT', 'XEC', 'ZK', 'AMP', 'BLUR', 'NOT', 
     'ROSE', 'GNO', 'ORDI', 'RSR', 'TURBO', 'BabyDoge', 'NEIRO', '1INCH', 'XAUT', 'SPX', 
-    'CKB', 'KAVA', 'KSM', 'ETHERFI', 'SAFE', 'CTC', 'TFUEL', 'SUSHI', 'TWT', 'BOME', 
+    'CKB', 'KAVA', 'KSM', 'TRAC', 'SAFE', 'CTC', 'TFUEL', 'SUSHI', 'TWT', 'BOME', 
     'ASTR', 'DASH', 'HOT', 'PAXG', 'ENJ', 'PRIME', 'ZIL', 'WOO', 'ZRX', 'GMT',
   ];
 
@@ -29,6 +29,6 @@ export const cryptoSymbols = [
     'Ethereum Name Service', 'Decentraland', 'PopCat (SOL)', 'Core', 'ApeCoin', 'GateToken', 'Chiliz', 'PancakeSwap', 'Synthetix', 'Conflux', 
     'Pendle', 'Nexo', 'Zcash', 'Compound', 'Akash Netwrok', 'eCash', 'ZKsync', 'Amp', 'Blur', 'Notcoin', 
     'Oasis', 'Gnosis', 'Ordinals', 'Reserve Rights', 'Turbo', 'Baby Doge Coin', 'Neiro (First Neiro On Ethereum)', '1inch Network', 'Tether Gold', 'SPX6900', 
-    'Nervos Network', 'Kava', 'Kusama', 'Ether Fi', 'Safe', 'Creditcoin', 'Theta Fuel', 'SushiSwap', 'Trust Wallet Token', 'Book Of Meme', 
+    'Nervos Network', 'Kava', 'Kusama', 'OriginTrail', 'Safe', 'Creditcoin', 'Theta Fuel', 'SushiSwap', 'Trust Wallet Token', 'Book Of Meme', 
     'Astar', 'Dash Ecosystem', 'Holo', "PAX Gold", 'Enjin Coin', 'Echelom Prime', 'Zilliqa', 'Woo Ecosystem', '0x Protocol', 'Find Satoshi Lab (FSL)',
   ];

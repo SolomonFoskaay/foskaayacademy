@@ -1,6 +1,7 @@
 // /components/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage/index.tsx
 "use client";
 import React, { useEffect, useState } from "react";
+import { cryptoSymbols, cryptoNames } from '../../ATHCryptoList';
 import Chart from "./Chart";
 import ContentMain from "./ContentMain";
 import Link from "next/link";
@@ -27,9 +28,24 @@ const ATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Get crypto full name from ATHCryptoList for symbols
+  const getCryptoFullName = (symbol: string) => {
+    const nameIndex = cryptoSymbols.indexOf(symbol.toUpperCase());
+    const cryptoName = cryptoNames[nameIndex] || symbol;
+    return `${cryptoName} (${symbol.toUpperCase()})`;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Before loading page or making API call, Check if crypto is in the allowed list
+        // Ensure non-donor version can only show lFoskaayFib stats for listed cryptos only
+        //Donor version can check even unlisted crypto for unlimited cryptos allowed by the API
+        if (!cryptoSymbols.includes(slug.toUpperCase())) {
+          window.location.href = '/crypto-ath-price-prediction/access-denied';
+          return;
+        }
+
         setIsLoading(true);
         setError(null);
         const response = await fetch(`/api/ath-crypto-price-prediction/historical-data?symbol=${slug}`);

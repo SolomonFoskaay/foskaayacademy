@@ -55,7 +55,7 @@ export default function DonorATHCryptoPricePredictionPage({
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: 'marketCap', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 100;
+  const [itemsPerPage, setItemsPerPage] = useState(100);
 
   const filteredAndSortedData = useMemo(() => {
     let filtered = cryptoList.filter(crypto => {
@@ -80,9 +80,16 @@ export default function DonorATHCryptoPricePredictionPage({
   }, [cryptoList, searchTerm, sortConfig]);
 
   const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredAndSortedData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredAndSortedData, currentPage]);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredAndSortedData.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredAndSortedData, currentPage, itemsPerPage]);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredAndSortedData.length / itemsPerPage);
+
+  // Calculate showing range
+  const startRange = (currentPage - 1) * itemsPerPage + 1;
+  const endRange = Math.min(startRange + itemsPerPage - 1, filteredAndSortedData.length);
 
   const handleSort = (key: string) => {
     setSortConfig({
@@ -167,6 +174,56 @@ export default function DonorATHCryptoPricePredictionPage({
         </div>
       </div>
 
+      {/* Pagination and Rows Per Page Controls */}
+      <div className="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+        {/* Showing entries info */}
+        <div className="text-sm text-gray-600 dark:text-gray-400">
+          Showing {startRange} - {endRange} out of {filteredAndSortedData.length}
+        </div>
+
+        <div className="flex items-center gap-4">
+          {/* Rows per page selector */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600 dark:text-gray-400">Show rows</span>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1); // Reset to first page when changing items per page
+              }}
+              className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200"
+            >
+              {[25, 50, 75, 100, 150, 200, 250, 300].map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Pagination controls */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded disabled:opacity-50 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200"
+            >
+              Previous
+            </button>
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded disabled:opacity-50 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Table */}
       <div className="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
@@ -239,7 +296,7 @@ export default function DonorATHCryptoPricePredictionPage({
                 return (
                   <tr key={crypto.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      {(currentPage - 1) * ITEMS_PER_PAGE + index + 1}
+                      {(currentPage - 1) * itemsPerPage + index + 1}
                     </td>
                     {/* Asset Name Values */}
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -303,22 +360,54 @@ export default function DonorATHCryptoPricePredictionPage({
         </div>
       </div>
 
-      {/* Pagination */}
-      <div className="mt-6 flex justify-center">
-        <nav className="flex items-center space-x-2">
-          {Array.from({ length: Math.ceil(filteredAndSortedData.length / ITEMS_PER_PAGE) }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 rounded ${currentPage === i + 1
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
+      {/* Pagination and Rows Per Page Controls */}
+      <div className="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+        {/* Showing entries info */}
+        <div className="text-sm text-gray-600 dark:text-gray-400">
+          Showing {startRange} - {endRange} out of {filteredAndSortedData.length}
+        </div>
+
+        <div className="flex items-center gap-4">
+          {/* Rows per page selector */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600 dark:text-gray-400">Show rows</span>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1); // Reset to first page when changing items per page
+              }}
+              className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200"
             >
-              {i + 1}
+              {[25, 50, 75, 100, 150, 200, 250, 300].map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Pagination controls */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded disabled:opacity-50 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200"
+            >
+              Previous
             </button>
-          ))}
-        </nav>
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded disabled:opacity-50 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200"
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Video Section */}

@@ -1,10 +1,11 @@
 // /components/donor/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage/index.tsx
 "use client";
 import React, { useEffect, useState } from "react";
+import { checkAuthAndRole, handleAuthRedirect } from '@/utils/donor-verification/verify-donor-nft';
+import { cryptoSymbols, cryptoNames } from '../../DonorATHCryptoList';
 import Chart from "./Chart";
 import ContentMain from "./ContentMain";
 import Link from "next/link";
-import { cryptoSymbols, cryptoNames } from '../../DonorATHCryptoList';
 import ContentSidebar from "./ContentSidebar";
 
 interface HistoricalDataPoint {
@@ -27,6 +28,8 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
   const [cryptoData, setCryptoData] = useState<CryptoData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
 
   // Get crypto name from ATHCryptoList
   const getCryptoFullName = (symbol: string) => {
@@ -36,6 +39,13 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
   };
 
   useEffect(() => {
+    const checkAuth = async () => {
+      const authResult = await checkAuthAndRole('admin'); // Change to 'donor' later
+      if (handleAuthRedirect(authResult)) return;
+      setIsAuthorized(true);
+      fetchData();
+    };
+
     const fetchData = async () => {
       try {
         setIsLoading(true);
@@ -60,8 +70,12 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
       }
     };
 
-    fetchData();
+    checkAuth();
   }, [slug]);
+
+  if (!isAuthorized) {
+    return null; // Or loading state
+  }
 
   if (isLoading) {
     return (

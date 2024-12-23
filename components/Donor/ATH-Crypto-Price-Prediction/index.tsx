@@ -1,6 +1,7 @@
 // /components/donor/ATH-Crypto-Price-Prediction/index.tsx
 "use client"
 import { useEffect, useState } from 'react';
+import { checkAuthAndRole, handleAuthRedirect } from '@/utils/donor-verification/verify-donor-nft';
 import DonorATHCryptoPricePredictionPage from './Page';
 import { cryptoSymbols } from './DonorATHCryptoList';
 
@@ -18,6 +19,18 @@ export default function DonorATHCryptoPricePrediction() {
   const [cryptoList, setCryptoList] = useState<CryptoData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const authResult = await checkAuthAndRole('admin'); // Change to 'donor' later
+      if (handleAuthRedirect(authResult)) return;
+      setIsAuthorized(true);
+      fetchCryptoData();
+    };
+
+    checkAuth();
+  }, []);
 
   const fetchCryptoData = async () => {
     try {
@@ -49,6 +62,10 @@ export default function DonorATHCryptoPricePrediction() {
 
     return () => clearInterval(refreshInterval);
   }, []);
+
+  if (!isAuthorized) {
+    return null; // Or loading state
+  }
 
   return (
     <div className="flex flex-col w-full">
