@@ -1,78 +1,39 @@
 // /utils/donor-verification/verify-door-nft.tsx
 import { createClient } from "@/utils/supabase/client";
 
-interface AuthCheckResult {
-  isAuthenticated: boolean;
-  isAuthorized: boolean;
+interface AuthResult {
+  isAdmin: boolean;
   error?: string;
 }
 
-export async function checkAuthAndRole(requiredRole: 'admin' | 'moderator' | 'donor' | 'user' = 'user'): Promise<AuthCheckResult> {
+export async function checkAuthAndRole(): Promise<AuthResult> {
   const supabase = createClient();
-
+  
   try {
     // Check if user is logged in
     const { data: { user }, error: userError } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      return {
-        isAuthenticated: false,
-        isAuthorized: false,
-        error: 'User not authenticated'
-      };
+      window.location.href = "/auth/login";
+      return { isAdmin: false };
     }
 
-    // If only basic authentication is needed
-    if (requiredRole === 'user') {
-      return {
-        isAuthenticated: true,
-        isAuthorized: true
-      };
-    }
-
-    // Check user's role
+    // Check if the user is an admin
     const { data: roles, error: roleError } = await supabase
       .from("user_role_manager")
-      .select("user_role_level")
-      .eq("user_id", user.id)
+      .select("*")
+      .eq("id", user.id)
+      .eq("user_role_level", "admin")
       .single();
 
-    if (roleError || !roles) {
-      return {
-        isAuthenticated: true,
-        isAuthorized: false,
-        error: 'Role verification failed'
-      };
+    if (roleError || !roles || roles.user_role_level !== "admin") {
+      window.location.href = "/crypto-ath-price-prediction/access-denied";
+      return { isAdmin: false };
     }
 
-    // Check if user has required role
-    const isAuthorized = roles.user_role_level === requiredRole;
-
-    return {
-      isAuthenticated: true,
-      isAuthorized,
-      error: isAuthorized ? undefined : 'Insufficient permissions'
-    };
-  } catch (error) {
-    return {
-      isAuthenticated: false,
-      isAuthorized: false,
-      error: 'Authentication check failed'
-    };
+    return { isAdmin: true };
+  } catch (err) {
+    window.location.href = "/auth/login";
+    return { isAdmin: false, error: 'Authentication check failed' };
   }
-}
-
-// Helper function to handle redirects
-export function handleAuthRedirect(authResult: AuthCheckResult) {
-  if (!authResult.isAuthenticated) {
-    window.location.href = '/auth/login';
-    return true;
-  }
-  
-  if (!authResult.isAuthorized) {
-    window.location.href = '/crypto-ath-price-prediction/access-denied';
-    return true;
-  }
-
-  return false;
 }

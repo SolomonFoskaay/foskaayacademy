@@ -111,7 +111,7 @@ export default function ATHCryptoPricePredictionPage({
   if (isLoading) {
     return (
       <div className="text-center">
-        <p>FoskaayFib Crypto ATH Price Prediction List</p>
+        <p>NON-DONOR VERSION: Calculating FoskaayFib Crypto ATH Price Prediction List</p>
         <p> Loading...</p>
       </div>
     );

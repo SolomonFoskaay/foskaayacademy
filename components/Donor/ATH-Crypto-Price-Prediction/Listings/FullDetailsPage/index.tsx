@@ -1,7 +1,7 @@
 // /components/donor/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage/index.tsx
 "use client";
 import React, { useEffect, useState } from "react";
-import { checkAuthAndRole, handleAuthRedirect } from '@/utils/donor-verification/verify-donor-nft';
+import { checkAuthAndRole} from '@/utils/donor-verification/verify-donor-nft';
 import { cryptoSymbols, cryptoNames } from '../../DonorATHCryptoList';
 import Chart from "./Chart";
 import ContentMain from "./ContentMain";
@@ -28,8 +28,7 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
   const [cryptoData, setCryptoData] = useState<CryptoData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthorized, setIsAuthorized] = useState(false);
-
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Get crypto name from ATHCryptoList
   const getCryptoFullName = (symbol: string) => {
@@ -39,16 +38,23 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
   };
 
   useEffect(() => {
+    // Use verify utils to confirm 
+    // if user have required access or not
     const checkAuth = async () => {
-      const authResult = await checkAuthAndRole('admin'); // Change to 'donor' later
-      if (handleAuthRedirect(authResult)) return;
-      setIsAuthorized(true);
-      fetchData();
+      try {
+        const { isAdmin } = await checkAuthAndRole();
+        setIsAdmin(isAdmin);
+        
+        if (isAdmin) {
+          await fetchData();
+        }
+      } catch (err) {
+        setError('Authorization check failed');
+      }
     };
 
     const fetchData = async () => {
       try {
-        setIsLoading(true);
         setError(null);
         const response = await fetch(`/api/ath-crypto-price-prediction/historical-data?symbol=${slug}`);
         const data = await response.json();
@@ -63,7 +69,6 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
 
         setCryptoData(data);
       } catch (error) {
-        console.error('Error fetching data:', error);
         setError(error instanceof Error ? error.message : 'Failed to fetch data');
       } finally {
         setIsLoading(false);
@@ -73,16 +78,20 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
     checkAuth();
   }, [slug]);
 
-  if (!isAuthorized) {
-    return null; // Or loading state
-  }
-
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      <div className="flex items-center justify-center">
+        <div className="border-gray-900">
+        DONOR VERSION: Calculating Selected {slug} Crypto Coin/Token Historical Data...With FoskaayFib!
+          <br />
+        Loading...
+        </div>
       </div>
     );
+  }
+
+  if (!isAdmin) {
+    return <div>Checking permissions...</div>;
   }
 
   if (error) {

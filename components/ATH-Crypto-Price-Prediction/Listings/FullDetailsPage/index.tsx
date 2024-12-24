@@ -73,8 +73,12 @@ const ATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      <div className="flex items-center justify-center">
+        <div className="border-gray-900">
+        NON-DONOR VERSION: Calculating Selected {slug} Crypto Coin/Token Historical Data...With FoskaayFib!
+          <br />
+        Loading...
+        </div>
       </div>
     );
   }
