@@ -21,7 +21,7 @@ const menuData: Menu[] = [
       },
       {
         id: 2.1,
-        title: "Unlock Donor Perks",
+        title: "Access Donor NFT Perks",
         newTab: false,
         path: "/donor",
       },

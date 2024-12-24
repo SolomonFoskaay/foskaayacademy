@@ -135,7 +135,7 @@ export default function DonorATHCryptoPricePredictionPage({
         <h1 className="text-4xl font-bold text-purple-500 mb-4">
           2022 - 2025 (Market Cycle) Crypto ATH Price Prediction List Using FoskaayFib Levels & Grades {donorVersionTracker}
         </h1>
-        <h2 className="text-2xl font-bold text-red-500 mb-4">
+        <h2 className="text-2xl font-bold text-green-500 mb-4">
           Donor Version With ADVANCED FEATURES!
         </h2>
         <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
