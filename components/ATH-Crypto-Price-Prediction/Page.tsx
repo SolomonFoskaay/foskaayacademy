@@ -3,6 +3,8 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { ArrowUpIcon, ArrowDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { cryptoSymbols, cryptoNames } from './ATHCryptoList';
+import { nonDonorVersionTracker } from '@/utils/changelogs/version-tracker';
+
 
 interface ATHCryptoPricePredictionPageProps {
   cryptoList: any[];
@@ -132,7 +134,7 @@ export default function ATHCryptoPricePredictionPage({
       {/* SEO Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-purple-500 mb-4">
-          2022 - 2025 (Market Cycle) Crypto ATH Price Prediction List Using FoskaayFib Levels & Grades (Beta-V1.32.140)
+          2022 - 2025 (Market Cycle) Crypto ATH Price Prediction List Using FoskaayFib Levels & Grades {nonDonorVersionTracker}
         </h1>
         <h2 className="text-2xl font-bold text-red-500 mb-4">
           Non-Donor Version With BASIC FEATURES
