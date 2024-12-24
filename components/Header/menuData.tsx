@@ -15,6 +15,18 @@ const menuData: Menu[] = [
     submenu: [
       {
         id: 2.1,
+        title: "Become A Donor",
+        newTab: false,
+        path: "/donate",
+      },
+      {
+        id: 2.1,
+        title: "Unlock Donor Perks",
+        newTab: false,
+        path: "/donor",
+      },
+      {
+        id: 2.1,
         title: "Categories",
         newTab: false,
         path: "/category",
