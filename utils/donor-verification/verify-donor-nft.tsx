@@ -23,10 +23,10 @@ export async function checkAuthAndRole(): Promise<AuthResult> {
       .from("user_role_manager")
       .select("*")
       .eq("id", user.id)
-      .eq("user_role_level", "admin")
+      .in("user_role_level", ["admin", "moderator"]) // Allow both roles
       .single();
 
-    if (roleError || !roles || roles.user_role_level !== "admin") {
+    if (roleError || !roles || !["admin", "moderator"].includes(roles.user_role_level)) {
       window.location.href = "/crypto-ath-price-prediction/access-denied";
       return { isAdmin: false };
     }
