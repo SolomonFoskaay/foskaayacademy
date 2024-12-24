@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowUpIcon, ArrowDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { cryptoSymbols, cryptoNames } from './DonorATHCryptoList';
 import { donorVersionTracker } from '@/utils/changelogs/version-tracker';
+import { formatFFLevel, useDonorFFGrades } from './DonorFFGrade';
 
 
 interface DonorATHCryptoPricePredictionPageProps {
@@ -58,6 +59,8 @@ export default function DonorATHCryptoPricePredictionPage({
   const [sortConfig, setSortConfig] = useState({ key: 'marketCap', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(100);
+  const { ffGrades, loading: gradesLoading } = useDonorFFGrades();
+
 
   const filteredAndSortedData = useMemo(() => {
     let filtered = cryptoList.filter(crypto => {
@@ -236,10 +239,12 @@ export default function DonorATHCryptoPricePredictionPage({
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   #
                 </th>
+
                 {/* Name */}
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Name
                 </th>
+
                 {/* MarketCap */}
                 <th
                   scope="col"
@@ -251,6 +256,7 @@ export default function DonorATHCryptoPricePredictionPage({
                     <SortIcon column="marketCap" />
                   </div>
                 </th>
+
                 {/* Price */}
                 <th
                   scope="col"
@@ -262,6 +268,7 @@ export default function DonorATHCryptoPricePredictionPage({
                     <SortIcon column="currentPrice" />
                   </div>
                 </th>
+
                 {/* Liquidity (24H) */}
                 <th
                   scope="col"
@@ -273,6 +280,7 @@ export default function DonorATHCryptoPricePredictionPage({
                     <SortIcon column="totalVolume24h" />
                   </div>
                 </th>
+
                 {/* FoskaayFib Grade  */}
                 <th
                   scope="col"
@@ -284,6 +292,19 @@ export default function DonorATHCryptoPricePredictionPage({
                     <SortIcon column="foskaayFibGrade" />
                   </div>
                 </th>
+
+                {/* FoskaayFib Levels  */}
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer group"
+                  onClick={() => handleSort('foskaayFibLevels')}
+                >
+                  <div className="flex items-center">
+                    FoskaayFib Levels (FFLevels)
+                    <SortIcon column="foskaayFibLevels" />
+                  </div>
+                </th>
+
                 {/* FoskaayFib Price Prediction */}
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   2025 Price Target
@@ -300,6 +321,7 @@ export default function DonorATHCryptoPricePredictionPage({
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       {(currentPage - 1) * itemsPerPage + index + 1}
                     </td>
+
                     {/* Asset Name Values */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
@@ -318,32 +340,60 @@ export default function DonorATHCryptoPricePredictionPage({
                         </div>
                       </Link>
                     </td>
+
                     {/* Marketcap values*/}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         {formatMarketCap(crypto.marketCap)}
                       </Link>
                     </td>
+
                     {/* Price values */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                       <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         {formatPrice(crypto.currentPrice)}
                       </Link>
                     </td>
+
                     {/* Liquidity (24H) values */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                       <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                         {formattotalVolume24h(crypto.totalVolume24h)}
                       </Link>
                     </td>
-                    {/* FoskaayFib Grades Values */}
+
+                    {/* FoskaayFib Grade Values */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getGradeColor(crypto.foskaayFibGrade)}`}>
-                          Calculate {crypto.symbol} FFGrade {/* {crypto.foskaayFibGrade} */}
+                      {gradesLoading ? (
+                        <span>Calculating...</span>
+                      ) : ffGrades[crypto.symbol]?.foskaayFibResults ? (
+                        <span
+                          className="px-2 py-1 rounded-full text-xs font-medium"
+                          style={{ color: ffGrades[crypto.symbol].foskaayFibResults.grade.currentGrade.color }}
+                        >
+                          {ffGrades[crypto.symbol].foskaayFibResults.grade.currentGrade.grade}
                         </span>
-                      </Link>
+                      ) : (
+                        <span>N/A</span>
+                      )}
                     </td>
+
+                    {/* FoskaayFib Current Level */}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {gradesLoading ? (
+                        <span>Calculating...</span>
+                      ) : ffGrades[crypto.symbol]?.foskaayFibResults ? (
+                        (() => {
+                          const results = ffGrades[crypto.symbol].foskaayFibResults;
+                          // Find the next unachieved level
+                          const nextLevel = results.levels.find(level => !level.isAchieved);
+                          return nextLevel ? formatFFLevel(nextLevel.price, nextLevel.percentage) : 'All Levels Achieved';
+                        })()
+                      ) : (
+                        'N/A'
+                      )}
+                    </td>
+
                     {/* FoskaayFib Price Prediction value */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">

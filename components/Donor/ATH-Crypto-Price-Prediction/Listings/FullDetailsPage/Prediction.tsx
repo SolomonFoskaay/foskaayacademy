@@ -11,10 +11,10 @@ interface DonorPredictionProps {
     FoskaayFibResults: FoskaayFibResult;
 }
 
-const DonorPrediction: React.FC<DonorPredictionProps> = ({ 
+const DonorPrediction: React.FC<DonorPredictionProps> = ({
     symbol,
     cryptoFullName,
-    FoskaayFibResults 
+    FoskaayFibResults
 }: DonorPredictionProps) => {
     // Helper function to get gradient based on percentage
     const getGradient = (percentage: number) => {
@@ -137,23 +137,23 @@ const DonorPrediction: React.FC<DonorPredictionProps> = ({
                 </div>
 
                 {/* ATH Prediction and FoskaayFib Grade Display Grid */}
-<div className="grid grid-cols-1 md:grid-cols-10 gap-4 mb-8">
-  <div className="md:col-span-3 bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-    <h3 className="text-sm text-gray-600 dark:text-gray-400">
-      {cryptoFullName} 2025 Predicted ATH (CMCATH)
-    </h3>
-    <p className="text-xl font-bold text-purple-600">
-      ${FoskaayFibResults.cmcATH.min.toLocaleString()} - ${FoskaayFibResults.cmcATH.max.toLocaleString()}
-    </p>
-  </div>
-  <div className="md:col-span-7">
-    <FoskaayFibGradeDisplay
-      symbol={cryptoFullName}
-      grade={FoskaayFibResults.grade}
-      currentPrice={FoskaayFibResults.currentPrice}
-    />
-  </div>
-</div>
+                <div className="grid grid-cols-1 md:grid-cols-10 gap-4 mb-8">
+                    <div className="md:col-span-3 bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                        <h3 className="text-sm text-gray-600 dark:text-gray-400">
+                            {cryptoFullName} 2025 Predicted ATH (CMCATH)
+                        </h3>
+                        <p className="text-xl font-bold text-purple-600">
+                            ${FoskaayFibResults.cmcATH.min.toLocaleString()} - ${FoskaayFibResults.cmcATH.max.toLocaleString()}
+                        </p>
+                    </div>
+                    <div className="md:col-span-7">
+                        <FoskaayFibGradeDisplay
+                            symbol={cryptoFullName}
+                            grade={FoskaayFibResults.grade}
+                            currentPrice={FoskaayFibResults.currentPrice}
+                        />
+                    </div>
+                </div>
 
                 {/* Current Zone Indicator */}
                 <div className="mb-6 p-4 rounded-lg border border-gray-200 dark:border-gray-700"
