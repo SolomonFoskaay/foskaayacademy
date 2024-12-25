@@ -12,8 +12,7 @@ interface HistoricalDataPoint {
   high: number;
   low: number;
   close: number;
-  volume: number;
-  marketCap: number;
+  volumefrom: number;  
 }
 
 interface ContentMainProps {
@@ -196,7 +195,7 @@ const ContentMain = ({ cryptoData }: ContentMainProps) => {
                     <td className="px-4 py-2">${item.high.toLocaleString()}</td>
                     <td className="px-4 py-2">${item.low.toLocaleString()}</td>
                     <td className="px-4 py-2">${item.close.toLocaleString()}</td>
-                    <td className="px-4 py-2">{item.volume.toLocaleString()}</td>
+                    <td className="px-4 py-2">{item.volumefrom.toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>

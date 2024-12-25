@@ -1,7 +1,7 @@
 // /components/donor/ATH-Crypto-Price-Prediction/index.tsx
 "use client"
 import { useEffect, useState } from 'react';
-import { checkAuthAndRole } from '@/utils/donor-verification/verify-donor-nft';
+import { checkAuthAndRole } from '@/utils/verification/donor-verification/verify-donor-nft';
 import DonorATHCryptoPricePredictionPage from './Page';
 import { cryptoSymbols } from './DonorATHCryptoList';
 

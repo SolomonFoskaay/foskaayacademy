@@ -1,7 +1,7 @@
 // /components/donor/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage/index.tsx
 "use client";
 import React, { useEffect, useState } from "react";
-import { checkAuthAndRole} from '@/utils/donor-verification/verify-donor-nft';
+import { checkAuthAndRole} from '@/utils/verification/donor-verification/verify-donor-nft';
 import { cryptoSymbols, cryptoNames } from '../../DonorATHCryptoList';
 import Chart from "./Chart";
 import ContentMain from "./ContentMain";
@@ -14,8 +14,7 @@ interface HistoricalDataPoint {
   high: number;
   low: number;
   close: number;
-  volume: number;
-  marketCap: number;
+  volumefrom: number;  
 }
 
 interface CryptoData {

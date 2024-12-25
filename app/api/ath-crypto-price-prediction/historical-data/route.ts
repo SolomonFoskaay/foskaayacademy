@@ -77,8 +77,10 @@ export async function GET(request: Request) {
         high: item.high,
         low: item.low,
         close: item.close,
-        volume: item.volumefrom,
-        marketCap: item.volumeto
+        volumefrom: item.volumefrom, 
+        volumeto: item.volumeto,     
+        conversionType: item.conversionType || 'direct',
+        conversionSymbol: item.conversionSymbol || 'USD'
       }))
     };
 

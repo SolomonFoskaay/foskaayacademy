@@ -1,4 +1,4 @@
-// /utils/donor-verification/verify-door-nft.tsx
+// /utils/verification/donor-verification/verify-door-nft.tsx
 import { createClient } from "@/utils/supabase/client";
 
 interface AuthResult {

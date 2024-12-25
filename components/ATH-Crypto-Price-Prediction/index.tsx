@@ -44,10 +44,6 @@ export default function ATHCryptoPricePrediction() {
 
   useEffect(() => {
     fetchCryptoData();
-
-    const refreshInterval = setInterval(fetchCryptoData, 5 * 60 * 1000); // Refresh every 5 minutes
-
-    return () => clearInterval(refreshInterval);
   }, []);
 
   return (

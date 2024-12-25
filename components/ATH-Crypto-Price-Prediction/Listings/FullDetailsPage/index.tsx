@@ -13,8 +13,7 @@ interface HistoricalDataPoint {
   high: number;
   low: number;
   close: number;
-  volume: number;
-  marketCap: number;
+  volumefrom: number;
 }
 
 interface CryptoData {

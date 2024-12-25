@@ -40,7 +40,7 @@ interface ChartProps {
       high: number;
       low: number;
       close: number;
-      volume: number;
+      volumefrom: number;
     }>;
   };
 }
@@ -139,7 +139,7 @@ const Chart = ({ cryptoData }: ChartProps) => {
       high: Math.max(...points.map(p => p.high)),
       low: Math.min(...points.map(p => p.low)),
       close: points[points.length - 1].close,
-      volume: points.reduce((sum, p) => sum + p.volume, 0)
+      volume: points.reduce((sum, p) => sum + p.volumefrom, 0)
     }));
   };
 
