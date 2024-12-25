@@ -74,6 +74,8 @@ export default function DonorATHCryptoPricePredictionPage({
     });
 
     return filtered.sort((a, b) => {
+
+      //Numeric sorting for other columns
       if (a[sortConfig.key] < b[sortConfig.key]) {
         return sortConfig.direction === 'asc' ? -1 : 1;
       }
@@ -364,6 +366,7 @@ export default function DonorATHCryptoPricePredictionPage({
 
                     {/* FoskaayFib Grade Values */}
                     <td className="px-6 py-4 whitespace-nowrap">
+                    <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                       {gradesLoading ? (
                         <span>Calculating...</span>
                       ) : ffGrades[crypto.symbol]?.foskaayFibResults ? (
@@ -376,10 +379,12 @@ export default function DonorATHCryptoPricePredictionPage({
                       ) : (
                         <span>N/A</span>
                       )}
+                      </Link>
                     </td>
 
                     {/* FoskaayFib Current Level */}
                     <td className="px-6 py-4 whitespace-nowrap">
+                    <Link href={`/donor/crypto-ath-price-prediction/${crypto.symbol.toLowerCase()}`} target='_blank' className="flex items-center">
                       {gradesLoading ? (
                         <span>Calculating...</span>
                       ) : ffGrades[crypto.symbol]?.foskaayFibResults ? (
@@ -392,6 +397,7 @@ export default function DonorATHCryptoPricePredictionPage({
                       ) : (
                         'N/A'
                       )}
+                      </Link>
                     </td>
 
                     {/* FoskaayFib Price Prediction value */}
