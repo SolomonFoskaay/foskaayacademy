@@ -1,8 +1,8 @@
 // /utils/api/crypto-historical-data-manager.tsx
+// /utils/api/crypto-historical-data-manager.tsx
 import { createClient } from '@/utils/supabase/client';
 import { cryptoSymbols, cryptoNames } from '@/components/Donor/ATH-Crypto-Price-Prediction/DonorATHCryptoList';
 
-// Interface to match API response
 interface HistoricalDataPoint {
     time: number;
     open: number;
@@ -29,6 +29,14 @@ interface UpdateOptions {
     isPaused: () => boolean;
     count?: number;
     fromTop?: boolean;
+    dataPointThreshold: number;
+}
+
+interface ExistingCryptoAsset {
+    id: number;
+    symbol: string;
+    name: string;
+    data_points_count: number;
 }
 
 export async function updateCryptoDatabase(options: UpdateOptions): Promise<UpdateResults> {
@@ -38,7 +46,8 @@ export async function updateCryptoDatabase(options: UpdateOptions): Promise<Upda
         onStatusUpdate,
         isPaused,
         count = cryptoSymbols.length,
-        fromTop = true
+        fromTop = true,
+        dataPointThreshold
     } = options;
 
     const supabase = createClient();
@@ -50,21 +59,54 @@ export async function updateCryptoDatabase(options: UpdateOptions): Promise<Upda
     };
 
     try {
-        // Select symbols based on count and direction
+        // First, get all existing crypto assets with their data point counts
+        onStatusUpdate('Fetching existing crypto assets...');
+        const { data: existingAssets, error: existingAssetsError } = await supabase
+            .from('crypto_assets')
+            .select('id, symbol, name, data_points_count')
+            .order('id');
+
+        if (existingAssetsError) {
+            throw new Error(`Failed to fetch existing assets: ${existingAssetsError.message}`);
+        }
+
+        // Create a map for quick lookup
+        const existingAssetsMap = new Map<string, ExistingCryptoAsset>();
+        existingAssets?.forEach(asset => {
+            existingAssetsMap.set(asset.symbol, asset);
+        });
+
+        // Filter symbols that need updating
         let selectedSymbols = [...cryptoSymbols];
         let selectedNames = [...cryptoNames];
 
-        if (count < cryptoSymbols.length) {
+        // Filter out symbols that are up to date
+        const symbolsToUpdate = selectedSymbols.filter((symbol, index) => {
+            const existingAsset = existingAssetsMap.get(symbol);
+            return !existingAsset || existingAsset.data_points_count < dataPointThreshold;
+        });
+
+        const namesToUpdate = symbolsToUpdate.map(symbol => {
+            const index = cryptoSymbols.indexOf(symbol);
+            return cryptoNames[index];
+        });
+
+        // Apply count and direction filters
+        if (count < symbolsToUpdate.length) {
             if (fromTop) {
-                selectedSymbols = selectedSymbols.slice(0, count);
-                selectedNames = selectedNames.slice(0, count);
+                selectedSymbols = symbolsToUpdate.slice(0, count);
+                selectedNames = namesToUpdate.slice(0, count);
             } else {
-                selectedSymbols = selectedSymbols.slice(-count);
-                selectedNames = selectedNames.slice(-count);
+                selectedSymbols = symbolsToUpdate.slice(-count);
+                selectedNames = namesToUpdate.slice(-count);
             }
+        } else {
+            selectedSymbols = symbolsToUpdate;
+            selectedNames = namesToUpdate;
         }
 
         onProgress(0, selectedSymbols.length);
+        onStatusUpdate(`Found ${selectedSymbols.length} cryptocurrencies to update`);
 
         for (let i = 0; i < selectedSymbols.length; i++) {
             if (signal.aborted) throw new Error('Operation was aborted');
@@ -82,31 +124,18 @@ export async function updateCryptoDatabase(options: UpdateOptions): Promise<Upda
 
             try {
                 // Check if asset exists
-                const { data: existingAsset, error: assetError } = await supabase
-                    .from('crypto_assets')
-                    .select('id, symbol')
-                    .eq('symbol', symbol)
-                    .single();
+                const existingAsset = existingAssetsMap.get(symbol);
+                let assetId: number;
 
-                if (assetError && assetError.code !== 'PGRST116') {
-                    results.errors.push(`Error checking asset ${symbol}: ${assetError.message}`);
-                    continue;
-                }
-
-                // Create asset if it doesn't exist
-                let assetId: string;
                 if (!existingAsset) {
-                    onStatusUpdate(`Creating new asset: ${symbol}`);
+                    // Create new asset
                     const { data: newAsset, error: createError } = await supabase
                         .from('crypto_assets')
                         .insert([
                             {
-                                symbol,
-                                name,
-                                decimals: 8,
-                                created_at: new Date().toISOString(),
-                                updated_at: new Date().toISOString(),
-                                last_historical_update: new Date().toISOString()
+                                symbol: symbol,
+                                name: name,
+                                decimals: 8
                             }
                         ])
                         .select('id')
@@ -123,7 +152,7 @@ export async function updateCryptoDatabase(options: UpdateOptions): Promise<Upda
                     assetId = existingAsset.id;
                 }
 
-                // Fetch historical data using our API route
+                // Fetch historical data
                 onStatusUpdate(`Fetching historical data for ${symbol}`);
                 const response = await fetch(`/api/ath-crypto-price-prediction/historical-data?symbol=${symbol}`);
 

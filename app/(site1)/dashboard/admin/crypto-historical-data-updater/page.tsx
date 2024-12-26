@@ -1,10 +1,15 @@
 // /app/(site1)/dashboard/crypto-historical-data-updater/page.tsx
 'use client';
-
 import { useState, useEffect, useRef } from 'react';
 import { checkAuthAndRole } from '@/utils/verification/verify-admin';
 import { updateCryptoDatabase } from '@/utils/api/crypto-historical-data-manager';
 import { cryptoSymbols } from '@/components/Donor/ATH-Crypto-Price-Prediction/DonorATHCryptoList';
+
+interface ConfigState {
+    cryptoCount: number;
+    fromTop: boolean;
+    dataPointThreshold: number;
+}
 
 export default function CryptoHistoricalDataUpdater() {
     const [isAuthorized, setIsAuthorized] = useState(false);
@@ -16,6 +21,7 @@ export default function CryptoHistoricalDataUpdater() {
     const [status, setStatus] = useState<string>('');
     const [cryptoCount, setCryptoCount] = useState<number>(5);
     const [fromTop, setFromTop] = useState<boolean>(true);
+    const [dataPointThreshold, setDataPointThreshold] = useState<number>(2001);
     const abortControllerRef = useRef<AbortController | null>(null);
 
     useEffect(() => {
@@ -42,7 +48,8 @@ export default function CryptoHistoricalDataUpdater() {
                 onStatusUpdate: (status) => setStatus(status),
                 isPaused: () => isPaused,
                 count: cryptoCount,
-                fromTop: fromTop
+                fromTop: fromTop,
+                dataPointThreshold: dataPointThreshold
             });
             setResults(results);
         } catch (err: any) {
@@ -79,11 +86,10 @@ export default function CryptoHistoricalDataUpdater() {
                         Crypto Historical Data Updater
                     </h1>
 
-                    {/* Configuration Controls */}
-                    <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Number of Cryptocurrencies to Process
+                                Number of Cryptocurrencies
                             </label>
                             <input
                                 type="number"
@@ -95,6 +101,22 @@ export default function CryptoHistoricalDataUpdater() {
                                 disabled={isUpdating}
                             />
                         </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Highest Data Point Threshold
+                            </label>
+                            <input
+                                type="number"
+                                min="1"
+                                value={dataPointThreshold}
+                                onChange={(e) => setDataPointThreshold(parseInt(e.target.value) || 2001)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                disabled={isUpdating}
+                                placeholder="e.g., 2001"
+                            />
+                        </div>
+
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Processing Direction
@@ -105,13 +127,12 @@ export default function CryptoHistoricalDataUpdater() {
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 disabled={isUpdating}
                             >
-                                <option value="top">From Top (BTC first)</option>
-                                <option value="bottom">From Bottom (Last coins)</option>
+                                <option value="top">From Top (First coin/token)</option>
+                                <option value="bottom">From Bottom (Last coin/token)</option>
                             </select>
                         </div>
                     </div>
                     
-                    {/* Action Buttons */}
                     <div className="mb-8 space-x-4">
                         {!isUpdating ? (
                             <button
@@ -151,7 +172,6 @@ export default function CryptoHistoricalDataUpdater() {
                         )}
                     </div>
 
-                    {/* Progress and Status */}
                     {isUpdating && (
                         <div className="mb-6">
                             <div className="h-2 bg-gray-200 rounded-full mb-2">
@@ -167,7 +187,6 @@ export default function CryptoHistoricalDataUpdater() {
                         </div>
                     )}
 
-                    {/* Error Display */}
                     {error && (
                         <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg border border-red-200">
                             <p className="font-medium">Error:</p>
@@ -175,7 +194,6 @@ export default function CryptoHistoricalDataUpdater() {
                         </div>
                     )}
 
-                    {/* Results Display */}
                     {results && (
                         <div className="space-y-6">
                             <div className="p-4 bg-green-100 text-green-700 rounded-lg border border-green-200">
