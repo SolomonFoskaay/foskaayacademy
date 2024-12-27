@@ -3,7 +3,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { checkAuthAndRole } from '@/utils/verification/verify-admin';
 import { updateCryptoDatabase } from '@/utils/api/crypto-historical-data-manager';
-import { cryptoSymbols } from '@/components/Donor/ATH-Crypto-Price-Prediction/DonorATHCryptoList';
+import { cryptoSymbols, cryptoNames } from '@/components/Donor/ATH-Crypto-Price-Prediction/DonorATHCryptoList';
+import DonorATHCryptoListDisplay from '@/components/Donor/ATH-Crypto-Price-Prediction/DonorATHCryptoListDisplay';
+
 
 interface PreflightInfo {
     btcCheck: {
@@ -30,6 +32,7 @@ export default function CryptoHistoricalDataUpdater() {
     const [fromTop, setFromTop] = useState<boolean>(true);
     const [preflightInfo, setPreflightInfo] = useState<PreflightInfo | null>(null);
     const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
+    const [additionalCryptos, setAdditionalCryptos] = useState<{ symbol: string, name: string }[]>([]);
     const abortControllerRef = useRef<AbortController | null>(null);
 
     useEffect(() => {
@@ -39,6 +42,15 @@ export default function CryptoHistoricalDataUpdater() {
     const checkAuth = async () => {
         const { isAdmin } = await checkAuthAndRole();
         setIsAuthorized(isAdmin);
+    };
+
+    // Update cryptoCount when either cryptoSymbols or additionalCryptos changes
+    useEffect(() => {
+        setCryptoCount(cryptoSymbols.length + additionalCryptos.length);
+    }, [cryptoSymbols.length, additionalCryptos.length]);
+
+    const handleNewCryptosChange = (newCryptos: { symbol: string, name: string }[]) => {
+        setAdditionalCryptos(newCryptos);
     };
 
     const handleUpdate = async () => {
@@ -51,6 +63,16 @@ export default function CryptoHistoricalDataUpdater() {
         abortControllerRef.current = new AbortController();
 
         try {
+            // Combine existing and new cryptos for processing
+            const combinedSymbols = [...cryptoSymbols];
+            const combinedNames = [...cryptoNames];
+            
+            // Add new cryptos to the processing list
+            additionalCryptos.forEach(crypto => {
+                combinedSymbols.push(crypto.symbol);
+                combinedNames.push(crypto.name);
+            });
+
             const results = await updateCryptoDatabase({
                 signal: abortControllerRef.current.signal,
                 onProgress: (current, total) => setProgress({ current, total }),
@@ -58,6 +80,9 @@ export default function CryptoHistoricalDataUpdater() {
                 isPaused: () => isPaused,
                 count: cryptoCount,
                 fromTop,
+                // Pass combined lists to be processed
+                symbolsList: combinedSymbols,
+                namesList: combinedNames,
                 onPreflightComplete: async (results) => {
                     if (results.preflightInfo) {
                         setPreflightInfo(results.preflightInfo);
@@ -84,6 +109,7 @@ export default function CryptoHistoricalDataUpdater() {
         }
     };
 
+
     const handleCancel = () => {
         if (abortControllerRef.current) {
             abortControllerRef.current.abort();
@@ -104,6 +130,9 @@ export default function CryptoHistoricalDataUpdater() {
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                     <h1 className="text-2xl font-bold mb-6 text-white">Crypto Historical Data Updater</h1>
 
+                    {/* Add the new component here */}
+                    <DonorATHCryptoListDisplay onNewCryptosChange={handleNewCryptosChange} />
+
                     <div className="space-y-6">
                         <div className="space-y-4">
                             <div>
@@ -114,7 +143,7 @@ export default function CryptoHistoricalDataUpdater() {
                                     onChange={(e) => setCryptoCount(parseInt(e.target.value))}
                                     className="w-full p-2 border rounded bg-gray-800 text-white"
                                     min="1"
-                                    max={cryptoSymbols.length}
+                                    max={cryptoSymbols.length + additionalCryptos.length}
                                 />
                             </div>
 

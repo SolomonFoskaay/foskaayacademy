@@ -52,7 +52,10 @@ export async function getBTCLatestTimeTo(): Promise<TimeCheckResult> {
     };
 }
 
-export async function findAssetsToUpdate(latestTimeTo: number): Promise<AssetsToUpdate> {
+export async function findAssetsToUpdate(
+    latestTimeTo: number,
+    symbolsList?: string[]  
+): Promise<AssetsToUpdate> {
     const supabase = createClient();
     
     // Get all existing assets
@@ -70,8 +73,11 @@ export async function findAssetsToUpdate(latestTimeTo: number): Promise<AssetsTo
         newAssets: []
     };
 
+    // Use symbolsList if provided, otherwise use cryptoSymbols
+    const symbolsToCheck = symbolsList || cryptoSymbols;
+
     // Simple check: either not in DB or has older timestamp
-    cryptoSymbols.forEach(symbol => {
+    symbolsToCheck.forEach(symbol => {
         const existing = existingMap.get(symbol);
         if (!existing) {
             result.newAssets.push(symbol);

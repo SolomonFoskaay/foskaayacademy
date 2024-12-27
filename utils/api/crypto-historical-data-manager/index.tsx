@@ -28,6 +28,8 @@ interface UpdateOptions {
     isPaused: () => boolean;
     count?: number;
     fromTop?: boolean;
+    symbolsList?: string[];  
+    namesList?: string[];    
     onPreflightComplete?: (results: UpdateResults) => Promise<boolean>;
 }
 
@@ -39,6 +41,8 @@ export async function updateCryptoDatabase(options: UpdateOptions): Promise<Upda
         isPaused,
         count = cryptoSymbols.length,
         fromTop = true,
+        symbolsList,
+        namesList,
         onPreflightComplete
     } = options;
 
@@ -61,7 +65,7 @@ export async function updateCryptoDatabase(options: UpdateOptions): Promise<Upda
 
         // Step 2: Find assets that need updating
         onStatusUpdate('Scanning database for assets that need updating...');
-        const assetsToUpdate = await findAssetsToUpdate(btcCheck.latestTimeTo);
+        const assetsToUpdate = await findAssetsToUpdate(btcCheck.latestTimeTo, symbolsList);
 
         results.preflightInfo = {
             btcCheck,
@@ -118,11 +122,19 @@ export async function updateCryptoDatabase(options: UpdateOptions): Promise<Upda
 
                 let assetId: number;
                 if (!existingAsset) {
+                    const symbolIndex = symbolsList 
+                        ? symbolsList.indexOf(symbol)
+                        : cryptoSymbols.indexOf(symbol);
+                    
+                    const name = symbolsList && namesList 
+                        ? namesList[symbolIndex]
+                        : cryptoNames[symbolIndex];
+        
                     const { data: newAsset, error: createError } = await supabase
                         .from('crypto_assets')
                         .insert([{
                             symbol: symbol,
-                            name: cryptoNames[cryptoSymbols.indexOf(symbol)],
+                            name: name,
                             decimals: 8
                         }])
                         .select('id')
