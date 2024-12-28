@@ -10,8 +10,11 @@ import DonorATHCryptoListDisplay from '@/components/Donor/ATH-Crypto-Price-Predi
 interface PreflightInfo {
     btcCheck: {
         apiTime: number;
+        apiBeforeTime: number;
         dbTime: number;
+        dbBeforeTime: number;
         latestTimeTo: number;
+        beforeTimeTo: number;
         source: 'api' | 'db';
     };
     assetsToUpdate: {
@@ -66,7 +69,7 @@ export default function CryptoHistoricalDataUpdater() {
             // Combine existing and new cryptos for processing
             const combinedSymbols = [...cryptoSymbols];
             const combinedNames = [...cryptoNames];
-            
+
             // Add new cryptos to the processing list
             additionalCryptos.forEach(crypto => {
                 combinedSymbols.push(crypto.symbol);
@@ -215,9 +218,12 @@ export default function CryptoHistoricalDataUpdater() {
                                     <div>
                                         <h3 className="font-semibold">BTC Timestamp Check:</h3>
                                         <ul className="list-disc list-inside pl-4">
-                                            <li>API TimeTo: {preflightInfo.btcCheck.apiTime}</li>
-                                            <li>DB time_to: {preflightInfo.btcCheck.dbTime}</li>
-                                            <li>Latest time_to: {preflightInfo.btcCheck.latestTimeTo} (from {preflightInfo.btcCheck.source})</li>
+                                            <li>API Latest Time (TimeTo): {preflightInfo.btcCheck.apiTime}</li>
+                                            <li>API Before Time: {preflightInfo.btcCheck.apiBeforeTime}</li>
+                                            <li>DB Latest Time (time_to): {preflightInfo.btcCheck.dbTime}</li>
+                                            <li>DB Before Time: {preflightInfo.btcCheck.dbBeforeTime}</li>
+                                            <li>Using Latest (Final Latest time_to): {preflightInfo.btcCheck.latestTimeTo} (from {preflightInfo.btcCheck.source})</li>
+                                            <li>Using Before (Final Before time_to): {preflightInfo.btcCheck.beforeTimeTo}</li>
                                         </ul>
                                     </div>
 
@@ -285,6 +291,15 @@ export default function CryptoHistoricalDataUpdater() {
                                     <h2 className="font-bold mb-3">Update Results:</h2>
                                     <p>✅ New assets added: {results.newAssetsAdded}</p>
                                     <p>📊 New data points added: {results.newDataPointsAdded}</p>
+                                    <p>🔄 Latest points updated: {results.updatedDataPoints}</p>
+
+                                    {results.processedPoints && (
+                                        <>
+                                            <h3 className="font-semibold mt-3">Processed Timestamps:</h3>
+                                            <p>Updated: {results.processedPoints.updated.join(', ')}</p>
+                                            <p>Inserted: {results.processedPoints.inserted.join(', ')}</p>
+                                        </>
+                                    )}
                                 </div>
 
                                 {results.errors?.length > 0 && (

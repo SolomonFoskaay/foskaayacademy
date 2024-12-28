@@ -72,8 +72,10 @@ export async function GET(request: Request) {
       success: true,
       symbol: symbol,
       TimeTo: data.TimeTo || data.Data.Data[data.Data.Data.length - 1].time,  // Add raw unconverted TimeTo
+      BeforeTimeTo: data.Data.Data[data.Data.Data.length - 2].time,  // Add raw unconverted BeforeTimeTo
       data: data.Data.Data.map((item: any) => ({
-        time: new Date(item.time * 1000).toISOString().split('T')[0],
+        // time: new Date(item.time * 1000).toISOString().split('T')[0],
+        time: item.time,
         open: item.open,
         high: item.high,
         low: item.low,
