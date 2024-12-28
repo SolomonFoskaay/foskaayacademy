@@ -1,4 +1,4 @@
-// /app/(site1)/dashboard/crypto-historical-data-updater/page.tsx
+// /app/(site1)/dashboard/admin/crypto-historical-data-updater/page.tsx
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { checkAuthAndRole } from '@/utils/verification/verify-admin';
