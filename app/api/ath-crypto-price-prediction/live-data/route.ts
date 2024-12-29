@@ -1,0 +1,49 @@
+// /app/api/ATH-Crypto-Price-Prediction/live-data/route.ts
+const CRYPTOCOMPARE_API_KEY = process.env.NEXT_PUBLIC_CRYPTOCOMPARE_API_KEY;
+const BASE_URL = 'https://min-api.cryptocompare.com/data';
+
+export async function POST(request: Request) {
+    try {
+        const { symbols } = await request.json();
+
+        if (!symbols || !Array.isArray(symbols)) {
+            return new Response(JSON.stringify({ error: 'Invalid symbols array' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const apiUrl = `${BASE_URL}/pricemultifull?fsyms=${symbols.join(',')}&tsyms=USD`;
+        console.log('Fetching from API:', apiUrl);
+
+        const startTime = Date.now();
+        const response = await fetch(apiUrl, {
+            headers: {
+                'authorization': `Apikey ${CRYPTOCOMPARE_API_KEY}`
+            }
+        });
+        const endTime = Date.now();
+
+        if (!response.ok) {
+            throw new Error(`API request failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        return new Response(JSON.stringify({
+            data,
+            timeMs: endTime - startTime,
+            status: response.status
+        }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        return new Response(JSON.stringify({ error: errorMessage }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+}

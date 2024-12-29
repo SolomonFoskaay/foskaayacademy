@@ -2,9 +2,8 @@
 import { createClient } from '@/utils/supabase/client';
 import { checkLivePriceStatus } from './pre-checks';
 
-const CRYPTOCOMPARE_API_KEY = process.env.NEXT_PUBLIC_CRYPTOCOMPARE_API_KEY;
-const BASE_URL = 'https://min-api.cryptocompare.com/data';
-const BATCH_SIZE = 50;
+const BATCH_SIZE = 50; // Increased from 50 to 100 to 200 max
+const MAX_CONCURRENT_BATCHES = 10; // Number of parallel batch operations
 
 // Add interface for the price data structure
 interface CryptoLivePrice {
@@ -92,31 +91,31 @@ export async function updateLivePrices(options: UpdateLivePricesOptions): Promis
             throw new Error('No cryptocurrencies found to update');
         }
 
-        // Step 2: Make single API call for all symbols
-        log('Making API call to CryptoCompare');
+        // Step 2: Make API call through route
+        log('Making API call to fetch prices');
         onStatusUpdate(`🌐 Fetching live prices for ${symbols.length} cryptocurrencies...`);
-        const apiUrl = `${BASE_URL}/pricemultifull?fsyms=${symbols.join(',')}&tsyms=USD`;
-
-        await serverLog('API Request', { url: apiUrl });
+        
+        await serverLog('API Request initiated');
         const startTime = Date.now();
-        const response = await fetch(apiUrl, {
+        
+        const response = await fetch('/api/ath-crypto-price-prediction/live-data', {
+            method: 'POST',
             headers: {
-                'authorization': `Apikey ${CRYPTOCOMPARE_API_KEY}`
-            }
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ symbols })
         });
-        const endTime = Date.now();
 
+        const endTime = Date.now();
         log(`API call completed in ${endTime - startTime}ms`);
-        await serverLog('API Response received', { 
-            timeMs: endTime - startTime,
-            status: response.status 
-        });
 
         if (!response.ok) {
             throw new Error(`API request failed: ${response.status}`);
         }
 
-        const data = await response.json();
+        const { data, timeMs } = await response.json();
+        await serverLog('API Response received', { timeMs, status: response.status });
+
         if (!data.RAW) {
             throw new Error('Invalid API response format');
         }
@@ -125,25 +124,12 @@ export async function updateLivePrices(options: UpdateLivePricesOptions): Promis
             symbolsReceived: Object.keys(data.RAW).length
         });
 
-        onStatusUpdate('💫 Processing and updating database in batches...');
+        onStatusUpdate('💫 Processing and updating database in parallel batches...');
 
-        // Step 3: Process symbols in batches
-        for (let i = 0; i < symbols.length; i += BATCH_SIZE) {
-            if (signal.aborted) {
-                log('Update process aborted');
-                break;
-            }
-
-            while (isPaused()) {
-                onStatusUpdate(`⏸️ Update paused at batch ${Math.floor(i / BATCH_SIZE) + 1}...`);
-                await new Promise(resolve => setTimeout(resolve, 100));
-                if (signal.aborted) break;
-            }
-
-            const batchSymbols = symbols.slice(i, i + BATCH_SIZE);
+        // Helper function to process a single batch
+        const processBatch = async (batchSymbols: string[]): Promise<number> => {
             const batchUpdates: CryptoLivePrice[] = [];
 
-            // Prepare batch updates
             for (const symbol of batchSymbols) {
                 try {
                     const priceData = data.RAW?.[symbol]?.USD;
@@ -152,7 +138,6 @@ export async function updateLivePrices(options: UpdateLivePricesOptions): Promis
                         continue;
                     }
 
-                    // Get crypto_id from database
                     const { data: asset } = await supabase
                         .from('crypto_assets')
                         .select('id')
@@ -198,7 +183,6 @@ export async function updateLivePrices(options: UpdateLivePricesOptions): Promis
                 }
             }
 
-            // Perform batch update
             if (batchUpdates.length > 0) {
                 const { error } = await supabase
                     .from('crypto_assets_live_prices')
@@ -206,17 +190,56 @@ export async function updateLivePrices(options: UpdateLivePricesOptions): Promis
                         onConflict: 'crypto_id'
                     });
 
-                if (error) {
-                    throw error;
-                }
-
-                log(`Processed batch ${Math.floor(i / BATCH_SIZE) + 1}`, {
-                    processed: batchUpdates.length
-                });
+                if (error) throw error;
+                log(`Processed batch of ${batchUpdates.length} records`);
             }
 
-            onProgress(i + batchUpdates.length, symbols.length, `Batch ${Math.floor(i / BATCH_SIZE) + 1}`);
-            onStatusUpdate(`✅ Processed batch ${Math.floor(i / BATCH_SIZE) + 1} of ${Math.ceil(symbols.length / BATCH_SIZE)}`);
+            return batchUpdates.length;
+        };
+
+        // Process all batches with parallel execution
+        for (let i = 0; i < symbols.length; i += (BATCH_SIZE * MAX_CONCURRENT_BATCHES)) {
+            if (signal.aborted) {
+                log('Update process aborted');
+                break;
+            }
+
+            while (isPaused()) {
+                onStatusUpdate(`⏸️ Update paused at batch group ${Math.floor(i / (BATCH_SIZE * MAX_CONCURRENT_BATCHES)) + 1}...`);
+                await new Promise(resolve => setTimeout(resolve, 100));
+                if (signal.aborted) break;
+            }
+
+            const batchPromises: Promise<number>[] = [];
+
+            // Create multiple batch promises
+            for (let j = 0; j < MAX_CONCURRENT_BATCHES; j++) {
+                const startIdx = i + (j * BATCH_SIZE);
+                const batchSymbols = symbols.slice(startIdx, startIdx + BATCH_SIZE);
+
+                if (batchSymbols.length > 0) {
+                    batchPromises.push(processBatch(batchSymbols));
+                }
+            }
+
+            // Process batch group in parallel
+            try {
+                const processedCounts = await Promise.all(batchPromises);
+                const totalProcessed = processedCounts.reduce((a, b) => a + b, 0);
+
+                onProgress(
+                    Math.min(i + (BATCH_SIZE * MAX_CONCURRENT_BATCHES), symbols.length),
+                    symbols.length,
+                    `Processed ${totalProcessed} records in parallel`
+                );
+
+                onStatusUpdate(`✅ Completed batch group ${Math.floor(i / (BATCH_SIZE * MAX_CONCURRENT_BATCHES)) + 1}`);
+
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                log(`Error in batch group: ${errorMessage}`);
+                results.errors.push(`Batch error: ${errorMessage}`);
+            }
         }
 
         log('Update process completed', {
