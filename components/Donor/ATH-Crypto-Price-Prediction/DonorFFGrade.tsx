@@ -38,7 +38,8 @@ export function useDonorFFGrades() {
                 console.log(`API Call #${apiCallCount} for ${symbol}`);
 
                 // 🔍 ANALYSIS: Currently making one API call per symbol
-                const response = await fetch(`/api/ath-crypto-price-prediction/historical-data?symbol=${symbol}`);
+                const response = await fetch(`/api/ath-crypto-price-prediction/crypto-assets/historical-prices/symbol-single?symbol=${symbol}`);
+                // const response = await fetch(`/api/ath-crypto-price-prediction/historical-data?symbol=${symbol}`);
                 if (!response.ok) throw new Error(`Failed to fetch ${symbol} data`);
 
                 const data = await response.json();

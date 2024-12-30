@@ -8,6 +8,13 @@ import ContentMain from "./ContentMain";
 import Link from "next/link";
 import ContentSidebar from "./ContentSidebar";
 
+interface CycleData {
+  ath: number;
+  ath_time: string;
+  atl: number;
+  atl_time: string;
+}
+
 interface HistoricalDataPoint {
   time: string;
   open: number;
@@ -20,6 +27,10 @@ interface HistoricalDataPoint {
 interface CryptoData {
   success: boolean;
   symbol: string;
+  cycles: {
+    [key: string]: CycleData;
+  };
+  currentPrice: number;
   data: HistoricalDataPoint[];
 }
 
@@ -55,7 +66,8 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
     const fetchData = async () => {
       try {
         setError(null);
-        const response = await fetch(`/api/ath-crypto-price-prediction/historical-data?symbol=${slug}`);
+        const response = await fetch(`/api/ath-crypto-price-prediction/crypto-assets/historical-prices/symbol-single?symbol=${slug}`);
+        // const response = await fetch(`/api/ath-crypto-price-prediction/historical-data?symbol=${slug}`);
         const data = await response.json();
 
         if (!response.ok) {

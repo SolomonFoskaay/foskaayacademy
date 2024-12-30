@@ -1,11 +1,18 @@
 // /components/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage/index.tsx
 "use client";
 import React, { useEffect, useState } from "react";
-import { cryptoSymbols, cryptoNames } from '../../ATHCryptoList';
+import { cryptoSymbols, cryptoNames, getCurrentList } from '../../ATHCryptoList';
 import Chart from "./Chart";
 import ContentMain from "./ContentMain";
 import Link from "next/link";
 import ContentSidebar from "./ContentSidebar";
+
+interface CycleData {
+  ath: number;
+  ath_time: string;
+  atl: number;
+  atl_time: string;
+}
 
 interface HistoricalDataPoint {
   time: string;
@@ -19,6 +26,10 @@ interface HistoricalDataPoint {
 interface CryptoData {
   success: boolean;
   symbol: string;
+  cycles: {
+    [key: string]: CycleData;
+  };
+  currentPrice: number;
   data: HistoricalDataPoint[];
 }
 
@@ -26,19 +37,39 @@ const ATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
   const [cryptoData, setCryptoData] = useState<CryptoData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [symbolsLoaded, setSymbolsLoaded] = useState(false);
 
-  // Get crypto full name from ATHCryptoList for symbols
-  const getCryptoFullName = (symbol: string) => {
-    const nameIndex = cryptoSymbols.indexOf(symbol.toUpperCase());
-    const cryptoName = cryptoNames[nameIndex] || symbol;
-    return `${cryptoName} (${symbol.toUpperCase()})`;
-  };
+  // First ensure crypto list is loaded
+  useEffect(() => {
+    const loadCryptoList = async () => {
+      try {
+        const { symbols } = await getCurrentList();
+        if (symbols.length > 0) {
+          setSymbolsLoaded(true);
+        } else {
+          // If no symbols loaded, set error
+          setError('Failed to load cryptocurrency list. Please try again later.');
+          setIsLoading(false);
+        }
+      } catch (err) {
+        console.error('Failed to load crypto list:', err);
+        setError('Failed to load cryptocurrency list. Please try again later.');
+        setIsLoading(false);
+      }
+    };
+
+    loadCryptoList();
+  }, []);
+
 
   useEffect(() => {
+    // wait and confirm cryptolist loaded sysmbols
+    if (!symbolsLoaded) return;
+
     const fetchData = async () => {
       try {
         // Before loading page or making API call, Check if crypto is in the allowed list
-        // Ensure non-donor version can only show lFoskaayFib stats for listed cryptos only
+        // Ensure non-donor version can only show FoskaayFib stats for listed cryptos only
         //Donor version can check even unlisted crypto for unlimited cryptos allowed by the API
         if (!cryptoSymbols.includes(slug.toUpperCase())) {
           window.location.href = '/crypto-ath-price-prediction/access-denied';
@@ -47,7 +78,8 @@ const ATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
 
         setIsLoading(true);
         setError(null);
-        const response = await fetch(`/api/ath-crypto-price-prediction/historical-data?symbol=${slug}`);
+        const response = await fetch(`/api/ath-crypto-price-prediction/crypto-assets/historical-prices/symbol-single?symbol=${slug}`);
+        // const response = await fetch(`/api/ath-crypto-price-prediction/historical-data?symbol=${slug}`);
         const data = await response.json();
 
         if (!response.ok) {
@@ -68,7 +100,14 @@ const ATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
     };
 
     fetchData();
-  }, [slug]);
+  }, [slug, symbolsLoaded]);
+
+  // Get crypto full name from ATHCryptoList for symbols
+  const getCryptoFullName = (symbol: string) => {
+    const nameIndex = cryptoSymbols.indexOf(symbol.toUpperCase());
+    const cryptoName = cryptoNames[nameIndex] || symbol;
+    return `${cryptoName} (${symbol.toUpperCase()})`;
+  };
 
   if (isLoading) {
     return (

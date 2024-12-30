@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { checkAuthAndRole } from '@/utils/verification/donor-verification/verify-donor-nft';
 import DonorATHCryptoPricePredictionPage from './Page';
-import { cryptoSymbols } from './DonorATHCryptoList';
+import { cryptoSymbols, getCurrentList } from './DonorATHCryptoList';
 
 interface CryptoData {
   id: string;
@@ -20,27 +20,40 @@ export default function DonorATHCryptoPricePrediction() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [symbolsLoaded, setSymbolsLoaded] = useState(false);
 
   useEffect(() => {
-    // Use verify utils to confirm 
-    // if user have required access or not
     const checkAuth = async () => {
       try {
         const { isAdmin } = await checkAuthAndRole();
         setIsAdmin(isAdmin);
         
         if (isAdmin) {
-          await fetchCryptoData();
+          // Load symbols first
+          const { symbols } = await getCurrentList();
+          if (symbols.length > 0) {
+            setSymbolsLoaded(true);
+          }
         }
       } catch (err) {
         setError('Authorization check failed');
+        setLoading(false);
       }
     };
+
+    checkAuth();
+  }, []);
+
+  // Fetch crypto data only after symbols are loaded and user is authorized
+  useEffect(() => {
+    if (!isAdmin || !symbolsLoaded) return;
 
     const fetchCryptoData = async () => {
       try {
         const symbols = cryptoSymbols.join(',');
-        const response = await fetch(`/api/ath-crypto-price-prediction/historical-data/multiple-crypto-list?symbols=${symbols}&timestamp=${new Date().getTime()}`);
+        const response = await fetch(
+          `/api/ath-crypto-price-prediction/crypto-assets/live-prices/symbol-all?symbols=${symbols}&timestamp=${new Date().getTime()}`
+        );
         
         if (!response.ok) {
           throw new Error('Failed to fetch cryptocurrency data');
@@ -60,16 +73,16 @@ export default function DonorATHCryptoPricePrediction() {
       }
     };
 
-    checkAuth();
-  }, []);
+    fetchCryptoData();
+  }, [isAdmin, symbolsLoaded]);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center">
         <div className="border-gray-900">
-        DONOR VERSION: Calculating Crypto ATH Price Prediction List With FoskaayFib
+          DONOR VERSION: Calculating Crypto ATH Price Prediction List With FoskaayFib
           <br />
-        Loading...
+          Loading...
         </div>
       </div>
     );

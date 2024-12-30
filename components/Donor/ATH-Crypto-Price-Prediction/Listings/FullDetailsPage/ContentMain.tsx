@@ -1,10 +1,9 @@
 // /components/donor/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage/ContentMain.tsx
 "use client";
 import React, { useState, useMemo } from 'react';
-import { calculateFoskaayFibLevels, FoskaayFibResult } from '@/utils/formulars/FoskaayFibV1';
-import DonorPrediction from './Prediction'
+import { calculateFoskaayFibLevels } from '@/utils/formulars/FoskaayFibV1';
+import DonorPrediction from './Prediction';
 import { cryptoSymbols, cryptoNames } from '../../DonorATHCryptoList';
-
 
 interface HistoricalDataPoint {
   time: string;
@@ -12,33 +11,57 @@ interface HistoricalDataPoint {
   high: number;
   low: number;
   close: number;
-  volumefrom: number;  
+  volumefrom: number;
+}
+
+interface CycleData {
+  ath: number;
+  ath_time: string;
+  atl: number;
+  atl_time: string;
 }
 
 interface ContentMainProps {
   cryptoData: {
     symbol: string;
+    cycles: {
+      [key: string]: CycleData;
+    };
+    currentPrice: number;
     data: HistoricalDataPoint[];
   };
 }
 
 const ContentMain = ({ cryptoData }: ContentMainProps) => {
-  // Helper function to display name and symbol
+  // Helper function to display name and symbol (keep this for donor version)
   const getCryptoFullName = (symbol: string) => {
     const nameIndex = cryptoSymbols.indexOf(symbol.toUpperCase());
     const cryptoName = cryptoNames[nameIndex] || symbol;
     return `${cryptoName} (${symbol.toUpperCase()})`;
   };
+
   const [currentPage, setCurrentPage] = useState(1);
   const [dateRange, setDateRange] = useState<{ start: string; end: string | null }>({ start: '', end: null });
   const itemsPerPage = 50;
 
-  const { symbol, data } = cryptoData;
+  const { symbol, cycles, currentPrice, data } = cryptoData;
 
-  // Calculate ATH and ATL
-  const prices = data.map(item => item.high);
-  const ath = Math.max(...prices);
-  const atl = Math.min(...prices);
+  // Calculate FoskaayFibonacci levels
+  const FoskaayFibResults = useMemo(() => {
+    const pmcATH = cycles['2018-2021']?.ath || 0;
+    const cmcATL = cycles['2022-2025']?.atl || 0;
+
+    return calculateFoskaayFibLevels(
+      pmcATH,
+      cmcATL,
+      currentPrice,
+      '2022-06-01', // predictionStartDate
+      data.map(item => ({  // historical prices for achievement tracking
+        time: item.time,
+        close: item.close
+      }))
+    );
+  }, [cycles, currentPrice, data]);
 
   // Filter data based on date range
   const filteredData = data.filter(item => {
@@ -69,43 +92,6 @@ const ContentMain = ({ cryptoData }: ContentMainProps) => {
       end: end.toISOString().split('T')[0]
     });
   };
-
-  // Calculate FoskaayFibonacci levels with historical data
-  const FoskaayFibResults = useMemo(() => {
-    // Find PMCATH (Previous Market Cycle ATH - highest price in 2021)
-    const pmcData = data.filter(item => {
-      const date = new Date(item.time);
-      return date.getFullYear() === 2021;
-    });
-    const pmcATH = Math.max(...pmcData.map(item => item.high));
-
-    // Find CMCATL (Current Market Cycle ATL - lowest price after PMCATH)
-    const cmcData = data.filter(item => {
-      const date = new Date(item.time);
-      return date > new Date(pmcData[pmcData.length - 1].time);
-    });
-    const cmcATL = Math.min(...cmcData.map(item => item.low));
-
-    // Get current price
-    const currentPrice = data[data.length - 1].close;
-
-    // Convert historical data to required format
-    const historicalPrices = data.map(item => ({
-      time: item.time,
-      close: item.close
-    }));
-
-    // Prediction start date (June 1st, 2022)
-    const predictionStartDate = '2022-06-01';
-
-    return calculateFoskaayFibLevels(
-      pmcATH,
-      cmcATL,
-      currentPrice,
-      predictionStartDate,
-      historicalPrices
-    );
-  }, [data]);
 
   return (
     <div className="w-full lg:w-2/3">
