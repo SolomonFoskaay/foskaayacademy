@@ -104,8 +104,8 @@ const ContentMain = ({ cryptoData }: ContentMainProps) => {
 
         {/* Prediction Component */}
         <DonorPrediction 
-        symbol={cryptoData.symbol}
-        cryptoFullName={getCryptoFullName(cryptoData.symbol)}
+        symbol={symbol}
+        cryptoFullName={getCryptoFullName(symbol)}
         FoskaayFibResults={FoskaayFibResults}
       />
 
@@ -131,7 +131,7 @@ const ContentMain = ({ cryptoData }: ContentMainProps) => {
 
         {/* Historical Price Data Section */}
         <section className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">{getCryptoFullName(cryptoData.symbol)} Historical Price Data</h2>
+          <h2 className="text-2xl font-bold mb-4">{getCryptoFullName(symbol)} Historical Price Data</h2>
           <div className="mb-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex gap-2 flex-wrap">
               <input

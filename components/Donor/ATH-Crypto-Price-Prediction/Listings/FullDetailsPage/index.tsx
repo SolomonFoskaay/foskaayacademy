@@ -1,7 +1,7 @@
 // /components/donor/ATH-Crypto-Price-Prediction/Listings/FullDetailsPage/index.tsx
 "use client";
 import React, { useEffect, useState } from "react";
-import { checkAuthAndRole} from '@/utils/verification/donor-verification/verify-donor-nft';
+import { checkAuthAndRole } from '@/utils/verification/donor-verification/verify-donor-nft';
 import { cryptoSymbols, cryptoNames } from '../../DonorATHCryptoList';
 import Chart from "./Chart";
 import ContentMain from "./ContentMain";
@@ -21,7 +21,7 @@ interface HistoricalDataPoint {
   high: number;
   low: number;
   close: number;
-  volumefrom: number;  
+  volumefrom: number;
 }
 
 interface CryptoData {
@@ -54,7 +54,7 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
       try {
         const { isAdmin } = await checkAuthAndRole();
         setIsAdmin(isAdmin);
-        
+
         if (isAdmin) {
           await fetchData();
         }
@@ -93,9 +93,9 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
     return (
       <div className="flex items-center justify-center">
         <div className="border-gray-900">
-        DONOR VERSION: Calculating Selected {slug} Crypto Coin/Token Historical Data...With FoskaayFib!
+          DONOR VERSION: Calculating Selected {slug} Crypto Coin/Token Historical Data...With FoskaayFib!
           <br />
-        Loading...
+          Loading...
         </div>
       </div>
     );
@@ -123,9 +123,9 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
       {/* Breadcrumbs */}
       <nav className="text-sm mb-4">
         <Link href="/donor/crypto-ath-price-prediction" className="text-blue-500 hover:underline">
-        <br /> {/* this break helps to create needed space on mobile betwen nav and notification header bar */}
-        ← Back to 
-        ATH Crypto Price Prediction Homepage (Donor Version)
+          <br /> {/* this break helps to create needed space on mobile betwen nav and notification header bar */}
+          ← Back to
+          ATH Crypto Price Prediction Homepage (Donor Version)
         </Link>
         <span className="mx-2">{">>"}</span>
         <span>{getCryptoFullName(slug)}</span>
@@ -150,7 +150,15 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
 
         {/* Two-column layout below chart */}
         <div className="flex flex-col lg:flex-row gap-8">
-          <ContentMain cryptoData={cryptoData} />
+          <ContentMain
+            cryptoData={{
+              symbol: cryptoData.symbol,
+              cycles: cryptoData.cycles,
+              currentPrice: cryptoData.currentPrice,
+              data: cryptoData.data
+            }}
+          />
+          {/* <ContentMain cryptoData={cryptoData} /> */}
           {/* <ContentSidebar /> */}
         </div>
       </div>
@@ -158,7 +166,7 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
       {/* Back to Homepage Link at Bottom */}
       <div className="mt-4">
         <Link href="/donor/crypto-ath-price-prediction" className="text-blue-500 hover:underline">
-        ← Back to Crypto ATH Price Prediction Homepage (Donor Version)
+          ← Back to Crypto ATH Price Prediction Homepage (Donor Version)
         </Link>
       </div>
 
