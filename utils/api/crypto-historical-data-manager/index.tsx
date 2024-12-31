@@ -3,6 +3,10 @@ import { createClient } from '@/utils/supabase/client';
 import { cryptoSymbols, cryptoNames } from '@/components/Donor/ATH-Crypto-Price-Prediction/DonorATHCryptoList';
 import { getBTCLatestTimeTo, findAssetsToUpdate } from './pre-checks';
 
+// Configuration constants
+const BATCH_SIZE = 1000; // Number of records to insert in one batch
+const API_DELAY = 250;   // Delay between API calls in milliseconds
+
 interface UpdateResults {
     newAssetsAdded: number;
     newDataPointsAdded: number;
@@ -28,81 +32,98 @@ interface UpdateOptions {
     onPreflightComplete?: (results: UpdateResults) => Promise<boolean>;
 }
 
+// Batch update/insert function
+async function batchProcessDataPoints(
+    supabase: any, 
+    assetId: number, 
+    dataPoints: any[]
+): Promise<{ updated: number[], inserted: number[] }> {
+    const updated: number[] = [];
+    const inserted: number[] = [];
+    
+    // Process in batches
+    for (let i = 0; i < dataPoints.length; i += BATCH_SIZE) {
+        const batch = dataPoints.slice(i, i + BATCH_SIZE);
+        
+        // Check which points exist
+        const timestamps = batch.map(point => point.timestamp);
+        const { data: existing } = await supabase
+            .from('crypto_assets_historical_prices')
+            .select('timestamp')
+            .eq('crypto_id', assetId)
+            .in('timestamp', timestamps);
+
+        const existingTimestamps = new Set(existing?.map((e: any) => e.timestamp));
+
+        // Separate updates and inserts
+        const updates = batch.filter(point => existingTimestamps.has(point.timestamp));
+        const inserts = batch.filter(point => !existingTimestamps.has(point.timestamp));
+
+        // Process updates
+        if (updates.length > 0) {
+            for (const point of updates) {
+                const { error } = await supabase
+                    .from('crypto_assets_historical_prices')
+                    .update({
+                        open: point.open,
+                        high: point.high,
+                        low: point.low,
+                        close: point.close,
+                        volumefrom: point.volumefrom,
+                        volumeto: point.volumeto,
+                        conversiontype: point.conversionType || 'direct',
+                        conversionsymbol: point.conversionSymbol || 'USD'
+                    })
+                    .eq('crypto_id', assetId)
+                    .eq('timestamp', point.timestamp);
+
+                if (!error) {
+                    updated.push(point.timestamp);
+                }
+            }
+        }
+
+        // Process inserts
+        if (inserts.length > 0) {
+            const { error } = await supabase
+                .from('crypto_assets_historical_prices')
+                .insert(inserts.map(point => ({
+                    crypto_id: assetId,
+                    timestamp: point.timestamp,
+                    open: point.open,
+                    high: point.high,
+                    low: point.low,
+                    close: point.close,
+                    volumefrom: point.volumefrom,
+                    volumeto: point.volumeto,
+                    conversiontype: point.conversionType || 'direct',
+                    conversionsymbol: point.conversionSymbol || 'USD'
+                })));
+
+            if (!error) {
+                inserted.push(...inserts.map(point => point.timestamp));
+            }
+        }
+    }
+
+    return { updated, inserted };
+}
+
 // Update existing data points
 async function updateDataPoint(supabase: any, assetId: number, timestamp: number, dataPoint: any): Promise<{ action: 'updated' | 'inserted', timestamp: number }> {
-    // First check if the point exists
-    const { data: existing, error: checkError } = await supabase
-        .from('crypto_assets_historical_prices')
-        .select('*')
-        .eq('crypto_id', assetId)
-        .eq('timestamp', timestamp)
-        .single();
-
-    console.log(`Checking point for asset ${assetId} at timestamp ${timestamp}:`, existing ? 'exists' : 'not found');
-
-    if (existing) {
-        console.log(`Updating existing point for asset ${assetId} at timestamp ${timestamp}`);
-        console.log('Current values:', existing);
-        console.log('New values:', dataPoint);
-
-        // Update existing point
-        const { error: updateError } = await supabase
-            .from('crypto_assets_historical_prices')
-            .update({
-                open: dataPoint.open,
-                high: dataPoint.high,
-                low: dataPoint.low,
-                close: dataPoint.close,
-                volumefrom: dataPoint.volumefrom,
-                volumeto: dataPoint.volumeto,
-                conversiontype: dataPoint.conversionType || 'direct',
-                conversionsymbol: dataPoint.conversionSymbol || 'USD'
-            })
-            .eq('crypto_id', assetId)
-            .eq('timestamp', timestamp);
-
-        if (updateError) {
-            console.error(`Error updating point:`, updateError);
-            throw updateError;
-        }
-
-        // Verify the update
-        const { data: updated } = await supabase
-            .from('crypto_assets_historical_prices')
-            .select('*')
-            .eq('crypto_id', assetId)
-            .eq('timestamp', timestamp)
-            .single();
-
-        console.log(`Updated values:`, updated);
-        return { action: 'updated', timestamp };
-    } else {
-        console.log(`Inserting new point for asset ${assetId} at timestamp ${timestamp}`);
-
-        // Insert new point
-        const { error: insertError } = await supabase
-            .from('crypto_assets_historical_prices')
-            .insert({
-                crypto_id: assetId,
-                timestamp: timestamp,
-                open: dataPoint.open,
-                high: dataPoint.high,
-                low: dataPoint.low,
-                close: dataPoint.close,
-                volumefrom: dataPoint.volumefrom,
-                volumeto: dataPoint.volumeto,
-                conversiontype: dataPoint.conversionType || 'direct',
-                conversionsymbol: dataPoint.conversionSymbol || 'USD'
-            });
-
-        if (insertError) {
-            console.error(`Error inserting point:`, insertError);
-            throw insertError;
-        }
-
-        return { action: 'inserted', timestamp };
-    }
+    const points = [{
+        timestamp,
+        ...dataPoint
+    }];
+    
+    const result = await batchProcessDataPoints(supabase, assetId, points);
+    
+    return {
+        action: result.updated.includes(timestamp) ? 'updated' : 'inserted',
+        timestamp
+    };
 }
+
 
 export async function updateCryptoDatabase(options: UpdateOptions): Promise<UpdateResults> {
     const {
