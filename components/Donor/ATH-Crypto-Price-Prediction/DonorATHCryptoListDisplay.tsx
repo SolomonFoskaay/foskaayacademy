@@ -37,14 +37,30 @@ export default function DonorATHCryptoListDisplay({ onNewCryptosChange }: DonorA
             setError('Both symbol and name are required');
             return;
         }
-
-        const symbolExists = await isSymbolExists(newCrypto.symbol);
-        if (symbolExists) {
-            setError('Symbol already exists');
+    
+        // Convert to uppercase for case-insensitive comparison
+        const upperSymbol = newCrypto.symbol.toUpperCase();
+    
+        // First check against current list
+        if (currentCryptos.symbols.some(symbol => symbol.toUpperCase() === upperSymbol)) {
+            setError(`Symbol ${upperSymbol} already exists in current list`);
             return;
         }
-
-        setNewCryptos([...newCryptos, newCrypto]);
+    
+        // Then check against new cryptos being added
+        if (newCryptos.some(crypto => crypto.symbol.toUpperCase() === upperSymbol)) {
+            setError(`Symbol ${upperSymbol} already in new cryptos list`);
+            return;
+        }
+    
+        // Finally check against database
+        const symbolExists = await isSymbolExists(upperSymbol);
+        if (symbolExists) {
+            setError(`Symbol ${upperSymbol} already exists in database`);
+            return;
+        }
+    
+        setNewCryptos([...newCryptos, { ...newCrypto, symbol: upperSymbol }]);
         setNewCrypto({ symbol: '', name: '' });
     };
 
