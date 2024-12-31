@@ -18,6 +18,13 @@ interface ProgressState {
     currentSymbol?: string;
 }
 
+// Timer Interface
+interface TimerState {
+    startTime: number | null;
+    endTime: number | null;
+    duration: string;
+}
+
 export default function CryptoLivePriceUpdater() {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -45,13 +52,47 @@ export default function CryptoLivePriceUpdater() {
     ];
     const [nextUpdateTime, setNextUpdateTime] = useState<Date | null>(null);
     const [timeRemaining, setTimeRemaining] = useState<string>('');
-    const [progress, setProgress] = useState<ProgressState>({ 
-        current: 0, 
-        total: 0, 
-        currentSymbol: undefined 
+    const [progress, setProgress] = useState<ProgressState>({
+        current: 0,
+        total: 0,
+        currentSymbol: undefined
+    });
+    const [timer, setTimer] = useState<TimerState>({
+        startTime: null,
+        endTime: null,
+        duration: ''
     });
 
-    // Add this useEffect for countdown
+    // Add format duration helper
+    const formatDuration = (ms: number): string => {
+        const seconds = Math.floor(ms / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+
+        const remainingMinutes = minutes % 60;
+        const remainingSeconds = seconds % 60;
+
+        return `${hours}h ${remainingMinutes}m ${remainingSeconds}s`;
+    };
+
+    // Timer effect
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+
+        if (isUpdating && timer.startTime) {
+            interval = setInterval(() => {
+                const now = Date.now();
+                const duration = formatDuration(now - timer.startTime!);
+                setTimer(prev => ({ ...prev, duration }));
+            }, 1000);
+        }
+
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [isUpdating, timer.startTime]);
+
+    // Timer useEffect for countdown
     useEffect(() => {
         let timer: NodeJS.Timeout;
         if (isAutoUpdateEnabled && nextUpdateTime) {
@@ -96,11 +137,18 @@ export default function CryptoLivePriceUpdater() {
 
     const handleUpdate = async () => {
         if (!isAuthorized || isUpdating) return;
-        
+
         setIsUpdating(true);
         setError(null);
         setProgress({ current: 0, total: 0, currentSymbol: undefined });
-        
+
+        // Start timer
+        setTimer({
+            startTime: Date.now(),
+            endTime: null,
+            duration: ''
+        });
+
         const controller = new AbortController();
         abortControllerRef.current = controller;
 
@@ -113,9 +161,9 @@ export default function CryptoLivePriceUpdater() {
                 onStatusUpdate: setStatus,
                 isPaused: () => isPaused
             });
-            
+
             setResults(results);
-            
+
             if (isAutoUpdateEnabled) {
                 const next = new Date();
                 next.setMinutes(next.getMinutes() + autoUpdateInterval);
@@ -124,6 +172,12 @@ export default function CryptoLivePriceUpdater() {
         } catch (error) {
             setError(error instanceof Error ? error.message : 'Unknown error');
         } finally {
+            // Stop timer
+            setTimer(prev => ({
+                ...prev,
+                endTime: Date.now(),
+                duration: formatDuration(Date.now() - prev.startTime!)
+            }));
             setIsUpdating(false);
             abortControllerRef.current = null;
         }
@@ -309,6 +363,20 @@ export default function CryptoLivePriceUpdater() {
                                 </div>
                             </div>
                         )}
+
+                        {/* Timer Display */}
+                        <div className="mb-4 text-white">
+                            {timer.startTime && (
+                                <div className="text-lg">
+                                    Time Elapsed: {timer.duration}
+                                    {timer.endTime && (
+                                        <span className="ml-2 text-green-400">
+                                            (Completed)
+                                        </span>
+                                    )}
+                                </div>
+                            )}
+                        </div>
 
                         {/* Results Display */}
                         {results && (

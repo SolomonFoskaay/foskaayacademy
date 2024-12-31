@@ -23,6 +23,14 @@ interface PreflightInfo {
     };
 }
 
+// Add Timer Interface
+interface TimerState {
+    startTime: number | null;
+    endTime: number | null;
+    duration: string;
+}
+
+
 export default function CryptoHistoricalDataUpdater() {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -37,6 +45,40 @@ export default function CryptoHistoricalDataUpdater() {
     const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
     const [additionalCryptos, setAdditionalCryptos] = useState<{ symbol: string, name: string }[]>([]);
     const abortControllerRef = useRef<AbortController | null>(null);
+    const [timer, setTimer] = useState<TimerState>({
+        startTime: null,
+        endTime: null,
+        duration: ''
+    });
+
+    // Format duration helper
+    const formatDuration = (ms: number): string => {
+        const seconds = Math.floor(ms / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+
+        const remainingMinutes = minutes % 60;
+        const remainingSeconds = seconds % 60;
+
+        return `${hours}h ${remainingMinutes}m ${remainingSeconds}s`;
+    };
+
+    // Update timer every second when running
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+
+        if (isUpdating && timer.startTime) {
+            interval = setInterval(() => {
+                const now = Date.now();
+                const duration = formatDuration(now - timer.startTime!);
+                setTimer(prev => ({ ...prev, duration }));
+            }, 1000);
+        }
+
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [isUpdating, timer.startTime]);
 
     useEffect(() => {
         checkAuth();
@@ -62,6 +104,13 @@ export default function CryptoHistoricalDataUpdater() {
         setResults(null);
         setPreflightInfo(null);
         setAwaitingConfirmation(false);
+
+        // Start timer
+        setTimer({
+            startTime: Date.now(),
+            endTime: null,
+            duration: ''
+        });
 
         abortControllerRef.current = new AbortController();
 
@@ -107,6 +156,12 @@ export default function CryptoHistoricalDataUpdater() {
         } catch (error) {
             setError(error instanceof Error ? error.message : 'Unknown error occurred');
         } finally {
+            // Stop timer
+            setTimer(prev => ({
+                ...prev,
+                endTime: Date.now(),
+                duration: formatDuration(Date.now() - prev.startTime!)
+            }));
             setIsUpdating(false);
             abortControllerRef.current = null;
         }
@@ -133,7 +188,7 @@ export default function CryptoHistoricalDataUpdater() {
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                     <h1 className="text-2xl font-bold mb-6 text-white">Crypto Historical Data Updater</h1>
 
-                    {/* Add the new component here */}
+                    {/*component here */}
                     <DonorATHCryptoListDisplay onNewCryptosChange={handleNewCryptosChange} />
 
                     <div className="space-y-6">
@@ -283,6 +338,20 @@ export default function CryptoHistoricalDataUpdater() {
                                 <p>{error}</p>
                             </div>
                         )}
+
+                        {/* Timer Display */}
+                        <div className="mb-4 text-white">
+                            {timer.startTime && (
+                                <div className="text-lg">
+                                    Time Elapsed: {timer.duration}
+                                    {timer.endTime && (
+                                        <span className="ml-2 text-green-400">
+                                            (Completed)
+                                        </span>
+                                    )}
+                                </div>
+                            )}
+                        </div>
 
                         {/* Results Display */}
                         {results && (

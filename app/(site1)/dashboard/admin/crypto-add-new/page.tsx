@@ -18,6 +18,13 @@ interface PreflightInfo {
     newAssets: string[];
 }
 
+//Timer Interface
+interface TimerState {
+    startTime: number | null;
+    endTime: number | null;
+    duration: string;
+}
+
 export default function CryptoAddNew() {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -30,6 +37,40 @@ export default function CryptoAddNew() {
     const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
     const [newCryptos, setNewCryptos] = useState<{ symbol: string, name: string }[]>([]);
     const abortControllerRef = useRef<AbortController | null>(null);
+    const [timer, setTimer] = useState<TimerState>({
+        startTime: null,
+        endTime: null,
+        duration: ''
+    });
+
+    // Time format duration helper
+    const formatDuration = (ms: number): string => {
+        const seconds = Math.floor(ms / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+
+        const remainingMinutes = minutes % 60;
+        const remainingSeconds = seconds % 60;
+
+        return `${hours}h ${remainingMinutes}m ${remainingSeconds}s`;
+    };
+
+    // Timer effect
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+
+        if (isProcessing && timer.startTime) {
+            interval = setInterval(() => {
+                const now = Date.now();
+                const duration = formatDuration(now - timer.startTime!);
+                setTimer(prev => ({ ...prev, duration }));
+            }, 1000);
+        }
+
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [isProcessing, timer.startTime]);
 
     useEffect(() => {
         checkAuth();
@@ -50,6 +91,13 @@ export default function CryptoAddNew() {
         setResults(null);
         setPreflightInfo(null);
         setAwaitingConfirmation(false);
+
+        // Start timer
+        setTimer({
+            startTime: Date.now(),
+            endTime: null,
+            duration: ''
+        });
 
         abortControllerRef.current = new AbortController();
 
@@ -82,6 +130,12 @@ export default function CryptoAddNew() {
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred');
         } finally {
+            // Stop timer
+            setTimer(prev => ({
+                ...prev,
+                endTime: Date.now(),
+                duration: formatDuration(Date.now() - prev.startTime!)
+            }));
             setIsProcessing(false);
             setStatus('');
             setProgress({ current: 0, total: 0 });
@@ -193,6 +247,20 @@ export default function CryptoAddNew() {
                             </div>
                         </div>
                     )}
+
+                    {/* Timer Display */}
+                    <div className="mb-4 text-white">
+                        {timer.startTime && (
+                            <div className="text-lg">
+                                Time Elapsed: {timer.duration}
+                                {timer.endTime && (
+                                    <span className="ml-2 text-green-400">
+                                        (Completed)
+                                    </span>
+                                )}
+                            </div>
+                        )}
+                    </div>
 
                     {/* Results Display */}
                     {results && (
