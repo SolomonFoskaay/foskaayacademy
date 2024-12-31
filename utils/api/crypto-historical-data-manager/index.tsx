@@ -7,8 +7,8 @@ import { getBTCLatestTimeTo, findAssetsToUpdate } from './pre-checks';
 const BATCH_SIZE = 1000; // Number of records to insert in one batch
 const DB_PARALLEL_OPS = 5;      // Number of parallel DB operations
 // API Calls: Process in batches of 30 symbols
-const SYMBOL_BATCH_SIZE = 30;
-const API_DELAY = 250;   // Delay between API calls in milliseconds
+const SYMBOL_BATCH_SIZE = 25;
+const API_DELAY = 500;   // Delay between API calls in milliseconds
 
 interface UpdateResults {
     newAssetsAdded: number;

@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server';
 
 const CRYPTOCOMPARE_API_KEY = process.env.CRYPTOCOMPARE_API_KEY;
 const BASE_URL = 'https://min-api.cryptocompare.com/data';
-const CONCURRENT_REQUESTS = 30; // Maximum parallel API calls
-const API_BATCH_DELAY = 250;   // Reduced delay between batches (ms)
+const CONCURRENT_REQUESTS = 25; // Maximum parallel API calls
+const API_BATCH_DELAY = 500;   // Reduced delay between batches (ms)
 
 export async function GET(request: Request) {
     try {
