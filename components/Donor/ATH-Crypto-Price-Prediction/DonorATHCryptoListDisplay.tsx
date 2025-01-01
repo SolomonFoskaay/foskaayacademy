@@ -10,6 +10,7 @@ interface NewCrypto {
 
 interface DonorATHCryptoListDisplayProps {
     onNewCryptosChange?: (newCryptos: NewCrypto[]) => void;
+    disabled?: boolean;
 }
 
 export default function DonorATHCryptoListDisplay({ onNewCryptosChange }: DonorATHCryptoListDisplayProps) {

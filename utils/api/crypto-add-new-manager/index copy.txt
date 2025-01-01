@@ -41,7 +41,6 @@ interface AddNewOptions {
     symbolsList: string[];
     namesList: string[];
     onPreflightComplete?: (results: AddNewResults) => Promise<boolean>;
-    selectedAssets?: string[]; // new optional property
 }
 
 
@@ -51,7 +50,7 @@ async function batchInsertHistoricalData(
     historicalData: HistoricalDataPoint[]
 ): Promise<number> {
     let insertedCount = 0;
-
+    
     // Split data into batches
     for (let i = 0; i < historicalData.length; i += BATCH_SIZE) {
         const batch = historicalData.slice(i, i + BATCH_SIZE).map(point => ({
@@ -88,7 +87,6 @@ export async function addNewCryptoAssets(options: AddNewOptions): Promise<AddNew
         onStatusUpdate,
         symbolsList,
         namesList,
-        selectedAssets,
         onPreflightComplete
     } = options;
 
@@ -97,15 +95,18 @@ export async function addNewCryptoAssets(options: AddNewOptions): Promise<AddNew
         newAssetsAdded: 0,
         newDataPointsAdded: 0,
         successfulAssets: [],
-        failedAssets: [],
-        preflightInfo: null
+        failedAssets: []
     };
 
     try {
         // Step 1: Check existing assets
-        onStatusUpdate('Checking for existing assets and fetching prices...');
-        const preflightInfo = await checkExistingAssets(symbolsList, namesList);
+        onStatusUpdate('Checking for existing assets...');
+        const preflightInfo = await checkExistingAssets(symbolsList);
         results.preflightInfo = preflightInfo;
+
+        if (preflightInfo.existingAssets.length > 0) {
+            onStatusUpdate(`Found ${preflightInfo.existingAssets.length} existing assets that will be skipped`);
+        }
 
         // Step 2: User confirmation
         if (onPreflightComplete) {
@@ -116,18 +117,16 @@ export async function addNewCryptoAssets(options: AddNewOptions): Promise<AddNew
             }
         }
 
-        // Step 3: Process selected assets
-        const assetsToProcess = selectedAssets || [];
-        const totalAssets = assetsToProcess.length;
-
-        for (let i = 0; i < assetsToProcess.length; i++) {
+        // Step 3: Process new assets
+        const newAssets = preflightInfo.newAssets;
+        for (let i = 0; i < newAssets.length; i++) {
             if (signal.aborted) break;
 
-            const symbol = assetsToProcess[i];
-            const name = namesList[symbolsList.indexOf(symbol)];
-
-            onProgress(i + 1, totalAssets);
-            onStatusUpdate(`Processing ${symbol} (${i + 1}/${totalAssets})`);
+            const symbol = newAssets[i];
+            const name = namesList[symbolsList.indexOf(symbol)] || symbol;
+            
+            onProgress(i + 1, newAssets.length);
+            onStatusUpdate(`Processing ${symbol} (${i + 1}/${newAssets.length})`);
 
             try {
                 // Fetch historical data
@@ -135,10 +134,14 @@ export async function addNewCryptoAssets(options: AddNewOptions): Promise<AddNew
                 const data = await response.json();
 
                 if (!data.success || !data.data || data.data.length === 0) {
-                    throw new Error('Failed to fetch historical data');
+                    results.failedAssets.push({
+                        symbol,
+                        reason: 'Failed to fetch historical data'
+                    });
+                    continue;
                 }
 
-                // Create asset
+                // Create asset first
                 const { data: newAsset, error: createError } = await supabase
                     .from('crypto_assets')
                     .insert([{
@@ -152,19 +155,33 @@ export async function addNewCryptoAssets(options: AddNewOptions): Promise<AddNew
                     .single();
 
                 if (createError || !newAsset) {
-                    throw new Error(`Failed to create asset: ${createError?.message}`);
+                    results.failedAssets.push({
+                        symbol,
+                        reason: `Failed to create asset: ${createError?.message}`
+                    });
+                    continue;
                 }
 
-                // Insert historical data
-                const insertedCount = await batchInsertHistoricalData(
-                    supabase,
-                    newAsset.id,
-                    data.data
-                );
+                // Batch insert historical data
+                try {
+                    const insertedCount = await batchInsertHistoricalData(
+                        supabase,
+                        newAsset.id,
+                        data.data
+                    );
+                    
+                    results.newDataPointsAdded += insertedCount;
+                    results.newAssetsAdded++;
+                    results.successfulAssets.push(symbol);
+                } catch (error) {
+                    // If historical data insertion fails, we should remove the asset
+                    await supabase
+                        .from('crypto_assets')
+                        .delete()
+                        .eq('id', newAsset.id);
 
-                results.newDataPointsAdded += insertedCount;
-                results.newAssetsAdded++;
-                results.successfulAssets.push(symbol);
+                    throw error;
+                }
 
             } catch (error) {
                 results.failedAssets.push({
@@ -173,9 +190,9 @@ export async function addNewCryptoAssets(options: AddNewOptions): Promise<AddNew
                 });
             }
 
-            // Add delay between processing
-            if (i < assetsToProcess.length - 1) {
-                await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
+            // Add delay between processing different assets
+            if (i < newAssets.length - 1) {
+                await new Promise(resolve => setTimeout(resolve, API_DELAY));
             }
         }
 

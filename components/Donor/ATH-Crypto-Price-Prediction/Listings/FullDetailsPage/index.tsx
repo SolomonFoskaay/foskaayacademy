@@ -48,26 +48,24 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
   };
 
   useEffect(() => {
-    // Use verify utils to confirm 
-    // if user have required access or not
-    const checkAuth = async () => {
+    const loadData = async () => {
       try {
-        const { isAdmin } = await checkAuthAndRole();
-        setIsAdmin(isAdmin);
-
-        if (isAdmin) {
-          await fetchData();
-        }
-      } catch (err) {
-        setError('Authorization check failed');
-      }
-    };
-
-    const fetchData = async () => {
-      try {
+        setIsLoading(true);
         setError(null);
-        const response = await fetch(`/api/ath-crypto-price-prediction/crypto-assets/historical-prices/symbol-single?symbol=${slug}`);
-        // const response = await fetch(`/api/ath-crypto-price-prediction/historical-data?symbol=${slug}`);
+
+        // Run auth check and data fetching in parallel
+        const [authResult, response] = await Promise.all([
+          checkAuthAndRole(),
+          fetch(`/api/ath-crypto-price-prediction/crypto-assets/historical-prices/symbol-single?symbol=${slug}`)
+        ]);
+
+        // Set admin status immediately
+        setIsAdmin(authResult.isAdmin);
+
+        if (!authResult.isAdmin) {
+          throw new Error('Unauthorized access');
+        }
+
         const data = await response.json();
 
         if (!response.ok) {
@@ -86,20 +84,57 @@ const DonorATHCPPListingsFullDetailsPage = ({ slug }: { slug: string }) => {
       }
     };
 
-    checkAuth();
+    loadData();
   }, [slug]);
 
+  // Loading step component with animation
+  const LoadingStep = ({ step, text }: { step: number; text: string }) => {
+    return (
+      <div className="flex items-center space-x-3 bg-gray-800/30 p-3 rounded-lg">
+        <div className="animate-pulse h-2 w-2 bg-purple-500 rounded-full" />
+        <span className="text-sm text-gray-300">{text}</span>
+      </div>
+    );
+  };
+
+  // Loading display
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center">
-        <div className="border-gray-900">
-          DONOR VERSION: Calculating Selected {slug} Crypto Coin/Token Historical Data...With FoskaayFib!
-          <br />
-          Loading...
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4 p-6">
+        <h2 className="text-2xl font-bold text-purple-500">
+          DONOR VERSION: Processing {slug.toUpperCase()} Data
+        </h2>
+
+        <div className="max-w-md text-center space-y-3">
+          <LoadingStep
+            step={1}
+            text={`Identifying the crypto asset you want to process.....`}
+          />
+          <LoadingStep
+            step={2}
+            text={`...Done and identified as ${slug.toUpperCase()}`}
+          />
+          <LoadingStep
+            step={3}
+            text={`Retrieving Historical Price Data & Market Cycles for ${slug.toUpperCase()}`}
+          />
+          <LoadingStep
+            step={4}
+            text={`Processing ${slug.toUpperCase()} Through FoskaayFib Levels Algorithm`}
+          />
+          <LoadingStep
+            step={5}
+            text={`Calculating ${slug.toUpperCase()} FoskaayFib Grades & Predictions`}
+          />
+          <LoadingStep
+            step={6}
+            text={`Preparing ${slug.toUpperCase()} FoskaayFib Algorithm Prediction with Interactive Charts & Analysis`}
+          />
         </div>
       </div>
     );
   }
+
 
   if (!isAdmin) {
     return <div>Checking permissions...</div>;
