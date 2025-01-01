@@ -150,8 +150,23 @@ const Prediction: React.FC<PredictionProps> = ({ symbol, FoskaayFibResults }: Pr
   </div>
 </div>
 
-                {/* Current Zone Indicator */}
+                {/* Current Zone Indicator with safety check */}
                 <div className="mb-6 p-4 rounded-lg border border-gray-200 dark:border-gray-700"
+                    style={{
+                        background: FoskaayFibResults.currentZone?.range ?
+                            getGradient(FoskaayFibResults.currentZone.range[1]) :
+                            'linear-gradient(90deg, rgba(107,114,128,0.9) 0%, rgba(156,163,175,0.6) 100%)' // Default gray gradient
+                    }}>
+                    <h3 className="text-lg font-bold mb-2 text-white">
+                        2022-2025 Crypto Market Cycle {symbol} Price Is Currently In {FoskaayFibResults.currentZone?.name || 'Calculation Pending'}
+                    </h3>
+                    <p className="text-sm text-white/90">
+                        {FoskaayFibResults.currentZone?.description ||
+                            'Insufficient data to determine current market cycle zone. This could be due to the asset being new or having limited historical data.'}
+                    </p>
+                </div>
+                {/* Current Zone Indicator */}
+                {/* <div className="mb-6 p-4 rounded-lg border border-gray-200 dark:border-gray-700"
                     style={{ background: getGradient(FoskaayFibResults.currentZone.range[1]) }}>
                     <h3 className="text-lg font-bold mb-2 text-white">
                         2022-2025 Crypto Market Cycle {symbol} Price Is Currently In {FoskaayFibResults.currentZone.name}
@@ -159,7 +174,7 @@ const Prediction: React.FC<PredictionProps> = ({ symbol, FoskaayFibResults }: Pr
                     <p className="text-sm text-white/90">
                         {FoskaayFibResults.currentZone.description}
                     </p>
-                </div>
+                </div> */}
 
                 {/* Fibonacci Levels */}
                 <h2 className="text-2xl font-bold mb-4">
