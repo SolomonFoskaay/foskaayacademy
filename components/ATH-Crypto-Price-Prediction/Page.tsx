@@ -10,6 +10,8 @@ interface ATHCryptoPricePredictionPageProps {
   cryptoList: any[];
   isLoading: boolean;
   error: string | null;
+  isDonor?: boolean;
+  totalCryptoCount: number;
 }
 
 const formatPrice = (price: number) => {
@@ -52,12 +54,14 @@ const getGradeColor = (grade: string) => {
 export default function ATHCryptoPricePredictionPage({
   cryptoList,
   isLoading,
-  error
+  error,
+  isDonor = false,
+  totalCryptoCount
 }: ATHCryptoPricePredictionPageProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: 'marketCap', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(50);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
 
 
   const filteredAndSortedData = useMemo(() => {
@@ -181,7 +185,15 @@ export default function ATHCryptoPricePredictionPage({
       <div className="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
         {/* Showing entries info */}
         <div className="text-sm text-gray-600 dark:text-gray-400">
-          Showing {startRange} - {endRange} out of {filteredAndSortedData.length}
+          Showing {startRange} - {endRange} of {filteredAndSortedData.length}
+          {!isDonor && (
+            <span className="ml-1 text-red-500">
+              (Non-Donor access limited to {filteredAndSortedData.length} out of {totalCryptoCount} available cryptos -
+              <Link href="/donate" className="text-blue-400 hover:text-blue-300 underline">
+                {"> "}Donate by Minting Donor NFT to unlock all {totalCryptoCount}+ assets
+              </Link>)
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-4">
@@ -367,7 +379,15 @@ export default function ATHCryptoPricePredictionPage({
       <div className="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
         {/* Showing entries info */}
         <div className="text-sm text-gray-600 dark:text-gray-400">
-          Showing {startRange} - {endRange} out of {filteredAndSortedData.length}
+          Showing {startRange} - {endRange} of {filteredAndSortedData.length}
+          {!isDonor && (
+            <span className="ml-1 text-red-500">
+              (Non-Donor access limited to {filteredAndSortedData.length} out of {totalCryptoCount} available cryptos -
+              <Link href="/donate" className="text-blue-400 hover:text-blue-300 underline">
+                {"> "}Donate by Minting Donor NFT to unlock all {totalCryptoCount}+ assets
+              </Link>)
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-4">

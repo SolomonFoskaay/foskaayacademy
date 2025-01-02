@@ -14,7 +14,11 @@ interface CryptoData {
   tokenImageURL: string;
 }
 
-export default function ATHCryptoPricePrediction() {
+interface ATHCryptoPricePredictionProps {
+  totalCryptoCount: number;
+}
+
+export default function ATHCryptoPricePrediction({ totalCryptoCount }: ATHCryptoPricePredictionProps) {
   const [cryptoList, setCryptoList] = useState<CryptoData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -79,6 +83,8 @@ export default function ATHCryptoPricePrediction() {
           isLoading={isLoading}
           cryptoList={cryptoList}
           error={error}
+          isDonor={false}
+          totalCryptoCount={totalCryptoCount}
         />
       </div>
     </div>

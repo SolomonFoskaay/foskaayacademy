@@ -1,6 +1,7 @@
 // /app/(site1)/crypto-ath-price-prediction/page.tsx
 import { Metadata } from 'next';
 import ATHCryptoPricePrediction from '@/components/ATH-Crypto-Price-Prediction';
+import { createClient } from '@/utils/supabase/server';
 
 
 // Define fixed metadata values
@@ -35,11 +36,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ATHCryptoPricePredictionPage() {
+export default async function ATHCryptoPricePredictionPage() {
+  const supabase = createClient();
+  
+  // Get total count of crypto assets
+  const { count } = await supabase
+    .from('crypto_assets')
+    .select('*', { count: 'exact', head: true });
+
   return (
     <section className="pb-20 pt-35 lg:pb-25 lg:pt-45 xl:pb-30 xl:pt-50">
        <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
-        <ATHCryptoPricePrediction />
+        <ATHCryptoPricePrediction totalCryptoCount={count || 0} />
       </div> 
     </section>
   );

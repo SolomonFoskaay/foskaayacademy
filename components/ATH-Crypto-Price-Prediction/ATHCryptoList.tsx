@@ -3,7 +3,7 @@
 import { createClient } from '@/utils/supabase/client';
 
 // Set limit for non-donor version
-const NON_DONOR_LIMIT = 100;
+const NON_DONOR_LIMIT = 50;
 
 // Initialize with empty arrays
 let cryptoSymbols: string[] = [];

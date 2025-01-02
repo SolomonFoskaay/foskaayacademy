@@ -185,7 +185,7 @@ export default function DonorATHCryptoPricePredictionPage({
       <div className="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
         {/* Showing entries info */}
         <div className="text-sm text-gray-600 dark:text-gray-400">
-          Showing {startRange} - {endRange} out of {filteredAndSortedData.length}
+          Showing {startRange} - {endRange} out of {filteredAndSortedData.length}          
         </div>
 
         <div className="flex items-center gap-4">
