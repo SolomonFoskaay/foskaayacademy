@@ -37,9 +37,8 @@ export const metadata: Metadata = {
 };
 
 export default async function ATHCryptoPricePredictionPage() {
-  const supabase = createClient();
-  
-  // Get total count of crypto assets
+  // Get total count of crypto assets from db
+  const supabase = createClient();  
   const { count } = await supabase
     .from('crypto_assets')
     .select('*', { count: 'exact', head: true });

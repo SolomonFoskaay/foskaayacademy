@@ -4,10 +4,13 @@ import Image from "next/image";
 import { useState } from "react";
 import ATHCryptoPricePredictionTabItem from "./ATHCryptoPricePredictionTabItem";
 import ATHCryptoPricePredictionTabData from "./ATHCryptoPricePredictionTabData";
-
 import { motion } from "framer-motion";
 
-const ATHCryptoPricePredictionTab = () => {
+interface ATHCryptoPricePredictionTabProps {
+  totalCryptoCount: number;
+}
+
+const ATHCryptoPricePredictionTab = ({ totalCryptoCount }: ATHCryptoPricePredictionTabProps) => {
   const [currentTab, setCurrentTab] = useState("tabOne");
 
   return (
@@ -51,11 +54,10 @@ const ATHCryptoPricePredictionTab = () => {
           >
             <div
               onClick={() => setCurrentTab("tabOne")}
-              className={`relative flex w-full cursor-pointer items-center gap-4 border-b border-stroke px-6 py-2 last:border-0 dark:border-strokedark md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${
-                currentTab === "tabOne"
+              className={`relative flex w-full cursor-pointer items-center gap-4 border-b border-stroke px-6 py-2 last:border-0 dark:border-strokedark md:w-auto md:border-0 xl:px-13.5 xl:py-5 ${currentTab === "tabOne"
                   ? "active before:absolute before:bottom-0 before:left-0 before:h-1 before:w-full before:rounded-tl-[4px] before:rounded-tr-[4px] before:bg-primary"
                   : ""
-              }`}
+                }`}
             >
               <div className="flex h-12.5 w-12.5 items-center justify-center rounded-[50%] border border-stroke dark:border-strokedark dark:bg-blacksection">
                 <p className="text-metatitle3 font-medium text-black dark:text-white">
@@ -64,7 +66,7 @@ const ATHCryptoPricePredictionTab = () => {
               </div>
               <div className="md:w-3/5 lg:w-auto">
                 <button className="text-sm font-medium text-black dark:text-white xl:text-regular">
-                FREE ATH Crypto Price Prediction Tool
+                  FREE ATH Crypto Price Prediction Tool
                 </button>
               </div>
             </div>
@@ -87,7 +89,7 @@ const ATHCryptoPricePredictionTab = () => {
                 </button>
               </div>
             </div> */}
-            
+
           </motion.div>
           {/* <!-- Tab Menues End --> */}
 
@@ -115,7 +117,10 @@ const ATHCryptoPricePredictionTab = () => {
                 className={feature.id === currentTab ? "block" : "hidden"}
                 key={key}
               >
-                <ATHCryptoPricePredictionTabItem featureTab={feature} />
+                <ATHCryptoPricePredictionTabItem
+                  featureTab={feature}
+                  totalCryptoCount={totalCryptoCount}
+                />
               </div>
             ))}
           </motion.div>

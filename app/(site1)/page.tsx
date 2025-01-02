@@ -20,6 +20,7 @@ import BlinksTab from "@/components/Blinks/Tab";
 import TitleAnimated from "@/components/Header/TitleAnimated";
 import CategoryTab from "@/components/Category/Tab";
 import ATHCryptoPricePredictionTab from "@/components/ATH-Crypto-Price-Prediction/Tab";
+import { createClient } from "@/utils/supabase/client";
 
 // Define fixed metadata values
 const title = "Explore 1,000+ Web3 Projects - Explore Web3";
@@ -53,7 +54,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  // Get total count of crypto assets from db
+  const supabase = createClient();
+    const { count } = await supabase
+    .from('crypto_assets')
+    .select('*', { count: 'exact', head: true });
+
   return (
     <main>
       <Hero />
@@ -63,7 +70,7 @@ export default function Home() {
       <TitleAnimated />
       <BlinksTab />
       {/* <Directory /> */}
-      <ATHCryptoPricePredictionTab />
+      <ATHCryptoPricePredictionTab totalCryptoCount={count || 0} />
       <CategoryTab />
       <DirectoryTab />
       {/* <About /> */}

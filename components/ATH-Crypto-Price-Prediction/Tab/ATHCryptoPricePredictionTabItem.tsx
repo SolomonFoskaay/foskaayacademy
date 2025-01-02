@@ -2,14 +2,22 @@
 import React from "react";
 import ATHCryptoPricePredictionHomepage from "..";
 
-const ATHCryptoPricePredictionTabItem = ({ featureTab }: { featureTab: directoryTabTypes }) => {
+interface ATHCryptoPricePredictionTabItemProps {
+  featureTab: directoryTabTypes;
+  totalCryptoCount: number;
+}
+
+const ATHCryptoPricePredictionTabItem = ({ 
+  featureTab, 
+  totalCryptoCount 
+}: ATHCryptoPricePredictionTabItemProps) => {
   const { title } = featureTab;
 
      const renderContent = () => {
        switch (title) {
          case "": //Put title here or leave empty if returned page alreay have title
           // Return the ATH Crypto Price Prediction Tool homepage content
-           return <ATHCryptoPricePredictionHomepage />;
+           return <ATHCryptoPricePredictionHomepage totalCryptoCount={totalCryptoCount} />;
         //  case "Explore Solana Blinks":
         //    return <Blinks />;
          default:
