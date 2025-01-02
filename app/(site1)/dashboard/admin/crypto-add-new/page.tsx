@@ -99,43 +99,51 @@ export default function CryptoAddNew() {
             setError('No cryptocurrencies to add');
             return;
         }
-    
+
         try {
             setError(null);
             setAwaitingConfirmation(true);
             setIsProcessing(true);
             setTimer({ startTime: Date.now(), endTime: null, duration: '' });
-            
+
             const symbolsList = newCryptos.map(crypto => crypto.symbol);
             const namesList = newCryptos.map(crypto => crypto.name);
-    
+
             const controller = new AbortController();
             abortControllerRef.current = controller;
-    
+
+            // Create a promise to handle the preflight confirmation
             const results = await addNewCryptoAssets({
                 signal: controller.signal,
                 onProgress: (current, total) => setProgress({ current, total }),
                 onStatusUpdate: setStatus,
                 symbolsList,
                 namesList,
-                selectedAssets: selectedCryptos, // This will be empty initially and set after preflight
+                selectedAssets: selectedCryptos,
                 onPreflightComplete: async (results) => {
                     setPreflightInfo(results.preflightInfo);
+
                     // Initialize selected cryptos with new assets that have prices
                     const assetsWithPrices = results.preflightInfo.newAssets.filter(
                         symbol => results.preflightInfo.priceInfo[symbol]?.price > 0
                     );
                     setSelectedCryptos(assetsWithPrices);
-                    
+
+                    // Return a new Promise for the confirmation
                     return new Promise((resolve) => {
                         window.confirmPreflight = (proceed) => {
+                            if (proceed) {
+                                // Only resolve with true if we have selected cryptos
+                                resolve(selectedCryptos.length > 0);
+                            } else {
+                                resolve(false);
+                            }
                             setAwaitingConfirmation(false);
-                            resolve(proceed);
                         };
                     });
                 }
             });
-    
+
             if (results) {
                 setResults(results);
                 setTimer(prev => ({ ...prev, endTime: Date.now() }));
@@ -150,9 +158,15 @@ export default function CryptoAddNew() {
         }
     };
 
+    // Handle selected crypto to start adding to db
     const handleConfirmPreflight = (proceed: boolean) => {
         if (window.confirmPreflight) {
-            window.confirmPreflight(proceed);
+            // Only proceed if we have selected cryptos or if canceling
+            if (!proceed || selectedCryptos.length > 0) {
+                window.confirmPreflight(proceed);
+            } else {
+                setError('Please select at least one cryptocurrency to proceed');
+            }
         }
     };
 

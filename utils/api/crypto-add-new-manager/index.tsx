@@ -117,8 +117,14 @@ export async function addNewCryptoAssets(options: AddNewOptions): Promise<AddNew
         }
 
         // Step 3: Process selected assets
+        // Assets to process
         const assetsToProcess = selectedAssets || [];
+        if (assetsToProcess.length === 0) {
+            throw new Error('No assets selected for processing');
+        }
+
         const totalAssets = assetsToProcess.length;
+        onStatusUpdate(`Starting to process ${totalAssets} selected assets...`);
 
         for (let i = 0; i < assetsToProcess.length; i++) {
             if (signal.aborted) break;
@@ -181,7 +187,8 @@ export async function addNewCryptoAssets(options: AddNewOptions): Promise<AddNew
 
         return results;
     } catch (error) {
-        if (signal.aborted) throw new Error('Operation was aborted');
+        console.error('Error in addNewCryptoAssets:', error);
+        // if (signal.aborted) throw new Error('Operation was aborted');
         throw error;
     }
 }
