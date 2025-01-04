@@ -81,6 +81,8 @@ async function batchInsertHistoricalData(
     return insertedCount;
 }
 
+// /utils/api/crypto-add-new-manager/index.tsx
+
 export async function addNewCryptoAssets(options: AddNewOptions): Promise<AddNewResults> {
     const {
         signal,
@@ -89,7 +91,6 @@ export async function addNewCryptoAssets(options: AddNewOptions): Promise<AddNew
         symbolsList,
         namesList,
         selectedAssets,
-        onPreflightComplete
     } = options;
 
     const supabase = createClient();
@@ -98,26 +99,10 @@ export async function addNewCryptoAssets(options: AddNewOptions): Promise<AddNew
         newDataPointsAdded: 0,
         successfulAssets: [],
         failedAssets: [],
-        preflightInfo: null
     };
 
     try {
-        // Step 1: Check existing assets
-        onStatusUpdate('Checking for existing assets and fetching prices...');
-        const preflightInfo = await checkExistingAssets(symbolsList, namesList);
-        results.preflightInfo = preflightInfo;
-
-        // Step 2: User confirmation
-        if (onPreflightComplete) {
-            const shouldContinue = await onPreflightComplete(results);
-            if (!shouldContinue) {
-                onStatusUpdate('Operation cancelled by user');
-                return results;
-            }
-        }
-
-        // Step 3: Process selected assets
-        // Assets to process
+        // Step 1: Process only selected assets
         const assetsToProcess = selectedAssets || [];
         if (assetsToProcess.length === 0) {
             throw new Error('No assets selected for processing');
@@ -181,14 +166,13 @@ export async function addNewCryptoAssets(options: AddNewOptions): Promise<AddNew
 
             // Add delay between processing
             if (i < assetsToProcess.length - 1) {
-                await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
+                await new Promise(resolve => setTimeout(resolve, API_DELAY));
             }
         }
 
         return results;
     } catch (error) {
         console.error('Error in addNewCryptoAssets:', error);
-        // if (signal.aborted) throw new Error('Operation was aborted');
         throw error;
     }
 }

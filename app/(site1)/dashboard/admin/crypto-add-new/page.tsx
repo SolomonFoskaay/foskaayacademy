@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { checkAuthAndRole } from '@/utils/verification/verify-admin';
 import { addNewCryptoAssets } from '@/utils/api/crypto-add-new-manager';
 import DonorATHCryptoListDisplay from '@/components/Donor/ATH-Crypto-Price-Prediction/DonorATHCryptoListDisplay';
+import { checkExistingAssets } from '@/utils/api/crypto-add-new-manager/pre-checks';
 
 // type declaration for window.confirmPreflight
 declare global {
@@ -103,70 +104,69 @@ export default function CryptoAddNew() {
         try {
             setError(null);
             setAwaitingConfirmation(true);
-            setIsProcessing(true);
-            setTimer({ startTime: Date.now(), endTime: null, duration: '' });
+            // Don't start timer here - it's for DB operations only
 
             const symbolsList = newCryptos.map(crypto => crypto.symbol);
             const namesList = newCryptos.map(crypto => crypto.name);
 
+            // First phase: Only do preflight checks
+            const preflightResults = await checkExistingAssets(symbolsList, namesList);
+            setPreflightInfo(preflightResults);
+
+            // Initialize selected cryptos with new assets that have prices
+            const assetsWithPrices = preflightResults.newAssets.filter(
+                symbol => preflightResults.priceInfo[symbol]?.price > 0
+            );
+            setSelectedCryptos(assetsWithPrices);
+
+        } catch (error) {
+            console.error('Preflight check error:', error);
+            setError(error instanceof Error ? error.message : 'An unknown error occurred');
+            setAwaitingConfirmation(false);
+        }
+    };
+
+    // Separate function for DB operations
+    const startDatabaseOperations = async (selectedSymbols: string[]) => {
+        try {
+            setIsProcessing(true);
+            setTimer({ startTime: Date.now(), endTime: null, duration: '' });
+
             const controller = new AbortController();
             abortControllerRef.current = controller;
 
-            // Create a promise to handle the preflight confirmation
+            const symbolsList = newCryptos.map(crypto => crypto.symbol);
+            const namesList = newCryptos.map(crypto => crypto.name);
+
             const results = await addNewCryptoAssets({
                 signal: controller.signal,
                 onProgress: (current, total) => setProgress({ current, total }),
                 onStatusUpdate: setStatus,
                 symbolsList,
                 namesList,
-                selectedAssets: selectedCryptos,
-                onPreflightComplete: async (results) => {
-                    setPreflightInfo(results.preflightInfo);
-
-                    // Initialize selected cryptos with new assets that have prices
-                    const assetsWithPrices = results.preflightInfo.newAssets.filter(
-                        symbol => results.preflightInfo.priceInfo[symbol]?.price > 0
-                    );
-                    setSelectedCryptos(assetsWithPrices);
-
-                    // Return a new Promise for the confirmation
-                    return new Promise((resolve) => {
-                        window.confirmPreflight = (proceed) => {
-                            if (proceed) {
-                                // Only resolve with true if we have selected cryptos
-                                resolve(selectedCryptos.length > 0);
-                            } else {
-                                resolve(false);
-                            }
-                            setAwaitingConfirmation(false);
-                        };
-                    });
-                }
+                selectedAssets: selectedSymbols
             });
 
-            if (results) {
-                setResults(results);
-                setTimer(prev => ({ ...prev, endTime: Date.now() }));
-            }
+            setResults(results);
+            setTimer(prev => ({ ...prev, endTime: Date.now() }));
+
         } catch (error) {
-            console.error('Process error:', error);
+            console.error('Database operation error:', error);
             setError(error instanceof Error ? error.message : 'An unknown error occurred');
         } finally {
             setIsProcessing(false);
-            setAwaitingConfirmation(false);
             abortControllerRef.current = null;
         }
     };
 
-    // Handle selected crypto to start adding to db
-    const handleConfirmPreflight = (proceed: boolean) => {
-        if (window.confirmPreflight) {
-            // Only proceed if we have selected cryptos or if canceling
-            if (!proceed || selectedCryptos.length > 0) {
-                window.confirmPreflight(proceed);
-            } else {
-                setError('Please select at least one cryptocurrency to proceed');
-            }
+    const handleConfirmPreflight = async (proceed: boolean) => {
+        setAwaitingConfirmation(false); // Always close the modal first
+
+        if (proceed && selectedCryptos.length > 0) {
+            // Start DB operations with selected cryptos
+            await startDatabaseOperations(selectedCryptos);
+        } else if (proceed) {
+            setError('Please select at least one cryptocurrency to proceed');
         }
     };
 
@@ -190,12 +190,13 @@ export default function CryptoAddNew() {
                 <div className="space-y-6">
                     <DonorATHCryptoListDisplay
                         onNewCryptosChange={setNewCryptos}
-                        disabled={isProcessing}
+                        disabled={isProcessing || awaitingConfirmation}
                     />
 
+                    {/* Add New Cryptocurrencies Button */}
                     <button
                         onClick={handleStartProcess}
-                        disabled={isProcessing || newCryptos.length === 0}
+                        disabled={isProcessing || awaitingConfirmation || newCryptos.length === 0}
                         className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
                     >
                         Add New Cryptocurrencies
@@ -269,9 +270,9 @@ export default function CryptoAddNew() {
                         </div>
                     )}
 
-                    {/* Timer Display */}
-                    <div className="mb-4 text-white">
-                        {timer.startTime && (
+                    {/* Timer Display - Only show during actual processing */}
+                    {isProcessing && timer.startTime && (
+                        <div className="mb-4 text-white">
                             <div className="text-lg">
                                 Time Elapsed: {timer.duration}
                                 {timer.endTime && (
@@ -280,11 +281,11 @@ export default function CryptoAddNew() {
                                     </span>
                                 )}
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
 
-                    {/* Results Display */}
-                    {results && (
+                    {/* Results Display - Only show during actual processing not for preflight price checks */}
+                    {!isProcessing && results && (
                         <div className="space-y-4">
                             <div className="p-4 bg-green-900 text-green-100 rounded-lg">
                                 <h2 className="font-bold mb-3">Results:</h2>
