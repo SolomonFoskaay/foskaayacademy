@@ -1,7 +1,7 @@
 // /utils/changelogs/version-tracker.tsx
 
 // Version tracker for non-donor version
-export const nonDonorVersionTracker = "(Beta-V1.62)";
+export const nonDonorVersionTracker = "(Beta-V1.63)";
 
 // Version tracker for donor version
-export const donorVersionTracker = "(Beta-V1.62)";
+export const donorVersionTracker = "(Beta-V1.63)";

@@ -1,7 +1,7 @@
 // /app/api/ATH-Crypto-Price-Prediction/live-data/route.ts
 const CRYPTOCOMPARE_API_KEY = process.env.NEXT_PUBLIC_CRYPTOCOMPARE_API_KEY;
 const BASE_URL = 'https://min-api.cryptocompare.com/data';
-const SYMBOL_BATCH_SIZE = 100; // Adjust this based on average symbol length
+const SYMBOL_BATCH_SIZE = 200; // Adjust this based on average symbol length
 
 export async function POST(request: Request) {
     try {
@@ -14,39 +14,27 @@ export async function POST(request: Request) {
             });
         }
 
-        // Process symbols in batches
-        const results = { RAW: {} };
+        const apiUrl = `${BASE_URL}/pricemultifull?fsyms=${symbols.join(',')}&tsyms=USD`;
+        console.log('Fetching from API:', apiUrl);
+
         const startTime = Date.now();
-
-        // Split symbols into batches
-        for (let i = 0; i < symbols.length; i += SYMBOL_BATCH_SIZE) {
-            const batchSymbols = symbols.slice(i, i + SYMBOL_BATCH_SIZE);
-            const apiUrl = `${BASE_URL}/pricemultifull?fsyms=${batchSymbols.join(',')}&tsyms=USD`;
-            
-            const response = await fetch(apiUrl, {
-                headers: {
-                    'authorization': `Apikey ${CRYPTOCOMPARE_API_KEY}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`API request failed: ${response.status}`);
+        const response = await fetch(apiUrl, {
+            headers: {
+                'authorization': `Apikey ${CRYPTOCOMPARE_API_KEY}`
             }
+        });
+        const endTime = Date.now();
 
-            const batchData = await response.json();
-            
-            // Merge batch results
-            if (batchData.RAW) {
-                results.RAW = { ...results.RAW, ...batchData.RAW };
-            }
+        if (!response.ok) {
+            throw new Error(`API request failed: ${response.status}`);
         }
 
-        const endTime = Date.now();
+        const data = await response.json();
         
         return new Response(JSON.stringify({
-            data: results,
+            data,
             timeMs: endTime - startTime,
-            status: 200
+            status: response.status
         }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
