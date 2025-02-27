@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 const DonateBasic = () => {
   const [walletAddress] = useState(
-    "63t6dZ78VFW1yX7uFJV678qFbZweDpUDenjLYEsq2J7q",
+    "G4a36dd17kRbif5WZTUgc7wTqNCxQiZy3DNmu8aa2d6s",
   );
 
   // Wallet copy function starts
@@ -46,10 +46,10 @@ const DonateBasic = () => {
   return (
     <>
       <h1 className="my-6 text-center text-2xl font-bold text-purple-400">
-        Kindly Donate to Keep ExploreSolana Project Going
+        Kindly Donate to Keep JupFAQAnswered Project Going
       </h1>
       <p className="text-md mb-4">
-        You can support by donating SOL and SOL tokens to the following wallet
+        You can support by donating JUP, USDC, SOL, USDT and SOL tokens to the following wallet
         address - THANKS!:
       </p>
       <p

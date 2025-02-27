@@ -43,14 +43,14 @@ const Header = () => {
         <div className="flex w-full items-center justify-between xl:w-1/4">
           <a href="/">
             <Image
-              src="/images/logo/ExploreWeb3-Logo-001a-DARK-120x40px.jpg"
+              src="/images/logo/JupFAQAnswered-Logo-001a-DARK-120x40px.png"
               alt="logo"
               width={119.03}
               height={30}
               className="hidden w-full dark:block"
             />
             <Image
-              src="/images/logo/ExploreWeb3-Logo-001a-LIGHT-120x40px.jpg"
+              src="/images/logo/JupFAQAnswered-Logo-001b-LIGHT-120x40px.png"
               alt="logo"
               width={119.03}
               height={30}
@@ -178,7 +178,7 @@ const Header = () => {
           {/* AuthButton and greeting menu button */}
           <div className="mt-7 flex items-center gap-3 xl:mt-0">
             {/* AuthButton */}
-            <AuthButton />
+            {/* <AuthButton /> */}
           </div>
         </div>
       </div>

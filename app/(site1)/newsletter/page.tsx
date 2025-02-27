@@ -1,12 +1,13 @@
-// /app/Donate/page.tsx
-import Donate from "@/components/Donate";
+// /app/s/page.tsx
+import EmailSubscriptionForm from "@/components/Newsletter/EmailSubscriptionForm";
+// import S from "@/components/S";
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 
 // Define fixed metadata values
-const title = "Donate - JupFAQAnswered";
-const description = "Kindly Support JupFAQAnswered Platform to keep it going";
+const title = "Newsletter - JupFAQAnswered";
+const description = "Subscribe to JupFAQAnswered Newsletter";
 const ogImage = "https://JupFAQAnswered.xyz/images/opengraph-image.png";
 const siteUrl = "https://JupFAQAnswered.xyz"; // Replace with your actual site URL
 
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
   },
 };
 
-const DonatePage = () => {
+const SPage = () => {
   return (
     <>
       <section className="flex-grow pb-12.5 pt-32.5 lg:pb-25 lg:pt-45 xl:pb-30 xl:pt-50">
@@ -80,11 +81,15 @@ const DonatePage = () => {
               </Link>
             </div>
           </div>
-          <Donate />
+          <div className="mb-3">
+            {/* <S /> */}
+          </div>
+          <p>Subscribe to 'JupFAQAnimated' Newsletter below:</p>
+          <EmailSubscriptionForm />
         </div>
       </section>
     </>
   );
 };
 
-export default DonatePage;
+export default SPage;

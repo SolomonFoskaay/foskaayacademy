@@ -15,14 +15,14 @@ const NotificationBar = () => {
       <div className=" text-white py-4 flex justify-center items-center">
         <div className="w-full max-w-c-1390 px-4 md:px-8 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <strong>New Feature:</strong>
+            <strong>ALERT:</strong>
             <span>
-              2025 Bull Market Crypto ATH Price Prediction Tool Launched - {" "}
+              Site Currently Under Construction - {" "}
               <a
-                href="/crypto-ath-price-prediction"
+                href="/"
                 className="underline hover:text-yellow-300"
               >
-                Explore FREE{">>"}
+                Expect Bugs & Frequent Unannounced Changes{">>"}
               </a>
             </span>
           </div>

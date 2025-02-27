@@ -1,4 +1,3 @@
-// /app/(site)/page.tsx
 import { createClient } from "@/utils/supabase/server";
 import VideosIndex from "@/components/Videos";
 

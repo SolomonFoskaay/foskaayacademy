@@ -21,7 +21,7 @@ const DisclosureDisclaimer: React.FC = () => {
           All our contents are for educational purposes only and do not
           constitute financial, trading, investment or development advice. This
           is an EXPERIMENTAL (Educational purpose-only) initiative born from a
-          passion for the Solana ecosystem and the desire to stay updated with
+          passion for the Jupiter ecosystem and the desire to stay updated with
           its rapid growth. - Please, Kindly Do Your Own Research (DYOR).
         </p>
         <p>

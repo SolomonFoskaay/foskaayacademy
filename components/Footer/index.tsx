@@ -41,7 +41,7 @@ const Footer = () => {
                     href="/support"
                     className="text-itemtitle font-medium text-black dark:text-white"
                   >
-                    ExploreWeb3 (Beta)
+                    JupFAQAnswered (Beta)
                   </a>
                 </p>
                 {/* <a href="index.html" className="relative">
@@ -62,10 +62,7 @@ const Footer = () => {
                 </a> */}
 
                 <p className="mb-10 mt-5">
-                  Explore Web3 like Solana ecosystem projects and discover opportunities to earn
-                  rewards, favorite projects (re-access later) and help other
-                  users and Web3 projects teams with your feedbacks via
-                  rating/review!
+                  JupFAQAnswered is an UnOfficial community-run platform dedicated to Answering your Frequently Asked Questions about Jupiter Exchange, Jup DAO, Jupiter Mobile, Jup Token, JupNet and Jupiverse in a video (non-animated and animated)!
                 </p>
 
                 {/* <p className="mb-1.5 text-sectiontitle uppercase tracking-[5px]">
@@ -115,13 +112,13 @@ const Footer = () => {
                     </li>
                     <li>
                       <a
-                        href="/earn"
+                        href="/donate"
                         className="mb-3 inline-block hover:text-primary"
                       >
-                        Earn
+                        Donate
                       </a>
                     </li>
-                    <li>
+                    {/* <li>
                       <a
                         href="https://exploresolana.substack.com/"
                         target="_blank"
@@ -137,7 +134,7 @@ const Footer = () => {
                       >
                         Roadmap
                       </a>
-                    </li>
+                    </li> */}
                   </ul>
                 </motion.div>
 
@@ -163,48 +160,7 @@ const Footer = () => {
                     Dashboard
                   </h4>
 
-                  <ul>
-                    <li>
-                      <a
-                        href="/dashboard/create-listings"
-                        className="mb-3 inline-block hover:text-primary"
-                      >
-                        Add Your Project
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="/dashboard/favorites"
-                        className="mb-3 inline-block hover:text-primary"
-                      >
-                        Favorites
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="/s"
-                        className="mb-3 inline-block hover:text-primary"
-                      >
-                        S
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="/projects"
-                        className="mb-3 inline-block hover:text-primary"
-                      >
-                        Projects
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="/blinks"
-                        className="mb-3 inline-block hover:text-primary"
-                      >
-                        Blinks
-                      </a>
-                    </li>
-                  </ul>
+                  
                 </motion.div>
 
                 <motion.div
@@ -297,7 +253,7 @@ const Footer = () => {
               className="animate_top"
             >
               <p>
-                &copy; 2024 - {new Date().getFullYear()} Explore Web3. All
+                &copy; 2025 - {new Date().getFullYear()} JupFAQAnswered. All
                 rights reserved
               </p>
             </motion.div>
@@ -324,7 +280,7 @@ const Footer = () => {
                 {/* Twitter icon */}
                 <li>
                   <a
-                    href="https://Twitter.com/ExploreWeb3xyz"
+                    href="https://x.com/JupFAQAnswered"
                     aria-label="social icon"
                     target="_blank"
                   >
@@ -351,7 +307,7 @@ const Footer = () => {
                   </a>
                 </li>
                 {/* Discord icon */}
-                <li>
+                {/* <li>
                   <a
                     href="https://dProgramminguniversity.com/Discord"
                     aria-label="social icon"
@@ -371,7 +327,7 @@ const Footer = () => {
                       />
                     </svg>
                   </a>
-                </li>
+                </li> */}
                 {/* Facebook icon */}
                 {/* <li>
                   <a href="#" aria-label="social icon">

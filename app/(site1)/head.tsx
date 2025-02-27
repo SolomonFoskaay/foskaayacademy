@@ -1,9 +1,9 @@
 export default function Head() {
   return (
     <>
-      <title> Explore Solana | Earn Exploring Solana Projects</title>
+      <title> JupFAQAnswered | Answers To Jupiter Frequently Asked Questions</title>
       <meta content="width=device-width, initial-scale=1" name="viewport" />
-      <meta name="description" content="Built with Next.js and TypeScript" />
+      <meta name="description" content="Answers To Jupiter Frequently Asked Questions With Videos" />
       <link rel="icon" href="/images/favicon.ico" />
     </>
   );

@@ -4,7 +4,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["localhost", "exploreweb3.xyz", "res.cloudinary.com"],
+    domains: ["localhost", "jupfaqanswered.xyz", "exploreweb3.xyz", "res.cloudinary.com", "i9.ytimg.com", "img.youtube.com"],
     remotePatterns: [
       {
         protocol: "https",
@@ -14,42 +14,10 @@ const nextConfig = {
     ],
   },
   async redirects() {
-    return [
-      {
-        source: '/foskaayfib',
-        destination: '/crypto-ath-price-prediction',
-        permanent: true,
-      },
-      {
-        source: '/ath-crypto-price-prediction',
-        destination: '/crypto-ath-price-prediction',
-        permanent: true,
-      },
-      {
-        source: '/directory/:path*',
-        destination: '/projects/:path*',
-        permanent: true, // This indicates that the redirect is permanent (301)
-      },
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'exploresol.xyz' }],
-        destination: 'https://exploreweb3.xyz/:path*',
-        permanent: true,
-      },
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'exploresolana.com' }],
-        destination: 'https://exploreweb3.xyz/:path*',
-        permanent: true,
-      },
-      {
-        source: '/Discord',
-        destination: 'https://discord.gg/A3B2msyzVK',
-        permanent: true,
-      },
+    return [      
       {
         source: '/X',
-        destination: 'https://x.com/ExploreWeb3xyz',
+        destination: 'https://x.com/JupFAQAnswered',
         permanent: true,
       },      
     ]

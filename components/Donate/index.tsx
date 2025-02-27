@@ -1,14 +1,12 @@
 // /components/Donate/index.tsx
 
 import DonateBasic from "./DonateBasic";
-import DonateNFT from "./DonateNFT";
 
 const Donate = () => {
-  
+
   return (
     <>
-      <DonateBasic/>
-      <DonateNFT/>
+      <DonateBasic />
 
       <p className="text-md mb-4">
         Thank YOU!
