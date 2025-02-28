@@ -39,9 +39,9 @@ const menuData: Menu[] = [
       // },
       {
         id: 2.6,
-        title: "Subscribe To Mailing List",
+        title: "Subscribe To Newsletter",
         newTab: false,
-        path: "/subscribe",
+        path: "/newsletter",
       },
       {
         id: 2.8,
