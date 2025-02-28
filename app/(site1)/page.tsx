@@ -1,6 +1,7 @@
 // /app/(site)/page.tsx
 import { createClient } from "@/utils/supabase/server";
 import VideosIndex from "@/components/Videos";
+import EmailSubscriptionForm from "@/components/Newsletter/EmailSubscriptionForm";
 
 const VideosHomePage = async () => {
   const supabase = createClient();
@@ -16,6 +17,7 @@ const VideosHomePage = async () => {
   return (
     <section className="pb-20 pt-35 lg:pb-25 lg:pt-45 xl:pb-30 xl:pt-50">
       <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
+        <EmailSubscriptionForm/>
         <VideosIndex videos={videos} />
       </div>
     </section>
