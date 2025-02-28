@@ -2,6 +2,39 @@
 import { createClient } from "@/utils/supabase/server";
 import VideosIndex from "@/components/Videos";
 import EmailSubscriptionForm from "@/components/Newsletter/EmailSubscriptionForm";
+import { Metadata } from "next";
+
+// Define fixed metadata values
+const title = "Home - JupFAQAnswered";
+const description = "Answers To Jupiter FAQs";
+const ogImage = "https://JupFAQAnswered.xyz/images/opengraph-image.png";
+const siteUrl = "https://JupFAQAnswered.xyz"; // Replace with your actual site URL
+
+// Create metadata object
+export const metadata: Metadata = {
+  title: title,
+  description: description,
+  openGraph: {
+    url: siteUrl,
+    type: 'website',
+    title: title,
+    description: description,
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: title,
+    description: description,
+    images: [ogImage],
+  },
+};
 
 const VideosHomePage = async () => {
   const supabase = createClient();
