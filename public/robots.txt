@@ -7,12 +7,12 @@ Disallow: /donor
 Disallow: /donor/*
 
 # Host
-Host: https://exploreweb3.xyz
+Host: https://jupfaqanswered.xyz
 
 # Sitemaps
-Sitemap: https://exploreweb3.xyz/sitemap.xml
-Sitemap: https://exploreweb3.xyz/sitemap/index.xml
-Sitemap: https://exploreweb3.xyz/sitemap/projects-listings.xml
-Sitemap: https://exploreweb3.xyz/sitemap/crypto-ath-price-prediction-list.xml
-Sitemap: https://exploreweb3.xyz/sitemap/categories.xml
-Sitemap: https://exploreweb3.xyz/sitemap/blinks-listings.xml
+Sitemap: https://jupfaqanswered.xyz/sitemap.xml
+Sitemap: https://jupfaqanswered.xyz/sitemap/index.xml
+Sitemap: https://jupfaqanswered.xyz/sitemap/projects-listings.xml
+Sitemap: https://jupfaqanswered.xyz/sitemap/crypto-ath-price-prediction-list.xml
+Sitemap: https://jupfaqanswered.xyz/sitemap/categories.xml
+Sitemap: https://jupfaqanswered.xyz/sitemap/blinks-listings.xml
