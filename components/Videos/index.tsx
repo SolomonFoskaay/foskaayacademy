@@ -35,24 +35,16 @@ const VideoCard = ({ video }: { video: any }) => (
   </Link>
 );
 
-const VideosIndex = () => {
-  const [videos, setVideos] = useState<any[]>([]);
+interface VideosIndexProps {
+  videos: any[];
+}
+
+const VideosIndex: React.FC<VideosIndexProps> = ({ videos }) => {
   const [categories, setCategories] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
 
   useEffect(() => {
-    const fetchVideos = async () => {
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from("jupfaqanswered_videos")
-        .select("*");
-
-      if (!error) {
-        setVideos(data);
-      }
-    };
-
     const fetchCategories = async () => {
       const supabase = createClient();
       const { data, error } = await supabase
@@ -61,10 +53,11 @@ const VideosIndex = () => {
 
       if (!error) {
         setCategories(data);
+      } else {
+        console.error("Error fetching categories:", error);
       }
     };
 
-    fetchVideos();
     fetchCategories();
   }, []);
 
@@ -82,11 +75,11 @@ const VideosIndex = () => {
   return (
     <div>
       {/* Search and Filter Section */}
-      <div className="flex flex-wrap items-center justify-between mb-4">        
+      <div className="flex flex-wrap items-center justify-between mb-4">
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
-          className="border p-2 rounded bg-purple-900 text-white"
+          className="border p-2 rounded mr-2 bg-purple-600 text-white"
         >
           <option value="All">All Categories</option>
           {categories.map((category) => (
@@ -100,7 +93,7 @@ const VideosIndex = () => {
           placeholder="Search Jup FAQ Answered videos..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="flex-grow border p-2 rounded mr-2"
+          className="flex-grow border p-2 rounded"
         />
       </div>
 
