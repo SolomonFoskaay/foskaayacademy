@@ -48,7 +48,7 @@ const VideosIndex: React.FC<VideosIndexProps> = ({ videos }) => {
     const fetchCategories = async () => {
       const supabase = createClient();
       const { data, error } = await supabase
-        .from("jupfaqanswered_categories_count")
+        .from("jupfaqanswered_videos_categories_count")
         .select("*");
 
       if (!error) {
