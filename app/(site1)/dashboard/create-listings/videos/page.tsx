@@ -1,12 +1,10 @@
-// /app/(site)/page.tsx
 import { createClient } from "@/utils/supabase/server";
-import VideosIndex from "@/components/Videos";
-import EmailSubscriptionForm from "@/components/Newsletter/EmailSubscriptionForm";
+import AddVideoForm from "@/components/Dashboard/CreateListings/Videos";
 import { Metadata } from "next";
-import TitleAnimated from "@/components/Header/TitleAnimated";
+import { redirect } from "next/navigation";
 
 // Define fixed metadata values
-const title = "Home - JupFAQAnswered";
+const title = "Videos - JupFAQAnswered";
 const description = "Answers To Jupiter FAQs";
 const ogImage = "https://JupFAQAnswered.xyz/images/opengraph-image.png";
 const siteUrl = "https://JupFAQAnswered.xyz"; // Replace with your actual site URL
@@ -37,27 +35,23 @@ export const metadata: Metadata = {
   },
 };
 
-const VideosHomePage = async () => {
+const VideosFormPage = async () => {
   const supabase = createClient();
-  const { data: videos, error } = await supabase
-    .from("jupfaqanswered_videos")
-    .select("*")
-    .eq("moderation_status", "approved");
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (error) {
-    console.error("Error fetching videos:", error);
-    return <div>Error loading videos</div>;
+  if (!user) {
+    return redirect("/auth/login");
   }
 
   return (
     <section className="pb-20 pt-35 lg:pb-25 lg:pt-45 xl:pb-30 xl:pt-50">
       <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
-        <EmailSubscriptionForm/>
-        <TitleAnimated />
-        <VideosIndex videos={videos} />
+        <AddVideoForm />
       </div>
     </section>
   );
 };
 
-export default VideosHomePage;
+export default VideosFormPage;

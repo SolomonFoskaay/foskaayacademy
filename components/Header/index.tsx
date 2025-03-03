@@ -178,7 +178,7 @@ const Header = () => {
           {/* AuthButton and greeting menu button */}
           <div className="mt-7 flex items-center gap-3 xl:mt-0">
             {/* AuthButton */}
-            {/* <AuthButton /> */}
+            <AuthButton />
           </div>
         </div>
       </div>

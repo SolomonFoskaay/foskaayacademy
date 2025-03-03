@@ -51,55 +51,61 @@ const menuData: Menu[] = [
       },
     ],
   },
-  // {
-  //   id: 3,
-  //   title: "Dashboard",
-  //   newTab: false,
-  //   submenu: [
-  //     {
-  //       id: 3.1,
-  //       title: "Dashboard Home",
-  //       newTab: false,
-  //       path: "/dashboard",
-  //     },
-  //     {
-  //       id: 3.2,
-  //       title: "Profile",
-  //       newTab: false,
-  //       path: "/dashboard/profile",
-  //     },
-  //     {
-  //       id: 3.3,
-  //       title: "Create Listings",
-  //       newTab: false,
-  //       path: "/dashboard/create-listings",
-  //     },
-  //     {
-  //       id: 3.3,
-  //       title: "Create Guides",
-  //       newTab: false,
-  //       path: "/dashboard/guides/create",
-  //     },
-  //     {
-  //       id: 3.3,
-  //       title: "Edit Guides",
-  //       newTab: false,
-  //       path: "/dashboard/guides/edit",
-  //     },
-  //     {
-  //       id: 3.4,
-  //       title: "Favorites",
-  //       newTab: false,
-  //       path: "/dashboard/favorites",
-  //     },
-  //     {
-  //       id: 3.5,
-  //       title: "Password Manager",
-  //       newTab: false,
-  //       path: "/dashboard/update-password",
-  //     },
-  //   ],
-  // },
+  {
+    id: 3,
+    title: "Dashboard",
+    newTab: false,
+    submenu: [
+      {
+        id: 3.1,
+        title: "Dashboard Home",
+        newTab: false,
+        path: "/dashboard",
+      },
+      // {
+      //   id: 3.2,
+      //   title: "Profile",
+      //   newTab: false,
+      //   path: "/dashboard/profile",
+      // },
+      {
+        id: 3.3,
+        title: "Create Listings",
+        newTab: false,
+        path: "/dashboard/create-listings",
+      },
+      {
+        id: 3.3,
+        title: "Create Video Answers",
+        newTab: false,
+        path: "/dashboard/create-listings/videos",
+      },
+      // {
+      //   id: 3.3,
+      //   title: "Create Guides",
+      //   newTab: false,
+      //   path: "/dashboard/guides/create",
+      // },
+      // {
+      //   id: 3.3,
+      //   title: "Edit Guides",
+      //   newTab: false,
+      //   path: "/dashboard/guides/edit",
+      // },
+      // {
+      //   id: 3.4,
+      //   title: "Favorites",
+      //   newTab: false,
+      //   path: "/dashboard/favorites",
+      // },
+      {
+        id: 3.5,
+        title: "Password Manager",
+        newTab: false,
+        path: "/dashboard/update-password",
+      },
+    ],
+  },
 ];
 
 export default menuData;

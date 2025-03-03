@@ -5,10 +5,36 @@ import Link from "next/link";
 import Image from "next/image";
 import { Metadata } from "next";
 
+// Define fixed metadata values
+const title = "Create Listings - JupFAQAnswered";
+const description = "Add your Jupiter FAQ Video Answers to JupFAQAnswered platform";
+const ogImage = "https://JupFAQAnswered.xyz/images/opengraph-image.png";
+const siteUrl = "https://JupFAQAnswered.xyz"; // Replace with your actual site URL
+
+// Create metadata object
 export const metadata: Metadata = {
-  title: "Create Listings - Explore Solana",
-  description: "Add your Solana project or Blink to Explore Solana platform",
-  // other metadata
+  title: title,
+  description: description,
+  openGraph: {
+    url: siteUrl,
+    type: 'website',
+    title: title,
+    description: description,
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: title,
+    description: description,
+    images: [ogImage],
+  },
 };
 
 const CreateListingsPage = async () => {
@@ -70,21 +96,28 @@ const CreateListingsPage = async () => {
           </h1>
 
           <div className="mb-5 text-center">
-            <div>Welcome to Explore Solana!</div>
+            <div>Welcome to JupFAQAnswered!</div>
             <div>
-              There are multiple explorers and directories on Explore Solana
+              There are multiple explorers and directories on JupFAQAnswered
               that you can submit your listings to.
             </div>
             <div>
               Please select one that match
               your listings type to get started 
               <br />
-              (Submitting Blinks for example as
-              a projects listings will be rejected and deleted not moved over to
-              blinks because they are separate directories):
+              <b>For Example:</b> 
+              <br />
+              Submitting Video answers as a Project listings (instead of submiting under videos listings) will be rejected and deleted not moved over to
+              Videos because they are separate directories by design and 
+              not easy to move over.
             </div>
             <div className="mt-4">
               <button className="m-2 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
+                <Link href="/dashboard/create-listings/videos">
+                  Create Listings For Jupiter FAQ Videos
+                </Link>
+              </button>
+              {/* <button className="m-2 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
                 <Link href="/dashboard/create-listings/projects">
                   Create Listings For Project
                 </Link>
@@ -93,7 +126,7 @@ const CreateListingsPage = async () => {
                 <Link href="/dashboard/create-listings/blinks">
                   Create Listings For Blinks
                 </Link>
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

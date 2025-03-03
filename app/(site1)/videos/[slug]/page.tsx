@@ -40,6 +40,7 @@ const VideoPage = async ({ params }) => {
     .from("jupfaqanswered_videos")
     .select("*")
     .eq("slug", params.slug)
+    .eq("moderation_status", "approved")
     .single();
 
   if (error || !video) {
