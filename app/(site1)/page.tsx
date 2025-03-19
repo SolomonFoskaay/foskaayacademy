@@ -6,8 +6,8 @@ import { Metadata } from "next";
 import TitleAnimated from "@/components/Header/TitleAnimated";
 
 // Define fixed metadata values
-const title = "Home - JupFAQAnswered";
-const description = "Answers To Jupiter FAQs";
+const title = "Home - Foskaay Academy";
+const description = "Multi-niche skills aquisition platform";
 const ogImage = "https://JupFAQAnswered.xyz/images/opengraph-image.png";
 const siteUrl = "https://JupFAQAnswered.xyz"; // Replace with your actual site URL
 
