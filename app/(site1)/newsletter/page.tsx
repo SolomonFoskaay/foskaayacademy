@@ -6,10 +6,10 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 // Define fixed metadata values
-const title = "Newsletter - JupFAQAnswered";
-const description = "Subscribe to JupFAQAnswered Newsletter";
-const ogImage = "https://JupFAQAnswered.xyz/images/opengraph-image.png";
-const siteUrl = "https://JupFAQAnswered.xyz"; // Replace with your actual site URL
+const title = "Newsletter - Foskaay Academy";
+const description = "Subscribe to Foskaay Academy Newsletter";
+const ogImage = "https://FoskaayAcademy.com/images/opengraph-image.png";
+const siteUrl = "https://FoskaayAcademy.com"; // Replace with your actual site URL
 
 // Create metadata object
 export const metadata: Metadata = {
@@ -84,7 +84,7 @@ const SPage = () => {
           <div className="mb-3">
             {/* <S /> */}
           </div>
-          <p>Subscribe to 'JupFAQAnimated' Newsletter below:</p>
+          {/* <p>Subscribe to 'Foskaay Academy' Newsletter below:</p> */}
           <EmailSubscriptionForm />
         </div>
       </section>

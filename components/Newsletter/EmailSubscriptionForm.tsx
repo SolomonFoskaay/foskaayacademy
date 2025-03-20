@@ -7,18 +7,18 @@ const EmailSubscriptionForm = () => {
     <div className="container bg-black py-8">
       <div className="text-center">
         <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">
-          Explore <span className="text-purple-400">Jupiter Ecosystem</span>
+          Explore <span className="text-purple-400">Foskaay Academy Ecosystem</span>
         </h1>
         <h2 className="text-xl font-semibold text-white md:text-2xl">
           & Discover Opportunities!
         </h2>
         <p className="mt-2 px-4 text-sm text-purple-300 md:text-base">
-          Handpicked <span className="text-pink-600">"Alpha"</span>, exclusive
-          partnership updates, insights and opportunities in Jupiverse Ecosystem and more await you:
+          Handpicked <span className="text-pink-600">"High Income Skills"</span> Courses, exclusive
+          partnership updates, insights and opportunities in Foskaay Ecosystem and more await you:
         </p>
         <p>
           <em>
-            Subscribe now and be part of the pioneering &quot;JupFAQAnswered&quot; community.
+            Subscribe now and be part of the pioneering &quot;Foskaay Academy&quot; community.
           </em>
         </p>
 
@@ -26,7 +26,7 @@ const EmailSubscriptionForm = () => {
         {/* <div className="flex justify-center mt-4" style={{ backgroundColor: 'purple', padding: '10px' }}> */}
         <div className="flex justify-center mt-4">
           <Iframe
-            url="https://JupFAQAnswered.substack.com/embed"
+            url="https://FoskaayAcademy.substack.com/embed"
             width="480"
             height="320"
             styles={{ border: '1px solid #EEE', backgroundColor: 'purple' }}
