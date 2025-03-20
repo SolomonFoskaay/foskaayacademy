@@ -21,9 +21,9 @@ const menuData: Menu[] = [
       },
       {
         id: 2.1,
-        title: "Donate",
+        title: "Payment",
         newTab: false,
-        path: "/donate",
+        path: "/payment",
       },
       // {
       //   id: 2.1,
