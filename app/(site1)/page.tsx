@@ -7,9 +7,9 @@ import TitleAnimated from "@/components/Header/TitleAnimated";
 
 // Define fixed metadata values
 const title = "Home - Foskaay Academy";
-const description = "Multi-niche skills aquisition platform";
-const ogImage = "https://JupFAQAnswered.xyz/images/opengraph-image.png";
-const siteUrl = "https://JupFAQAnswered.xyz"; // Replace with your actual site URL
+const description = "Multi-niche skills acquisition education platform";
+const ogImage = "https://FoskaayAcademy.com/images/opengraph-image.png";
+const siteUrl = "https://FoskaayAcademy.com"; // Replace with your actual site URL
 
 // Create metadata object
 export const metadata: Metadata = {

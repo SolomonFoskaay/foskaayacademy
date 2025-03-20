@@ -14,7 +14,7 @@ const AboutPage = () => {
   return (
     <>
       <h1 className="text-2xl font-bold text-center my-6 text-purple-500">
-        WHAT IS JupFAQAnswered PLATFORM ABOUT
+        WHAT IS FOSKAAY ACADEMY PLATFORM ABOUT
       </h1>
 
       {/* Introduction Section */}
@@ -22,7 +22,7 @@ const AboutPage = () => {
         A. INTRODUCTION:
       </h2>
       <p className="text-md mb-4 text-justify">
-      JupFAQAnswered is an UnOfficial community-run platform dedicated to Answering your Frequently Asked Questions about Jupiter Exchange, Jup DAO, Jupiter Mobile, Jup Token, JupNet and Jupiverse in a video (non-animated and animated)!
+      Foskaay Academy is a (non-degree offering) multi-niche skills acquisition education platform!
       </p>
       {/* <p className="text-md mb-4 text-justify">
         And for the users (also earn contributing to the platform), ExploreWeb3

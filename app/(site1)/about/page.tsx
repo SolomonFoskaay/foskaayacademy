@@ -5,10 +5,10 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 // Define fixed metadata values
-const title = "About - JupFAQAnswered";
-const description = "Answers To Jupiter FAQs";
-const ogImage = "https://JupFAQAnswered.xyz/images/opengraph-image.png";
-const siteUrl = "https://JupFAQAnswered.xyz"; // Replace with your actual site URL
+const title = "About - Foskaay Academy";
+const description = "Multi-niche skills acquisition education platform";
+const ogImage = "https://FoskaayAcademy.com/images/opengraph-image.png";
+const siteUrl = "https://FoskaayAcademy.com"; // Replace with your actual site URL
 
 // Create metadata object
 export const metadata: Metadata = {
