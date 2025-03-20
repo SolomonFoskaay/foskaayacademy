@@ -4,7 +4,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["localhost", "jupfaqanswered.xyz", "exploreweb3.xyz", "res.cloudinary.com", "i9.ytimg.com", "img.youtube.com"],
+    domains: ["localhost", "foskaayacademy.com", "dprogramminguniversity.com", "exploreweb3.xyz", "res.cloudinary.com", "i9.ytimg.com", "img.youtube.com"],
     remotePatterns: [
       {
         protocol: "https",
@@ -17,7 +17,7 @@ const nextConfig = {
     return [      
       {
         source: '/X',
-        destination: 'https://x.com/JupFAQAnswered',
+        destination: 'https://x.com/SolomonFoskaay',
         permanent: true,
       },      
     ]

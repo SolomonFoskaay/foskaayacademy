@@ -4,10 +4,10 @@ import Contact from "@/components/Contact";
 import { Metadata } from "next";
 
 // Define fixed metadata values
-const title = "Contact Support - JupFAQAnswered";
-const description = "JupFAQAnswered Contact US Page";
-const ogImage = "https://JupFAQAnswered.xyz/images/opengraph-image.png";
-const siteUrl = "https://JupFAQAnswered.xyz"; // Replace with your actual site URL
+const title = "Contact Support - Foskaay Academy";
+const description = "Foskaay Academy Contact US Page";
+const ogImage = "https://FoskaayAcademy.com/images/opengraph-image.png";
+const siteUrl = "https://FoskaayAcademy.com"; // Replace with your actual site URL
 
 // Create metadata object
 export const metadata: Metadata = {

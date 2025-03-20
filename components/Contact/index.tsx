@@ -21,7 +21,7 @@ const Contact = () => {
   }
 
   // email here
-  const email = "hello@exploresolana.com";
+  const email = "FoskaayAcademy@gmail.com";
 
   return (
     <>
