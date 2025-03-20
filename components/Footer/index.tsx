@@ -38,10 +38,10 @@ const Footer = () => {
               >
                 <p>
                   <a
-                    href="/support"
+                    href="#"
                     className="text-itemtitle font-medium text-black dark:text-white"
                   >
-                    JupFAQAnswered (Beta)
+                    Foskay Academy (Beta)
                   </a>
                 </p>
                 {/* <a href="index.html" className="relative">
@@ -62,7 +62,7 @@ const Footer = () => {
                 </a> */}
 
                 <p className="mb-10 mt-5">
-                  JupFAQAnswered is an UnOfficial community-run platform dedicated to Answering your Frequently Asked Questions about Jupiter Exchange, Jup DAO, Jupiter Mobile, Jup Token, JupNet and Jupiverse in a video (non-animated and animated)!
+                Foskaay Academy is a (non-degree offering) multi-niche skills acquisition education platform!
                 </p>
 
                 {/* <p className="mb-1.5 text-sectiontitle uppercase tracking-[5px]">
@@ -112,10 +112,10 @@ const Footer = () => {
                     </li>
                     <li>
                       <a
-                        href="/donate"
+                        href="/payment"
                         className="mb-3 inline-block hover:text-primary"
                       >
-                        Donate
+                        Payment
                       </a>
                     </li>
                     {/* <li>
@@ -185,7 +185,7 @@ const Footer = () => {
                     Contact
                   </h4>
                   <p className="mb-4 ">
-                    <a href="/support" className="">
+                    <a href="/contact" className="">
                       {"=>"}Click To Reachout
                     </a>
                   </p>
@@ -253,7 +253,7 @@ const Footer = () => {
               className="animate_top"
             >
               <p>
-                &copy; 2025 - {new Date().getFullYear()} JupFAQAnswered. All
+                &copy; 2025 - {new Date().getFullYear()} Foskaay Academy. All
                 rights reserved
               </p>
             </motion.div>
