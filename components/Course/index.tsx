@@ -14,8 +14,8 @@ const getYouTubeEmbedUrl = (youtubeUrl: string) => {
   }
 };
 
-const VideoCard = ({ video }: { video: any }) => (
-  <Link href={`/videos/${video.slug}`}>
+const CourseCard = ({ video }: { video: any }) => (
+  <Link href={`/course/${video.slug}`}>
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
       <div className="relative h-48">
         <iframe
@@ -35,11 +35,11 @@ const VideoCard = ({ video }: { video: any }) => (
   </Link>
 );
 
-interface VideosIndexProps {
-  videos: any[];
+interface CoursesIndexProps {
+  courses: any[];
 }
 
-const VideosIndex: React.FC<VideosIndexProps> = ({ videos }) => {
+const CourseIndex: React.FC<CoursesIndexProps> = ({ courses }) => {
   const [categories, setCategories] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
@@ -48,7 +48,7 @@ const VideosIndex: React.FC<VideosIndexProps> = ({ videos }) => {
     const fetchCategories = async () => {
       const supabase = createClient();
       const { data, error } = await supabase
-        .from("jupfaqanswered_videos_categories_count")
+        .from("fa_course_category_count")
         .select("*");
 
       if (!error) {
@@ -61,11 +61,11 @@ const VideosIndex: React.FC<VideosIndexProps> = ({ videos }) => {
     fetchCategories();
   }, []);
 
-  const filteredVideos = videos.filter((video) => {
-    const searchMatch = video.title.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredCourses = courses.filter((course) => {
+    const searchMatch = course.title.toLowerCase().includes(searchTerm.toLowerCase());
     const categoryMatch =
       filterCategory === "All" ||
-      [video.category_1, video.category_2, video.category_3, video.category_4, video.category_5].includes(
+      [course.category_1, course.category_2, course.category_3, course.category_4, course.category_5].includes(
         categories.find((cat) => cat.name === filterCategory)?.id
       );
 
@@ -90,21 +90,21 @@ const VideosIndex: React.FC<VideosIndexProps> = ({ videos }) => {
         </select>
         <input
           type="text"
-          placeholder="Search Jup FAQ Answered videos..."
+          placeholder="Search Foskaay Academy Courses..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="flex-grow border p-2 rounded"
         />
       </div>
 
-      {/* Video Cards Section */}
+      {/* Course Cards Section */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filteredVideos.map((video) => (
-          <VideoCard key={video.id} video={video} />
+        {filteredCourses.map((video) => (
+          <CourseCard key={video.id} video={video} />
         ))}
       </div>
     </div>
   );
 };
 
-export default VideosIndex;
+export default CourseIndex;

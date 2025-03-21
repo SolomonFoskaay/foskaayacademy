@@ -53,19 +53,25 @@ const PaymentBasic = () => {
 
       <div className="space-y-6">
         <div className="space-y-2">
-        <p className="text-gray-300">
+          <p className="text-gray-300">
             Foskaay Academy has multiple subscription plans catering for different students based on niche your subscription will cover like web3 programming for dPU Pro student. You can pay for them by following instructions for each plans below:
-            
+          </p>
+          <p className="text-red-500">
+            <b>IMPORTANT NOTES:</b>
+            <br />
+            (1) All prices are in USD (USDC and USDT Stable Coins).
+            <br />
+            (2) <b>NO REFUNDS </b>- kindly try free dPU courses first to experience my teaching style before upgrading to dPU PRO.
           </p>
           <br />
           <h3 className="text-4xl font-bold text-yellow-300 text-center mb-8">
-        (1) HOW TO MAKE PAYMENT FOR dPU PRO EXPLAINED:
-      </h3>
+            (1) HOW TO MAKE PAYMENT FOR dPU PRO EXPLAINED:
+          </h3>
           <span className="text-green-400 font-bold">STEP 1. Payment:</span>
           <p className="text-gray-300">
             Kindly send precise amount for your selected {" "}
             <a href="https://dProgrammingUniversity.com" className="text-pink-500 hover:underline" target="_blank">
-            dPU Pro Plans here
+              dPU Pro Plans here
             </a>
             {" "} (Please ensure that you are paying precise amount displayed for available plans, if unsure, you can ask me first in dPU discord below if particular slot still available or not before payment).
           </p>
@@ -76,7 +82,7 @@ const PaymentBasic = () => {
             Please, Send ONLY Stable coins (USDC or USDT) on the SOLANA Network to Solana wallet below:
           </p>
           <p className="break-words rounded-md border bg-gray-800 p-2 text-lg text-white"
-             style={{ userSelect: "text" }}>
+            style={{ userSelect: "text" }}>
             {walletAddress}
           </p>
           <button

@@ -15,7 +15,7 @@ const TitleAnimated = () => {
 
       // Fetch categories
       const { data: categoriesData, error: categoriesError } = await supabaseClient
-        .from("jupfaqanswered_categories")
+        .from("fa_course_category")
         .select("name");
 
       if (categoriesError) {
@@ -26,9 +26,9 @@ const TitleAnimated = () => {
 
       // Fetch total questions
       const { count: questionsCount, error: questionsError } = await supabaseClient
-        .from("jupfaqanswered_videos")
+        .from("fa_course_video")
         .select("*", { count: "exact" })
-        .eq("moderation_status", "approved");
+        .eq("moderation_status", "Approved");
 
       if (questionsError) {
         console.error("Error fetching total questions:", questionsError);
@@ -61,7 +61,8 @@ const TitleAnimated = () => {
         transition={{ duration: 1 }}
       >
         <div className="flex items-center justify-center gap-1">
-          <span>Search Answers to {totalQuestions}+ Jupiter Frequently Asked Questions</span>
+          <span>Search 
+            {' '}<span className="inline-block text-center text-purple-400">{totalQuestions}+</span> Foskaay Academy Courses</span>
           <span>{"=>"}</span>
           <motion.span
             className="inline-block text-center text-purple-400"

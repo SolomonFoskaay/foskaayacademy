@@ -280,7 +280,7 @@ const Footer = () => {
                 {/* Twitter icon */}
                 <li>
                   <a
-                    href="https://x.com/JupFAQAnswered"
+                    href="/X"
                     aria-label="social icon"
                     target="_blank"
                   >

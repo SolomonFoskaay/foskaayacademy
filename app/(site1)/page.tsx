@@ -1,6 +1,6 @@
 // /app/(site)/page.tsx
 import { createClient } from "@/utils/supabase/server";
-import VideosIndex from "@/components/Videos";
+import CourseIndex from "@/components/Course";
 import EmailSubscriptionForm from "@/components/Newsletter/EmailSubscriptionForm";
 import { Metadata } from "next";
 import TitleAnimated from "@/components/Header/TitleAnimated";
@@ -37,12 +37,12 @@ export const metadata: Metadata = {
   },
 };
 
-const VideosHomePage = async () => {
+const CourseHomePage = async () => {
   const supabase = createClient();
-  const { data: videos, error } = await supabase
-    .from("jupfaqanswered_videos")
+  const { data: courses, error } = await supabase
+    .from("fa_course_video")
     .select("*")
-    .eq("moderation_status", "approved");
+    .eq("moderation_status", "Approved");
 
   if (error) {
     console.error("Error fetching videos:", error);
@@ -54,10 +54,10 @@ const VideosHomePage = async () => {
       <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
         <EmailSubscriptionForm/>
         <TitleAnimated />
-        <VideosIndex videos={videos} />
+        <CourseIndex courses={courses} />
       </div>
     </section>
   );
 };
 
-export default VideosHomePage;
+export default CourseHomePage;

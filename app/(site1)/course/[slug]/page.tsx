@@ -1,12 +1,12 @@
 import { createClient } from "@/utils/supabase/server";
-import VideoDetailsPage from "@/components/Videos/DetailsPage";
+import CourseDetailsPage from "@/components/Course/DetailsPage";
 import { Metadata } from "next";
 
 // Define fixed metadata values
-const title = "Watch Video - JupFAQAnswered";
-const description = "Answers To Jupiter FAQs";
-const ogImage = "https://JupFAQAnswered.xyz/images/opengraph-image.png";
-const siteUrl = "https://JupFAQAnswered.xyz"; // Replace with your actual site URL
+const title = "Course Page - Foskaay Academy";
+const description = "Multi-niche skills acquisition education platform";
+const ogImage = "https://FoskaayAcademy.com/images/opengraph-image.png";
+const siteUrl = "https://FoskaayAcademy.com"; // Replace with your actual site URL
 
 // Create metadata object
 export const metadata: Metadata = {
@@ -34,13 +34,13 @@ export const metadata: Metadata = {
   },
 };
 
-const VideoPage = async ({ params }) => {
+const CoursePage = async ({ params }) => {
   const supabase = createClient();
   const { data: video, error } = await supabase
-    .from("jupfaqanswered_videos")
+    .from("fa_course_video")
     .select("*")
     .eq("slug", params.slug)
-    .eq("moderation_status", "approved")
+    .eq("moderation_status", "Approved")
     .single();
 
   if (error || !video) {
@@ -48,7 +48,7 @@ const VideoPage = async ({ params }) => {
     return <div>Video not found</div>;
   }
 
-  return <VideoDetailsPage video={video} />;
+  return <CourseDetailsPage video={video} />;
 };
 
-export default VideoPage;
+export default CoursePage;

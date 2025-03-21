@@ -10,7 +10,7 @@ const getYouTubeEmbedUrl = (youtubeUrl: string) => {
   throw new Error('Invalid YouTube URL');
 };
 
-const VideoDetailsPage = ({ video }) => (
+const CourseDetailsPage = ({ video }) => (
   <div className="container mx-auto px-4 py-8 pt-40">
     <h1 className="text-4xl font-bold mb-4">{video.title}</h1>
     <div className="mb-8">
@@ -28,4 +28,4 @@ const VideoDetailsPage = ({ video }) => (
   </div>
 );
 
-export default VideoDetailsPage;
+export default CourseDetailsPage;

@@ -162,10 +162,10 @@ const Header = () => {
 
             {/* Donate link */}
             <Link
-              href="/donate"
+              href="/payment"
               className="text-regular font-medium text-waterloo hover:text-primary"
             >
-              Donate🌟
+              Pricing🌟
             </Link>
           </div>
 
