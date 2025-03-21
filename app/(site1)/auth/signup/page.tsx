@@ -4,10 +4,10 @@ import SignUp from "@/components/Auth/Signup";
 import { Metadata } from "next";
 
 // Define fixed metadata values
-const title = "Signup - Explore Web3";
-const description = "This is Registration page for Explore Web3";
-const ogImage = "https://ExploreWeb3.xyz/images/opengraph-image.png";
-const siteUrl = "https://ExploreWeb3.xyz"; // Replace with your actual site URL
+const title = "Signup Page - Foskaay Academy";
+const description = "This is Registration page for Foskaay Academy";
+const ogImage = "https://FoskaayAcademy.com/images/opengraph-image.png";
+const siteUrl = "https://FoskaayAcademy.com"; // Replace with your actual site URL
 
 // Create metadata object
 export const metadata: Metadata = {
