@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html" />
+
+	<title>Embed YouTube Videos</title>
+
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <script type='text/javascript' src='epytv.js'></script>
+    <script type='text/javascript' src='//www.youtube.com/iframe_api'></script>
+
+    <link href="epytv.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+
+<!-- for non autoplay video //-->
+<div style="width: 80%; max-width: 640px; max-height: 360px; margin: 0 auto;">
+    <div class="epyv-video-container" id="epyv-container">
+        <div id="epytvPlayButton" class="play-button" onClick="clickToPlay('TFaLZrT_E34');"></div>
+        <img id="epytvImage" src="/thumbnails/video-thumbnail-filename" /> 
+        <div class="epyv-video-player" id="TFaLZrT_E34" data-params="controls=1,rel=1,autoplay=0"></div>
+        <div id="epytvPlayerCounter" class="playerCounter" style="visibility: hidden;">10</div>
+    </div>
+</div>
+
+<!-- for autoplay video //-->
+<!-- <div style="width: 80%; max-width: 640px; max-height: 360px; margin: 0 auto;">
+    <div class="epyv-video-container" id="epyv-container">";
+        <div id="epytvPlayButton" class="play-button" onClick="clickToPlay('insert-youtube-video-id-here');" style="visibility: hidden;"></div>
+        <img id="epytvImage" src="/thumbnails/video-thumbnail-filename" /> 
+        <div class="epyv-video-player" id="insert-youtube-video-id-here" data-params="controls=0,autoplay=1"></div>
+        <div id="epytvPlayerCounter" class="playerCounter">10</div>
+    </div>
+</div> -->
+
+
+
+</body>
+</html>

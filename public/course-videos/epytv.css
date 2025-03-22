@@ -1,0 +1,109 @@
+#TB_ajaxContent iframe{
+
+	margin:0px !important;
+
+	padding:0px !important;
+
+}
+
+#TB_ajaxContent{
+
+	padding:0px !important;
+
+	margin:0 auto !important;
+
+}
+
+#ErrorResponse {
+    width: 300px;
+    height: 50px;
+    font-size: 2em;
+    text-align: center;
+    font-weight: bold;
+}
+
+.epyv-video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+
+.epyv-video-container iframe, .epyv-video-container object, .epyv-video-container embed  {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+}
+
+.epyv-video-container img {
+    width: 100%;
+    top: -60px;
+    left: 0;
+    opacity: 1;
+}
+
+.epyv-video-container .play-button {
+    width: 5.7em;
+    height: 3.8em;
+    background-color: #333;
+    box-shadow: 0 0 1.9em rgba( 0,0,0,0.6 );
+    z-index: 1;
+    opacity: 0.8;
+    border-radius: 0.38em;
+}
+
+.epyv-video-container .play-button:before {
+    content: "";
+    border-style: solid;
+    border-width: 0.95em 0 0.95em 1.65em;
+    border-color: transparent transparent transparent #fff;
+}
+
+.epyv-video-container img,
+.epyv-video-container .play-button {
+    cursor: pointer;
+}
+
+.epyv-video-container img,
+.epyv-video-container .play-button,
+.epyv-video-container .play-button:before {
+    position: absolute;
+}
+
+.epyv-video-container .play-button,
+.epyv-video-container .play-button:before {
+    top: 50%;
+    left: 50%;
+    transform: translate3d( -50%, -50%, 0 );
+}
+
+.errorMessageDiv    {
+    border-color: red;
+    font-size: 3em;
+    color: red;
+    visibility: visible;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 30%;
+    width: 100%;
+    margin: -2% 0 0 -50%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.playerCounter  {
+    font-family: "Poppins", sans-serif;
+    font-size: 10em;
+    font-weight: bold;
+    color: #337ab7;
+    text-shadow: #000000 0.02em 0.02em 0.2em;
+    z-index: 1000;
+    top: 30%;
+    left: 42%;
+    position: absolute;    
+}
+

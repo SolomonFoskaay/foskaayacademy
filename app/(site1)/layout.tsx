@@ -23,6 +23,26 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+
+        {/* Embededprivatevideo header script code */}
+      <script 
+          type="text/javascript" 
+          src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+        />
+        <script 
+          type="text/javascript" 
+          src="/epytv.js"
+        />
+        <script 
+          type="text/javascript" 
+          src="//www.youtube.com/iframe_api"
+        />
+        <link 
+          href="/epytv.css" 
+          rel="stylesheet" 
+          type="text/css"
+        />
+
         {/* Google Analytics */}
         {GA_TRACKING_ID && (
           <>
@@ -44,6 +64,7 @@ export default function RootLayout({
             />
           </>
         )}
+        
 
         {/* Umami Analytics */}
         <script

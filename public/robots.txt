@@ -7,12 +7,12 @@ Disallow: /donor
 Disallow: /donor/*
 
 # Host
-Host: https://jupfaqanswered.xyz
+Host: https://foskaayacademy.com
 
 # Sitemaps
-Sitemap: https://jupfaqanswered.xyz/sitemap.xml
-Sitemap: https://jupfaqanswered.xyz/sitemap/index.xml
-Sitemap: https://jupfaqanswered.xyz/sitemap/projects-listings.xml
-Sitemap: https://jupfaqanswered.xyz/sitemap/crypto-ath-price-prediction-list.xml
-Sitemap: https://jupfaqanswered.xyz/sitemap/categories.xml
-Sitemap: https://jupfaqanswered.xyz/sitemap/blinks-listings.xml
+Sitemap: https://foskaayacademy.com/sitemap.xml
+Sitemap: https://foskaayacademy.com/sitemap/index.xml
+Sitemap: https://foskaayacademy.com/sitemap/projects-listings.xml
+Sitemap: https://foskaayacademy.com/sitemap/crypto-ath-price-prediction-list.xml
+Sitemap: https://foskaayacademy.com/sitemap/categories.xml
+Sitemap: https://foskaayacademy.com/sitemap/blinks-listings.xml

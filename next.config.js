@@ -22,6 +22,20 @@ const nextConfig = {
       },      
     ]
   },
+  // Add static file serving configuration
+  async headers() {
+    return [
+      {
+        source: '/course-videos/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
