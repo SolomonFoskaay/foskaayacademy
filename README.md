@@ -16,7 +16,7 @@ I had to build the project from scratch (in about 2 months) after I bought a dir
 
 This project merges a custom directory design with the responsive shell from the Solid SaaS template to create a comprehensive platform for discovering Solana projects.
 
-The goal is to provide an intuitive, visually appealing, and functional directory for Solana projects, complete with necessary integrations and features.
+The goal is to provide an intuitive, visually appealing, and functional directory for Solana projects, complete with necessary integrations and features..
 
 Solid is a free Next.js template specifically crafted for startups, SaaS, and software websites. It provides an extensive array of necessary sections, elements, and pages required to build a fully-equipped website.
 
