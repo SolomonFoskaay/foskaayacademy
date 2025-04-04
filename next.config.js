@@ -29,13 +29,13 @@ const nextConfig = {
         source: '/course-videos/:path*',
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600',
-          },
+            key: 'Content-Security-Policy',
+            value: "script-src 'self' 'unsafe-inline' 'unsafe-eval' [https://www.youtube.com](https://www.youtube.com) [https://ajax.googleapis.com](https://ajax.googleapis.com);"
+          }
         ],
-      },
-    ];
-  },
+      }
+    ]
+  }
 };
 
 module.exports = nextConfig;
