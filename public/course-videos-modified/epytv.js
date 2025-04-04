@@ -4,7 +4,7 @@
 
 // Configuration
 const config = {
-    API_BASE_URL: 'https://api.embedprivatevideo.com/embed.php',
+    API_BASE_URL: 'https://api.embedprivatevideo.com/v2/embed.php',  // Updated API endpoint
     API_VERSION: '6',
     DEFAULT_PARAMS: {
         controls: 1,
@@ -21,7 +21,6 @@ let isCountingDown = false;
 
 // Initialize YouTube API
 function onYouTubeIframeAPIReady() {
-    // YouTube API is ready
     console.log('YouTube API Ready');
 }
 
@@ -31,21 +30,28 @@ function clickToPlay(videoId) {
     const playButton = document.querySelector(`#playButton\\[${videoId}\\]`);
     const playerDiv = document.getElementById(videoId);
     
-    // Check authorization
-    fetch(`${config.API_BASE_URL}?v=${config.API_VERSION}&videos=${videoId}&client=${window.location.hostname}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.responseCode === 5) { // Success code from API
-                initializePlayer(videoId, playerDiv);
-                if (playButton) playButton.style.display = 'none';
-            } else {
-                showError(data.responseCode || 'Unauthorized video');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showError('Service unavailable');
-        });
+    // Enhanced API call with additional headers
+    fetch(`${config.API_BASE_URL}?v=${config.API_VERSION}&videos=${videoId}&client=${window.location.hostname}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Origin': window.location.origin
+        },
+        credentials: 'include'  // Include cookies for authentication
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.responseCode === 5) { // Success code from API
+            initializePlayer(videoId, playerDiv);
+            if (playButton) playButton.style.display = 'none';
+        } else {
+            showError(data.responseCode || 'Unauthorized video');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showError('Service unavailable');
+    });
 }
 
 // Initialize YouTube player
@@ -69,7 +75,7 @@ function onPlayerReady(event) {
 }
 
 function onPlayerStateChange(event) {
-    // Handle player state changes if needed
+    // Handle player state changes
 }
 
 function onPlayerError(event) {
@@ -81,23 +87,29 @@ function showError(message) {
     const container = document.querySelector('.epyv-video-container');
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
-    errorDiv.textContent = message;
+    errorDiv.textContent = typeof errorMessages[message] !== 'undefined' ? 
+        errorMessages[message] : message;
     container.appendChild(errorDiv);
+    
+    setTimeout(() => {
+        errorDiv.remove();
+    }, 5000);
 }
 
 // Define error messages
 const errorMessages = {
     0: "Service unavailable",
-    1: "Unregistered video",  
-    2: "Unregistered client",  
-    3: "No client ID",  
-    4: "Video unavailable",
-    5: "OK",
-    6: "Processing video"
+    1: "Unregistered video",
+    2: "Invalid domain",
+    3: "Domain not authorized",
+    4: "Invalid video ID",
+    5: "Success",
+    6: "API version not supported"
 };
 
-// Initialize YouTube API
+// Initialize
 function init() {
+    // Load YouTube API
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     const firstScriptTag = document.getElementsByTagName('script')[0];
@@ -106,13 +118,13 @@ function init() {
 
 init();
 
-// Handle play button click
-document.addEventListener('DOMContentLoaded', function() {
-    const playButtons = document.querySelectorAll('.play-button');
-    playButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const videoId = button.getAttribute('data-video-id');
-            clickToPlay(videoId);
-        });
+// Event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.play-button');
+    buttons.forEach(button => {
+        const videoId = button.getAttribute('data-video-id');
+        if (videoId) {
+            button.addEventListener('click', () => clickToPlay(videoId));
+        }
     });
 });
