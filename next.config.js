@@ -14,12 +14,12 @@ const nextConfig = {
     ],
   },
   async redirects() {
-    return [      
+    return [
       {
         source: '/X',
         destination: 'https://x.com/SolomonFoskaay',
         permanent: true,
-      },      
+      },
     ]
   },
   // Add static file serving configuration
@@ -30,7 +30,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "script-src 'self' 'unsafe-inline' 'unsafe-eval' [https://www.youtube.com](https://www.youtube.com) [https://ajax.googleapis.com](https://ajax.googleapis.com);"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.youtube.com https://ajax.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' https://img.youtube.com https://*.ytimg.com data:; frame-src https://www.youtube.com;"
           }
         ],
       }
